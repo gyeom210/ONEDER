@@ -1,16 +1,24 @@
 ## 팀 프로젝트
-> 제   목 : 어린이 장난감 구독 사이트 <br>
-> 기   간 : 2020.01.01 ~ 2020.02.27 <br>
-> 참여인원 : 6명 <br>
+> - 제   목 : 어린이 장난감 구독 사이트 <br>
+> - 기   간 : 2020.01.01 ~ 2020.02.27 <br>
+> - 참여인원 : 6명 <br>
 
 <br>
 
 ## 제작기간 
-> ✔️ 1주차 ~ 2주차 : 분석 및 기획 <br>
-> ✔️ 2주차 ~ 3주차 : DB 설계 및 모델링 <br>
-> ✔️ 3주차 ~ 5주차 : 프로젝트 전반적인 UI 구현 <br>
-> ✔️ 5주차 ~ 9주차 : 기능 구현 및 통합 테스트 <br>
-> ✔️ 9주차 ~ 10주차 : 오류테스트 및 마무리 작업 <br>
+> - 1주차 ~ 2주차 : 분석 및 기획 <br>
+> - 2주차 ~ 3주차 : DB 설계 및 모델링 <br>
+> - 3주차 ~ 5주차 : 프로젝트 전반적인 UI 구현 <br>
+> - 5주차 ~ 9주차 : 기능 구현 및 통합 테스트 <br>
+> - 9주차 ~ 10주차 : 오류테스트 및 마무리 작업 <br>
+
+<br>
+
+## 사용기술
+> - FrontEnd : Javascript, HTML5, CSS3, JQuery, Ajax, JSP, BootStrap <br>
+> - Back-End : Java, MyBatis, Oracle, Spring Tool Suite <br>
+> - Open API : Chart.js, Kakao Developers, NAVER Developers, import, JavaMail, SummerNote Editor <br>
+> - Tool : Apache Tomcat 9, Apache Commons, Amazon (RDS, EC2), Eclipse, Git, Github, SourceTree, Slack <br>
 
 <br>
  
@@ -41,3 +49,17 @@
 * 커뮤니티 권한 제한
 * 프로필 이미지 drag & drop
 * 기타 전반적인 부분 수정
+
+<br>
+
+## 페이지 구성
+* 게시판
+  * community.jsp
+  * community_detail.jsp
+  * community_user.jsp
+  * community_updateForm.jsp
+  * community_writeForm.jsp
+* 회원가입
+  * signup.jsp
+  
+<br>
