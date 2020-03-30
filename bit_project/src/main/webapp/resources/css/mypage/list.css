@@ -1,0 +1,110 @@
+@charset "UTF-8";
+@import url("https://cdn.jsdelivr.net/gh/moonspam/NanumBarunGothic@latest/nanumbarungothicsubset.css");
+
+.profile_menu1, .profile_menu2, .profile_menu3 {
+    cursor: pointer;
+}
+.list {
+	padding: 0 10px;
+    display:none;
+    max-width:1020px;
+    box-shadow:3px 3px 5px 0 rgb(172, 171, 171);
+    border-radius:10px;
+    margin:0 auto;
+}
+.list_menu > table {
+    margin-top:10px;
+    margin-bottom:10px;
+    font-size: 15px;
+    color:rgb(71, 70, 70);
+    text-align:center;
+    width:100%;
+    border-bottom:solid 3px rgb(206, 207, 205);
+    border-collapse:collapse;
+}
+.product > img {
+	width:211px;
+	height:225px;
+} 
+.menu_line > th {
+    width:33.3%;
+    padding-bottom:5px;
+    padding-top:5px;
+}
+.menu_product {
+    text-align: center;
+}
+.menu_product > table {
+    width:100%;
+    margin-top:70px;
+    text-align: center;
+}
+.product_line > td {
+    display:flex;
+    flex-wrap:wrap;
+}
+.product {
+    padding-bottom:40px;
+    padding-left:15px;
+}
+
+
+/* 2020-01-29 20:20 문용민 추가 */
+
+.product_line div img {
+	width:211px;
+	height:225px;
+	z-index: 10;
+	cursor: pointer;
+} 
+.product_line div {
+	position:relative;
+    padding-bottom:40px;
+    padding-left:15px;
+}
+.product_line div button {
+	width:50px;
+	height:50px;
+	text-align:center;
+	vertical-align:middle;
+	background:#1AAB8A;
+	border:0;
+	outline:0;
+	cursor:pointer;
+	display:inline;
+	position: absolute;
+	visibility:hidden;
+	top:0;
+	bottom:0;
+	left:15px;
+	right:0;
+	opacity: 0;
+	color: #fff;
+	background:rgba(29, 106, 154, 0.72);
+	z-index:999;
+} 
+
+.product_line div:hover button{
+	visibility:visible;
+	color:#fff;
+	opacity: 1;
+	z-index:999;
+	cursor: pointer;
+}
+/* 2020-01-29 20:20 문용민 추가 */
+@media(max-width:480px) {
+    .product > img {
+        width:170px;
+        height:170px;
+    }
+    .list {
+    	padding:10px;
+    }
+   	.product {
+   		padding-left:0;
+   		margin:0 auto;
+   	}
+   	.profile_menu1, .profile_menu2, .profile_menu3 > b {
+   		font-size:1.2rem;
+   	}
+}

@@ -1,0 +1,95 @@
+@charset "UTF-8";
+@import url("https://cdn.jsdelivr.net/gh/moonspam/NanumBarunGothic@latest/nanumbarungothicsubset.css");
+
+.subscribe_wrap {
+	padding: 0 10px;
+    display:none;
+    max-width:900px;
+    min-height:750px;
+    box-shadow:3px 3px 5px 0 rgb(172, 171, 171);
+    border-radius:10px;
+    margin:0 auto;
+}
+.subscribe_wrap > h2 {
+    color:rgb(73, 69, 69);
+    margin-bottom:5px;
+}
+.product_history {
+    margin-bottom:50px;
+}
+.product_history > h3 {
+    color:rgb(73, 69, 69);
+    margin-bottom:10px;
+}
+.product_history > table {
+    font-size: 15px;
+    color:rgb(71, 70, 70);
+    text-align:left;
+    width:100%;
+    border-top:solid 3px rgb(206, 207, 205);
+    border-bottom:solid 3px rgb(206, 207, 205);
+    border-collapse: collapse;
+}
+.pay_block {
+    margin-bottom:50px;
+}
+.pay_block > h3 {
+    color:rgb(73, 69, 69);
+    margin-bottom:10px;
+}
+.pay_block > table {
+    font-size: 15px;
+    color:rgb(71, 70, 70);
+    text-align:left;
+    width:100%;
+    border-top:solid 3px rgb(206, 207, 205);
+    border-bottom:solid 3px rgb(206, 207, 205);
+    border-collapse: collapse;
+}
+.line > td, .line > th {
+    border-bottom:solid 1px rgb(206, 207, 205);
+    padding:10px;
+}
+.subscribe_block {
+    margin-bottom:50px;
+    height:35px;
+    border-radius:7px;
+    display:flex;
+    justify-content: space-between;
+    background-color: #e4e4e4;
+}
+.subscribe_content_1 {
+    line-height: 35px;
+    padding-left:20px;
+}
+.subscribe_content_2 {
+    line-height: 35px;
+    padding-right:20px;
+}
+.subscribe_content_1 > b {
+    font-size:13px;
+    color:#EA7475;
+    padding:3px;
+    border:solid 2.2px rgb(112, 111, 111);
+    border-radius:7px;
+}
+.subscribe_content_2 a b{
+    color:#EA7475;
+}
+.pay_block table tr:nth-child(1) {
+	background-color:#f9f9f9;
+}
+.pay_block table tr:hover {
+	background-color:#fafafa;
+}
+.product_history table tr:nth-child(1) {
+	background-color:#f9f9f9;
+}
+.product_history table tr:hover {
+	background-color:#fafafa;
+}
+@media(max-width:480px) {
+.subscribe_wrap {
+    padding:10px;
+}
+}

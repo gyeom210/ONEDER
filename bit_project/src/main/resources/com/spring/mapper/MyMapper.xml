@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.mapper.MyMapper">
+<resultMap type="com.spring.mypage.BookmarkVO" id="bmMap">
+   <result property="mark_num" column="mark_num"  />
+   <result property="email" column="email"  />
+   <result property="product_num" column="product_num"  />
+   <result property="regist" column="regist"  />
+   <result property="bookmark_img" column="bookmark_img"  />
+</resultMap>
+
+<resultMap type="com.spring.mypage.PStateVO" id="psMap">
+   <result property="state_num" column="state_num"  />
+   <result property="subscribe_num" column="subscribe_num"  />
+   <result property="product_num" column="product_num"  />
+   <result property="state" column="state"  />
+   <result property="delivery_date" column="delivery_date"  />
+   <result property="return_application" column="return_application"  />
+   <result property="email" column="email" />
+   <result property="product_name" column="product_name" />
+</resultMap>
+
+
+
+<select id="getMyPageBookMark" parameterType="map" resultType="com.spring.mypage.bookjoinproductVO">	
+	select p.product_num, p.product_name, p.MANUFACTURER, p.img_sum, b.mark_num, b.email  
+	from product p, bookmark b 
+	where p.product_num=b.product_num AND email=#{email}
+</select>
+
+<select id="getMyPageWishList" parameterType="map" resultType="com.spring.mypage.wishjoinproductVO">
+	select p.product_num, p.product_name, p.MANUFACTURER, p.img_sum, w.wish_num, w.email  
+	from product p, wishlist w
+	where p.product_num=w.product_num AND email=#{email}
+</select>
+
+<select id="getMyPageReservation" parameterType="map" resultType="com.spring.mypage.reservjoinproductVO">
+	select p.product_num, p.product_name, p.MANUFACTURER, p.img_sum, r.reserve_num, r.email  
+	from product p, reservation r
+	where p.product_num=r.product_num AND email=#{email}	
+</select>
+
+
+
+<select id="getShareJoin" parameterType="map" resultType="com.spring.product.SettlementVO">
+	select p.share_num, p.product_num, p.email, p.product_name, s.bank, s.account, s.name
+	from share_waiting_list s, product_share p 
+	where p.share_num=#{share_num} AND p.product_name=s.product_name AND s.share_state=3
+</select>
+
+<insert id="addMyPageShareSettle" parameterType="com.spring.product.SettlementVO">
+	<selectKey order="BEFORE" keyProperty="settlement_num" resultType="int">
+	SELECT settle_sequence.NEXTVAL FROM DUAL
+	</selectKey>
+	insert into settlement_details values(#{settlement_num}, #{share_num}, #{product_num}, #{email}, #{product_name}, #{accumulated_fund}, #{name}, #{bank}, #{account}, sysdate, '정산대기')
+</insert>
+
+<update id="updateShareJoin" parameterType="map">
+update product_share set total_accumulated_fund=total_accumulated_fund-#{settle} where share_num=#{share_num}
+</update>
+
+
+<select id="getProductState" parameterType="com.spring.mypage.PStateVO" resultMap="psMap">
+	SELECT P.STATE_NUM, P.SUBSCRIBE_NUM, P.PRODUCT_NUM, P.STATE, P.DELIVERY_DATE, P.RETURN_APPLICATION 
+	FROM MEMBER M, SUBSCRIBE S, PRODUCT_STATE P
+	WHERE M.EMAIL = S.EMAIL AND S.SUBSCRIBE_NUM = P.SUBSCRIBE_NUM AND M.EMAIL = #{email} AND P.STATE = #{state}
+</select>
+
+<select id="checkPS" parameterType="com.spring.mypage.PStateVO" resultType="int">
+	SELECT COUNT(*)
+	FROM MEMBER M, SUBSCRIBE S, PRODUCT_STATE P
+	WHERE M.EMAIL = S.EMAIL AND S.SUBSCRIBE_NUM = P.SUBSCRIBE_NUM AND M.EMAIL = #{email} AND P.STATE = #{state}
+</select>
+
+<select id="checkReserve" parameterType="String" resultType="int">
+	SELECT NVL(COUNT(*),0) FROM RESERVATION WHERE EMAIL = #{email}
+</select>
+
+<select id="getReserve" parameterType="String" resultType="int">
+	SELECT RNUM FROM 
+	(SELECT ROWNUM RNUM, EMAIL, REGIST FROM RESERVATION WHERE PRODUCT_NUM = 
+	(SELECT PRODUCT_NUM FROM RESERVATION WHERE EMAIL=#{email}) ORDER BY REGIST ASC)
+	WHERE EMAIL=#{email}
+</select>
+
+
+<select id="selectPS" parameterType="com.spring.mypage.PStateVO" resultMap="psMap">
+	SELECT * FROM 
+	(SELECT rownum rnum, T.PRODUCT_NAME, P.STATE_NUM, P.SUBSCRIBE_NUM, P.PRODUCT_NUM, P.STATE, P.DELIVERY_DATE, P.RETURN_APPLICATION 
+	FROM MEMBER M, SUBSCRIBE S, PRODUCT_STATE P, PRODUCT T
+	WHERE T.PRODUCT_NUM = P.PRODUCT_NUM AND M.EMAIL = S.EMAIL AND S.SUBSCRIBE_NUM = P.SUBSCRIBE_NUM AND M.EMAIL = #{email})
+	<![CDATA[WHERE rnum >=#{start} and rnum<=#{end}]]> 
+</select>
+
+
+<select id="scount" parameterType="map" resultType="int">
+select NVL(count(*), 0) from share_waiting_list where email=#{email}
+</select>
+
+
+<select id="hcount" parameterType="map" resultType="int">
+select NVL(count(*), 0) from product_share where email=#{email}
+</select>
+
+
+<select id="getMyPageShare" parameterType="map" resultType="com.spring.tazo.ShareWatingListVO">
+	select * FROM (
+		SELECT rownum rnum, waiting_num, email, name, product_name, amount, consignment_start_date, consignment_end_date, share_img1, share_img2
+		,share_img3, share_content, bank, account, share_state
+		FROM share_waiting_list
+		where email=#{email}              
+		ORDER BY waiting_num asc
+		)
+	<![CDATA[WHERE rnum>=#{startrow} and rnum<=#{endrow}]]>
+	
+	 
+</select>
+<select id="getMyPageShare2" parameterType="map" resultType="com.spring.product.ProductShareVO">
+	select * FROM (
+		SELECT rownum rnum, SHARE_NUM, product_num, PRODUCT_NAME, email, CONSIGNMENT_START_DATE, CONSIGNMENT_END_DATE, TOTAL_SHARE_COUNT, TOTAL_ACCUMULATED_FUND,
+		ACCUMULATED_FUND, TOTAL_AMOUNT, SHARE_AMOUNT, CURRENT_AMOUNT
+		FROM product_share
+		where email=#{email}              
+		ORDER BY SHARE_NUM asc
+		)
+	<![CDATA[WHERE rnum>=#{startrow} and rnum<=#{endrow}]]>
+</select>
+
+<select id="getMyPageShareDetail" parameterType="map" resultType="com.spring.product.PsharePlusWatingVO">
+	select p.*, s.account, s.name, s.bank
+	from share_waiting_list s, product_share p 
+	where p.share_num=#{share_num} AND p.waiting_num=s.waiting_num
+</select>
+</mapper>

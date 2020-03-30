@@ -1,0 +1,103 @@
+@charset "UTF-8";
+@import url("https://cdn.jsdelivr.net/gh/moonspam/NanumBarunGothic@latest/nanumbarungothicsubset.css");
+
+.share{
+    display:none;
+    max-width:900px;
+    box-shadow:3px 3px 5px 0 rgb(172, 171, 171);
+    margin:0 auto;
+    border-radius:10px;
+}
+.share_history {
+	padding: 0 10px;
+	display:none;
+    max-width:900px;
+    box-shadow:3px 3px 5px 0 rgb(172, 171, 171);
+    margin:0 auto;
+    border-radius:10px;
+}
+.share > h2 {
+    color:rgb(73, 69, 69);
+    margin-bottom:15px;
+}
+.account_title > h3 {
+    color:rgb(73, 69, 69);
+    margin-bottom:10px;
+}
+.application > h3 {
+    margin-top: 40px;
+    color:rgb(73, 69, 69);
+    margin-bottom:10px;
+}
+.share_history > h3 {
+    color:rgb(73, 69, 69);
+    display:inline;
+}
+.share_history > input {
+    background-color: #EA7475;
+    color:white;
+    font-size: 15px;
+    border:0;
+    outline:0;
+    border-radius:5px;
+    width:60px;
+    height:30px;
+    float:right;
+    margin-right:40px;
+    box-shadow:3px 3px 5px 0 rgb(172, 171, 171);
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+.share_history > input:active {
+	-webkit-transform: scale(0.9);
+     -ms-transform: scale(0.9);
+     transform: scale(0.9);    
+}
+.application > table {
+    font-size: 15px;
+    color:rgb(71, 70, 70);
+    text-align:left;
+    width:100%;
+    border-top:solid 3px rgb(206, 207, 205);
+    border-bottom:solid 3px rgb(206, 207, 205);
+    border-collapse:collapse;
+    margin-bottom:10px;
+}
+.application_line > th, .application_line > td {
+    border-bottom:solid 1px rgb(206, 207, 205);
+    padding:10px;
+}
+
+.share_history > table {
+    font-size: 15px;
+    color:rgb(71, 70, 70);
+    text-align:left;
+    width:100%;
+    border-top:solid 3px rgb(206, 207, 205);
+    border-bottom:solid 3px rgb(206, 207, 205);
+    border-collapse:collapse;
+    margin-top:10px;
+    margin-bottom:10px;
+
+}
+.share_line > th, .share_line > td {
+    border-bottom:solid 1px rgb(206, 207, 205);
+    padding:10px;
+}
+.application table tr:nth-child(1) {
+	background-color:#f9f9f9;
+}
+.share_history table tr:nth-child(1) {
+	background-color:#f9f9f9;
+}
+.application table tr:hover {
+	background-color:#fafafa;
+}
+.share_history table tr:hover {
+	background-color:#fafafa;
+}
+@media(max-width:480px) {
+.share {
+    padding:10px;
+}
+}

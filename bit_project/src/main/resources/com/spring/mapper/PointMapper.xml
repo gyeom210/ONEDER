@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.mapper.PointMapper">
+<resultMap id="pointResultMap" type="com.spring.point.PointVO">
+      <result property="point_num" column="point_num"/>
+      <result property="email" column="email"/>
+      <result property="occur_date" column="occur_date"/>
+      <result property="state" column="state"/>
+      <result property="variation" column="variation"/>
+      <result property="reason" column="reason"/>
+      <result property="start" column="start"/>
+      <result property="end" column="end"/>
+</resultMap>
+   
+<select id="countTotalData" parameterType="String" resultType="int"> 
+   select count(*) from member_point where email=#{email}
+</select>
+   
+
+<select id="getPointList" parameterType="com.spring.point.PointVO" resultMap="pointResultMap">
+	select * from ( 
+		select rownum rnum, point_num, email, occur_date, state, variation, reason from (
+			select * from member_point where email=#{email} order by point_num DESC)  )
+   <![CDATA[WHERE rnum >=#{start} and rnum<=#{end}]]> 
+</select>
+
+<select id="getTotalPoints" parameterType="String" resultType="int">
+	select point from member where email=#{email}
+</select>
+
+<update id="updateTotalPoints" parameterType="com.spring.member.MemberVO">
+	update member set point=#{point} where email=#{email}
+</update>
+
+<insert id="insertPoint" parameterType="com.spring.point.PointVO">
+	<selectKey keyProperty="point_num" order="BEFORE" resultType="int">
+		SELECT member_pt_sequence.NEXTVAL FROM DUAL
+	</selectKey>
+	insert into member_point (point_num, email, occur_date, state, variation, reason) values(#{point_num}, #{email}, sysdate, #{state}, #{variation}, #{reason})
+</insert>
+
+<!-- subscribe_payment -->
+<select id="getPayNum" parameterType="String" resultType="int">
+	select pay_num from subscribe_payment where subscribe_num in (select subscribe_num from subscribe where email=#{email})
+</select>
+
+<select id="getPointPrice" parameterType="int" resultType="int">
+	select point_price from subscribe_payment where pay_num=#{pay_num}
+</select>
+
+<update id="updatePointPrice" parameterType="int">
+	update subscribe_payment set point_price=#{point_price} where pay_num=#{pay_num}
+</update>
+
+</mapper>

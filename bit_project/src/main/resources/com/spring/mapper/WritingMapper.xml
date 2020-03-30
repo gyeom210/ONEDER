@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.mapper.WritingMapper">
+
+	<resultMap id="resultWritingVO" type="com.spring.writing.WritingVO">
+		<result property="board_num" column="board_num" />
+		<result property="nickname" column="nickname" />
+		<result property="board_name" column="board_name" />
+		<result property="content" column="content" />
+		<result property="regist" column="regist" />
+		<result property="img" column="img" />
+		<result property="count" column="count" />
+		<result property="category" column="category" />
+		<result property="scrap_count" column="scrap_count" />
+		<result property="email" column="email" />
+	</resultMap>
+
+	<!-- 글쓰기 -->
+	<insert id="write" parameterType="com.spring.writing.WritingVO">
+		<selectKey keyProperty="board_num" order="BEFORE" resultType="int">
+			SELECT board_sequence.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO BOARD (board_num, nickname, board_name, content, regist, img, count, category, scrap_count, email)
+					VALUES (#{board_num}, #{nickname}, #{board_name}, #{content}, sysdate, #{img}, #{count}, #{category}, #{scrap_count}, #{email})
+	</insert>
+	
+	<!-- DB) file_path table -->
+<!-- 	<insert id="storeFilePath" parameterType="String">
+		insert into file_path values (#{file_path})
+	</insert> -->
+	
+	<!-- file_path table 데이터 삭제 -->
+<!-- 	<delete id="deleteFilePath">
+		delete from file_path
+	</delete> -->
+	
+	<!-- 글 수정폼 -->
+	<select id="updateForm" parameterType="int" resultMap="resultWritingVO">
+		select * from board where board_num = #{board_num}
+	</select>
+	
+	<!-- 글 수정 -->
+	<update id="update" parameterType="com.spring.writing.WritingVO">
+		update board set board_name=#{board_name}, content=#{content}, img=#{img} where board_num=#{board_num}
+	</update>
+	
+	<!-- 글 삭제 -->
+	<delete id="delete" parameterType="int">
+		delete from board where board_num = #{board_num}
+	</delete>
+	
+	
+</mapper>
+

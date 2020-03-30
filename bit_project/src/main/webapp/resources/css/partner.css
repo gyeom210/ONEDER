@@ -1,0 +1,168 @@
+
+@font-face { font-family: 'S-CoreDream-4Regular'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-4Regular.woff') format('woff'); font-weight: normal; font-style: normal; }
+* {
+	font-family: 'S-CoreDream-4Regular';
+}
+body {
+	margin: 0;
+}
+
+#container {
+	min-height: 900px;
+}
+
+.btn {
+	margin: 10px;
+}
+.snip1273 {
+  font-family: 'Raleway', Arial, sans-serif;
+  display: inline-block;
+  position: relative;
+  margin: 30px;
+  /* min-width: 310px -60px; */
+  /* max-width: 310px; */
+  
+  height: auto;
+  color: #ffffff;
+  background-color: #000000;
+  font-size: 16px;
+}
+#category form div {
+	float:right;
+	margin-right:40px;
+}
+
+.btn-partner {
+	border: 1px solid;
+    border-radius: 5px;
+    width: 100px;
+    height: 36px;
+    font-size: 16px;
+    background-color: #ffb0b1;
+    color:#fff; 
+}
+
+.snip1273 * {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-transition: all 0.4s ease-in;
+  transition: all 0.4s ease-in;
+  
+}
+.snip1273 img {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  vertical-align: top;
+}
+.snip1273 figcaption {
+  /* display: inline-block; */
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: auto;
+  z-index: 1;
+  opacity: 0;
+  padding-top: 20px;
+    padding-bottom: 30px;
+    padding-left: 20px;
+}
+.snip1273 figcaption:before,
+.snip1273 figcaption:after {
+  width: 1px;
+  height: 0;
+}
+.snip1273 figcaption:before {
+  right: 0;
+  top: 0;
+}
+.snip1273 figcaption:after {
+  left: 0;
+  bottom: 0;
+}
+.snip1273 h3,
+.snip1273 p {
+  line-height: 1.5em;
+}
+.snip1273 h3 {
+  margin: 5px 0 5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: left;
+}
+.partner_chart{
+	text-align: center;
+}
+.snip1273 p {
+  font-size: 0.8em;
+  text-align: left;
+  font-weight: 500;
+  margin: 0 0 22px;
+  text-align: left;
+}
+.snip1273 a {
+  position: relative;
+  text-align: right;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  color: #ffffff;
+  float: left;
+}
+.snip1273:before,
+.snip1273:after,
+.snip1273 figcaption:before,
+.snip1273 figcaption:after {
+  position: relative;
+  content: '';
+  background-color: #ffffff;
+  z-index: 1;
+  -webkit-transition: all 0.4s ease-in;
+  transition: all 0.4s ease-in;
+  opacity: 0.8;
+}
+.snip1273:before,
+.snip1273:after {
+  height: 1px;
+  width: 0%;
+}
+.snip1273:before {
+  top: 0;
+  left: 0;
+}
+.snip1273:after {
+  bottom: 0;
+  right: 0;
+}
+.snip1273:hover img,
+.snip1273.hover img {
+  opacity: 0.4;
+}
+.snip1273:hover figcaption,
+.snip1273.hover figcaption {
+  opacity: 1;
+}
+.snip1273:hover figcaption:before,
+.snip1273.hover figcaption:before,
+.snip1273:hover figcaption:after,
+.snip1273.hover figcaption:after {
+  height: auto;
+}
+.snip1273:hover:before,
+.snip1273.hover:before,
+.snip1273:hover:after,
+.snip1273.hover:after {
+  width: 45%;
+}
+.snip1273:hover:before,
+.snip1273.hover:before,
+.snip1273:hover:after,
+.snip1273.hover:after,
+.snip1273:hover figcaption:before,
+.snip1273.hover figcaption:before,
+.snip1273:hover figcaption:after,
+.snip1273.hover figcaption:after {
+  opacity: 0.1;
+}

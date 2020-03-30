@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.mapper.ChatMapper">
+
+   <!-- admin 정보 -->
+   <resultMap type="com.spring.chat.ChatVO" id="ChatMap">
+   <result property="email" column="email"  />
+   <result property="nickname" column="nickname" /> 
+   <result property="password" column="password"  />
+   <result property="phone" column="phone"  />
+   <result property="regist" column="regist"  />
+   <result property="img" column="img"  />
+   <result property="usergroup" column="usergroup"  />
+   </resultMap>
+   
+   <!-- Message 정보 -->
+   <resultMap type="com.spring.chat.MessageVO" id="MessageMap">
+   <result property="message_num" column="message_num" />
+   <result property="parent_room" column="parent_room"  />
+   <result property="content" column="content" /> 
+   <result property="room_num" column="room_num"  />
+   <result property="receiver" column="receiver"  />
+   <result property="sender" column="sender"  />
+   <result property="img" column="img" />
+   <result property="state" column="state" />
+   </resultMap>
+  
+   <!-- 관리자 목록 불러오기 (일반사용자) -->
+   <select id="allAdmin" resultMap="ChatMap">
+   		SELECT * FROM ADMIN
+   </select>
+   
+   <!-- 채팅방 불러오기 (관리자) -->
+   <select id="getRoom" parameterType="String" resultMap="MessageMap">
+   		SELECT * FROM CHATROOM WHERE RECEIVER=#{nickname}
+   </select>
+   
+   <!-- 채팅방이 있는지 확인 (관리자) -->
+   <select id="checkRoom" parameterType="String" resultType="int">
+   		SELECT COUNT(*) FROM CHATROOM WHERE RECEIVER=#{nickname}
+   </select>
+   
+   <!-- 채팅방 메시지 불러오기 (관리자) -->
+   <select id="getMessage" parameterType="int" resultMap="MessageMap">
+   		SELECT * FROM CHATMESSAGE WHERE ROOM_NUM=#{room_num} ORDER BY MESSAGE_NUM ASC
+   </select>
+   
+   <!-- 채팅방 만들기 (일반사용자) -->
+   <insert id="createRoom" parameterType="com.spring.chat.MessageVO">
+   <selectKey keyProperty="room_num" resultType="int" order="BEFORE">
+			SELECT CHATROOM_SEQUENCE.nextval From DUAL
+	</selectKey>
+   		INSERT INTO CHATROOM
+   		VALUES(#{room_num}, #{receiver}, #{sender}, #{img})
+   </insert>
+   
+   <!-- 채팅내용 (일반/관리자) -->
+   <insert id="insertContent" parameterType="com.spring.chat.MessageVO">
+   <selectKey keyProperty="message_num" resultType="int" order="BEFORE">
+			SELECT CHATMESSAGE_SEQUENCE.nextval From DUAL
+	</selectKey>
+   		INSERT INTO CHATMESSAGE
+   		VALUES(#{message_num}, #{room_num}, #{content}, #{state})
+   </insert>
+   
+   <!-- 방번호 가져오기 -->
+   <select id="getNum" parameterType="String" resultType="int">
+   		SELECT ROOM_NUM FROM CHATROOM WHERE SENDER=#{sender}
+   </select>
+   
+   <!-- 채팅내용 삭제 -->
+   <delete id="deleteMessage" parameterType="int">
+   		DELETE CHATMESSAGE WHERE ROOM_NUM=#{room_num}
+   </delete>
+   
+   <!-- 채팅방 삭제 -->
+   <delete id="deleteRoom" parameterType="String">
+   		DELETE CHATROOM WHERE SENDER=#{key}
+   </delete>
+   
+   <!-- 이미지 불러오기 -->
+   <select id="getImg" parameterType="String" resultType="String">
+   		SELECT IMG FROM MEMBER WHERE NICKNAME=#{sender}
+   </select>
+   
+   <!-- 방체크 -->
+   <select id="ckRoom" parameterType="String" resultType="int">
+    	SELECT COUNT(*) FROM CHATROOM WHERE SENDER=#{key}
+   </select>
+   
+   <!-- 관리자 닉네임 불러오기 -->
+   <select id="getAdmin" resultType="String">
+   		SELECT NICKNAME FROM ADMIN
+   </select>
+   
+</mapper>

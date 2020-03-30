@@ -1,0 +1,43 @@
+
+/* 데스크탑 */
+@media (min-width: 1200px){
+    #phone{
+        display: none;
+    }
+    #menu_phone{
+        display: none;
+    }
+    #delivery{
+        padding-top: 100px;
+    }
+}
+/* @media (min-width: 481px){
+    #chatM{
+        display: none;
+    }
+} */
+
+.nav_hov{color: black;
+  -webkit-transition: .0s all ease;
+  -o-transition: .0s all ease;
+  transition: .0s all ease;}
+.nav_hov:hover{font-weight: 600; color: #ea7475; text-decoration: none;}
+
+
+.btn-hover {
+	color: white;
+	background-color: #ea7475;	
+}
+.btn-hover:hover{
+	-webkit-transition: .3s all ease;
+	-o-transition: .3s all ease;
+	transition: .3s all ease;
+	color: #ea7475;
+	background-color: white;
+	border-color: #ea7475;
+}
+/* @media (max-width: 480px){
+    #chat{
+        display: none;
+    }
+}     */

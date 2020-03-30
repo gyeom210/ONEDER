@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.mapper.MemberMapper">
+
+	<resultMap id="signUpMap" type="com.spring.member.MemberVO">
+		<result property="email" column="email" />
+		<result property="usergroup" column="usergroup" />
+		<result property="nickname" column="nickname" />
+		<result property="name" column="name" /> 
+		<result property="password" column="password" />
+		<result property="phone" column="phone" />
+		<result property="address" column="address" />
+		<result property="address_detail" column="address_detail" />
+		<result property="postal_num" column="postal_num" />
+		<result property="birth" column="birth" />
+		<result property="children_birth" column="children_birth" />
+		<result property="point" column="point" />
+		<result property="regist" column="regist" />
+		<result property="subscribe" column="subscribe" />
+		<result property="instagram_id" column="instagram_id" />
+		<result property="receive_email" column="receive_email" />
+		<result property="receive_text" column="receive_text" />
+		<result property="img" column="img" />
+		
+
+	</resultMap>
+	
+	<resultMap type="com.spring.member.MemberSubscribeVO" id="membersubscribeMap">
+		<result property="email" column="email" />
+		<result property="usergroup" column="usergroup" />
+		<result property="nickname" column="nickname" />
+		<result property="phone" column="phone" />
+		<result property="regist" column="regist" />
+		<result property="subscribe" column="subscribe" />
+		<result property="grade" column="grade" />
+	</resultMap>
+
+	<select id="nicknameCheck" resultMap="signUpMap">
+		select * from member where nickname = #{nickname}
+	</select>
+
+	<select id="emailCheck" resultMap="signUpMap">
+		select * from member where email = #{email}
+	</select>
+
+	<update id="verifyEmail" parameterType="com.spring.member.MemberVO" >
+		update member set email_state='Y' where email= #{email}
+	</update>
+	
+	<insert id="memberInsert" parameterType="com.spring.member.MemberVO" >
+		insert into member(email, usergroup, nickname, name, password, phone, address, address_detail, postal_num, birth, children_birth,  point, regist, last_connection, subscribe, instagram_id, receive_email, receive_text, img) 
+		values (#{email}, '일반회원', #{nickname}, #{name}, #{password}, #{phone}, #{address}, #{address_detail}, #{postal_num}, #{birth}, #{children_birth}, 0, sysdate, sysdate, 'N', #{instagram_id}, #{receive_email}, #{receive_text}, #{img})
+	</insert>
+	
+	<!-- 이메일 찾기 -->
+	<select id="findEmail" parameterType="com.spring.member.MemberVO" resultMap="signUpMap">
+		select email from member where name = #{name} and phone = #{phone}
+	</select>
+	
+	<!-- 비밀번호 찾기 -->
+	<select id="findPassword" parameterType="com.spring.member.MemberVO" resultMap="signUpMap">
+		select password from member where name = #{name} and phone = #{phone} and email = #{email}
+	</select>
+	
+	<!-- 비밀번호 찾기 비밀번호를 난수 발생시킨 후 db에 다시 넣는 작업 -->
+	<update id="updatepassword" parameterType="com.spring.member.MemberVO">
+		update member set password = #{password} where name = #{name} and phone = #{phone} and email = #{email}
+	</update>
+	
+	<!-- mypage 회원정보 update에서 기존 비밀번호 확인 -->
+	<select id="passwordCheck" resultMap="signUpMap" parameterType="com.spring.member.MemberVO">
+		select * from member where password = #{password} and email = #{email}
+	</select>
+	
+	<!-- mypage 닉네임 중복확인 -->
+	<select id="nnupdateCheck" resultMap="signUpMap" parameterType="com.spring.member.MemberVO">
+		select * from member where nickname=#{nickname}
+	</select>
+	
+	<!-- mypage 회원정보 update에서 닉네임 중복확인 확인 -->
+	<update id="nicknameupdateCheck" parameterType="com.spring.member.MemberVO">
+		update member 
+		<set>
+			<if test="img != null and img != ''">
+				nickname=#{nickname}, postal_num=#{postal_num}, address=#{address},
+				address_detail=#{address_detail}, instagram_id=#{instagram_id},
+				children_birth=#{children_birth}, img=#{img} 
+			</if>
+			<if test="img == null or img ==''">
+				nickname=#{nickname}, postal_num=#{postal_num}, address=#{address},
+				address_detail=#{address_detail}, instagram_id=#{instagram_id},
+				children_birth=#{children_birth}
+			</if>
+		</set> 
+		where email=#{email} and password=#{password}
+	</update>
+	
+	<!-- 비밀번호 변경 -->
+	<update id="passwordUpdate" parameterType="com.spring.member.MemberVO">
+		update member set password = #{password} where email = #{email}
+	</update>
+	
+	<!-- admin페이지 member -->
+	<select id="getMemberList" resultMap="signUpMap">
+		select email, nickname, phone, regist, subscribe, usergroup from member
+	</select>
+	
+	<!-- admin페이지 group -->
+	<select id="getGroupList" resultMap="signUpMap" parameterType="com.spring.member.MemberVO">
+		select * from member
+	</select>
+	
+	<!-- admin group 변경 -->
+	<update id="normal_to_bad" parameterType="com.spring.member.MemberVO">
+		update member set usergroup = '비매너회원' where email = #{email}
+	</update>
+	
+	<!-- admin group 변경 -->
+	<update id="bad_to_normal" parameterType="com.spring.member.MemberVO">
+		update member set usergroup = '일반회원' where email = #{email}
+	</update>
+ 
+	<!-- admin페이지 member -->
+	<select id="getMemberListjeon" resultType="com.spring.member.MemberAdminVO">
+	<!-- 	select m.*, s.grade from member m, subscribe s where m.email = s.email -->
+	select * from member
+	</select>
+</mapper>

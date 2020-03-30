@@ -1,0 +1,292 @@
+@charset "UTF-8";
+@font-face { font-family: 'S-CoreDream-4Regular'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-4Regular.woff') format('woff'); font-weight: normal; font-style: normal; }
+* {
+	font-family: 'S-CoreDream-4Regular';
+}
+
+
+html,body,div,span,ul,li,select,h1,h2,h3,h4,h5,h6,dl,dt,dd,button,label,p,pre,textarea,section {
+  margin:0;
+  padding:0;
+  font-size:16px;
+  color:#616161;
+
+}
+h1 {font-size: 18px;} h2 {font-size: 24px;} h3 {font-size: 30px;} h4 {font-size: 36px;}
+.text-field {font-size: 20px; text-align: center; margin-top: 40px;}
+
+html,body {
+  height:100%;
+}
+figure {
+  margin:0;
+  padding:0;
+}
+#termSelect, .subscribeNext button, .subscribeEnd button {
+	display:block;
+}
+.txt label {
+	display:block;
+}
+.loop {
+	display:block;
+}
+
+/*등급 아이콘 */
+.choiceBox > div > label > div > span> label> em.level { font-style: normal; font-size: 10px; padding:2px; border-radius: 4px; border:1px solid #ff7276; margin-left:10px; color: #ff7276;}
+/*매달 아이콘*/
+.choiceBox > div > label > div > span> label> em.monthly { font-style: normal; font-size: 10px; padding:2px; border-radius: 4px; border:1px solid #7594c8; margin-left:10px; color: #7594c8;}
+
+
+.pc-flex {display:none !important;}
+.non-dis-mobile {visibility: hidden; max-height: 0;}
+.non-dis-pc {visibility: visible;; max-height: inherit;}
+
+
+/***************************************step1**********************************************/
+.subscribeHeader {width:100%; text-align: center;}
+.subscribeHeader > ul {display:flex; padding-bottom:20px; margin:0 auto; /*헤더와의 간격*/margin-top: 100px; width:250px;}
+.subscribeHeader > ul >  li {width:90px;}
+.subscribeHeader > ul >  li > span {margin-top:5px;}
+.subscribeHeader > ul >  li > h1 {width:30px; height:30px; line-height: 30px; border-radius: 15px; border:1px solid #aaaaaa; margin:0 auto; position: relative; text-align: center; background: #fff; font-size:12px;}
+.subscribeHeader > ul >  li > h1::after {content: ''; width:80px; height:1px; position: absolute; background: #aaaaaa; left:-60px; top:14px; z-index: -1; }
+.subscribeHeader > ul >  li:first-child > h1::after {content: ''; display:none;}
+.subscribeHeader > ul >  li.on > h1::after {content: ''; background: #ff7276;}
+.subscribeHeader > ul >  li.on > h1 {border:1px solid #ff7276; color:#ff7276;}
+.subscribeHeader > ul >  li.on > span {color:#ff7276;}
+
+.choiceBox {padding:0 25px; margin-top:5px; }
+.choiceBox > div {margin-top:5px; text-align: center; }
+.choiceBox > div:first-child {margin-top:0;}
+.choiceBox > div > input[type=radio] {display: none;} 
+.choiceBox > div > input[type=radio]:checked + label {border:2px solid #ff7276; border-radius: 5px; transform: scale(1.03); transition: all 0.2s;
+  box-shadow: 0 4px 4px rgba(0,23,80,.02), 0 1px 6px rgba(0,23,80,.03), 0 8px 8px rgba(0,23,80,.024), 0 16px 16px rgba(0,23,80,.024), 8px 32px 32px rgba(0,23,80,.036), 8px 64px 64px rgba(0,23,80,.036); }
+
+.choiceBox > div > input[type=radio]:checked + label > span.checked {visibility: visible;}
+.choiceBox > div > label:hover {border:2px solid #ff7276; border-radius: 5px; transform: scale(1.03); transition: all 0.2s;
+  box-shadow: 0 4px 4px rgba(0,23,80,.02), 0 1px 6px rgba(0,23,80,.03), 0 8px 8px rgba(0,23,80,.024), 0 16px 16px rgba(0,23,80,.024), 8px 32px 32px rgba(0,23,80,.036), 8px 64px 64px rgba(0,23,80,.036); }
+.choiceBox > div > label {border:1px solid #ddd; margin-top:20px; text-align: left; position: relative; transition: all 0.2s; cursor: pointer; display:block;}
+
+/*choiceBox size*/
+.choiceBox > div > label > div {text-align: left; height:300px; display: flex; flex-direction: column; padding-left:12px; }
+.choiceBox > div > label > div > span {font-size:14px; text-indent: -55;}
+
+
+.choiceBox > div > label > div > span.title {font-size: 24px; line-height: 1; font-weight: 800; margin-top:40px; text-align: center;}
+.choiceBox > div > label > div > span.txt {margin-top:10px; margin-left:10px;}
+.choiceBox > div > label > span {position: absolute; font-weight: 800;}
+.choiceBox > div > label > span.checked {right:135px; top:-30px; line-height: 60px; font-size: 30px; text-align: center; color:#fff; width:60px; height:60px; background: #ff7276; border-radius: 40px; visibility: hidden; z-index: 2;}
+.choiceBox > div > label > span.checked > i {font-size:30px;}
+
+
+.subscribeNext {margin:60px 0 30px !important;}
+.subscribeNext > button, .subscribeNext > input {cursor:pointer;margin:0 auto; border-radius: 3px; color:#fff; border:0; width:120px; height:36px; font-size:14px; font-weight: 800; text-align:center; background: #ff7276;}
+
+
+
+
+@media (min-width: 800px) {
+
+    .pc-flex {display:flex !important;}
+    .non-dis-mobile {visibility: visible;; max-height: inherit;}
+    .non-dis-pc {visibility: hidden; max-height: 0;}
+
+    .subscribeHeader {width:450px; margin:0 auto; }
+    .subscribeHeader > h3 {margin-top:50px; font-size:36px; line-height: 36px;}
+
+    .choiceBox {display:flex; width:780px; margin:0 auto;  margin-top:30px;}
+    .choiceBox > div {margin:0; width:350px;}
+    .choiceBox > div:last-child {margin-left:auto;}
+
+    .choiceTerm > div {display:flex; justify-content: center; margin-left:-75px;}
+    .choiceTerm > div > label {width: 350px; margin-left:75px; margin-top:100px;}
+
+    .orderVolume > div {width:780px; margin: 0 auto; display:flex; justify-content:center;}
+    .orderVolume > div > label {width: 350px; margin-top:100px;}
+    .orderVolume > div > label:last-child {margin-left:auto;}
+    .subscribeEndBox > div {display:flex; justify-content: center; margin-left:-75px;}
+    .subscribeEndBox > div > label {width: 350px; margin-left:75px; margin-top:100px;}
+
+}
+/******************************step2***************************************/
+.choiceTerm {padding:0 25px 25px 25px;}
+.choiceTerm > div > input[type=radio] {display: none;}
+.choiceTerm > div > input[type=radio]:checked + label {
+  border:2px solid #ff7276;
+  transform: scale(1.03);
+  transition: all 0.2s;
+  box-shadow: 0 0 30px rgba(0,0,0,0.05);
+}
+.choiceTerm > div > input[type=radio]:checked + label > div > img {opacity: 1; transition: all 0.2s;}
+.choiceTerm > div > input[type=radio]:checked + label > span.checked {visibility: visible;}
+.choiceTerm > div > label { display:block; padding:44px 30px; height:270px; border:1px solid #ddd; margin-top:60px; text-align: left; position: relative; transition: all 0.2s; cursor: pointer; position: relative;}
+.choiceTerm > div > label:hover {
+  border:2px solid #ff7276;
+  transform: scale(1.03);
+  transition: all 0.2s;
+  box-shadow: 0 4px 4px rgba(0,23,80,.02), 0 1px 6px rgba(0,23,80,.03), 0 8px 8px rgba(0,23,80,.024), 0 16px 16px rgba(0,23,80,.024), 8px 32px 32px rgba(0,23,80,.036), 8px 64px 64px rgba(0,23,80,.036);
+}
+.choiceTerm > div > label > span {font-size: 36px; padding:10px 0; font-weight: 600;}
+/* .choiceTerm > div > label > span {font-size: 16px; line-height: 24px;} */
+.choiceTerm > div > label > span.loop {font-size:14px;}
+.choiceTerm > div > label > span.price {margin-top:30px;}
+.choiceTerm > div > label > div.option {display:flex; align-items: baseline;}
+.choiceTerm > div > label > div.option > em { font-style: normal; font-size: 10px; padding:2px; border-radius: 4px; border:1px solid #7594c8; margin-left:10px; color: #7594c8;}
+.choiceTerm > div > label > div.option > span {font-size: 24px; color:#ff7276;}
+.choiceTerm > div > label > div.option > span:first-child {font-size:24px;}
+.choiceTerm > div > label > span.checked {position: absolute; right:135px; top:-40px; line-height: 60px; font-size: 18px; text-align: center; color:#fff; width:60px; height:60px; background: #ff7276; border-radius: 40px; visibility: hidden; z-index: 2;}
+
+@media (min-width: 1200px) {
+  .choiceTerm {padding:0 25px 25px 25px;}
+  .choiceTerm > div > input[type=radio] {display: none;}
+  .choiceTerm > div > input[type=radio]:checked + label {
+    border:2px solid #ff7276;
+    transform: scale(1.03);
+    transition: all 0.2s;
+    box-shadow: 0 0 30px rgba(0,0,0,0.05);
+    border-radius: 5px;
+  }
+  .choiceTerm > div > input[type=radio]:checked + label > div > img {opacity: 1; transition: all 0.2s;}
+  .choiceTerm > div > input[type=radio]:checked + label > span.checked {visibility: visible; }
+  .choiceTerm > div > label {padding:44px 30px; height:300px; border:1px solid #ddd; margin-top:60px; text-align: left; position: relative; transition: all 0.2s; cursor: pointer; position: relative;}
+  .choiceTerm > div > label:hover {
+    border:2px solid #ff7276;
+    transform: scale(1.03);
+    transition: all 0.2s;
+    box-shadow: 0 4px 4px rgba(0,23,80,.02), 0 1px 6px rgba(0,23,80,.03), 0 8px 8px rgba(0,23,80,.024), 0 16px 16px rgba(0,23,80,.024), 8px 32px 32px rgba(0,23,80,.036), 8px 64px 64px rgba(0,23,80,.036);
+  }
+  .choiceTerm > div > label > span {font-size: 16px; line-height: 24px;}
+  .choiceTerm > div > label > span {font-size: 36px; padding:10px 0; font-weight: 600;}
+  .choiceTerm > div > label > span.loop {margin-top:40px;}
+  .choiceTerm > div > label > span.price {margin-top:30px;}
+  .choiceTerm > div > label > div.option {display:flex; align-items: baseline;}
+  .choiceTerm > div > label > div.option > em { font-style: normal; font-size: 10px; padding:2px; border-radius: 4px; border:1px solid #7594c8; margin-left:10px; color: #7594c8;}
+  .choiceTerm > div > label > div.option > span {font-size: 24px; color:#ff7276;}
+  .choiceTerm > div > label > div.option > span:first-child {font-size:36px;}
+  .choiceTerm > div > label > span.checked {position: absolute; right:135px; top:-40px; line-height: 80px; font-size: 30px; text-align: center; color:#fff; width:80px; height:80px; background: #ff7276; border-radius: 40px; visibility: hidden; z-index: 2;}
+}
+  /**********************step3***************************/
+.subscribeEndBox  {padding:0 25px 25px 25px;}
+.subscribeEndBox > div > input[type=radio] {display: none;}
+.subscribeEndBox > div > input[type=radio]:checked + label {
+  display:block;
+  border:2px solid #ff7276;
+  transform: scale(1.03);
+  transition: all 0.2s;
+  box-shadow: 0 0 30px rgba(0,0,0,0.05);
+}
+.subscribeEndBox > div > input[type=radio]:checked + label > div > img {opacity: 1; transition: all 0.2s;}
+.subscribeEndBox > div > input[type=radio]:checked + label > span.checked {visibility: visible;}
+.subscribeEndBox > div > label {padding:44px 30px; height:270px; border:1px solid #ddd; margin-top:60px; text-align: left; position: relative; transition: all 0.2s; cursor: pointer; position: relative;}
+.subscribeEndBox > div > label:hover {
+  border:2px solid #ff7276;
+  transform: scale(1.03);
+  transition: all 0.2s;
+  box-shadow: 0 4px 4px rgba(0,23,80,.02), 0 1px 6px rgba(0,23,80,.03), 0 8px 8px rgba(0,23,80,.024), 0 16px 16px rgba(0,23,80,.024), 8px 32px 32px rgba(0,23,80,.036), 8px 64px 64px rgba(0,23,80,.036);
+}
+.subscribeEndBox > div > label > span {font-size: 36px; padding:10px 0; font-weight: 600;}
+/* .subscribeEndBox > div > label > span {font-size: 16px; line-height: 24px;} */
+.subscribeEndBox > div > label > span.loop {font-size:14px;}
+.subscribeEndBox > div > label > span.price {margin-top:30px;}
+.subscribeEndBox > div > label > div.option {display:flex; align-items: baseline;}
+.subscribeEndBox > div > label > div.option > em { font-style: normal; font-size: 10px; padding:2px; border-radius: 4px; border:1px solid #7594c8; margin-left:10px; color: #7594c8;}
+.subscribeEndBox > div > label > div.option > span {font-size: 24px; color:#ff7276;}
+.subscribeEndBox > div > label > div.option > span:first-child {font-size:24px;}
+.subscribeEndBox > div > label > span.checked {position: absolute; right:135px; top:-40px; line-height: 60px; font-size: 18px; text-align: center; color:#fff; width:60px; height:60px; background: #ff7276; border-radius: 40px; visibility: hidden; z-index: 2;}
+
+@media (min-width: 1200px) {
+  .subscribeEndBox {padding:0 25px 25px 25px;}
+  .subscribeEndBox > div > input[type=radio] {display: none;}
+  .subscribeEndBox > div > input[type=radio]:checked + label {
+    border:2px solid #ff7276;
+    transform: scale(1.03);
+    transition: all 0.2s;
+    box-shadow: 0 0 30px rgba(0,0,0,0.05);
+    border-radius: 5px;
+  }
+  .subscribeEndBox > div > input[type=radio]:checked + label > div > img {opacity: 1; transition: all 0.2s;}
+  .subscribeEndBox > div > input[type=radio]:checked + label > span.checked {visibility: visible; }
+  .subscribeEndBox > div > label {padding:44px 30px; height:300px; border:1px solid #ddd; margin-top:60px; text-align: left; position: relative; transition: all 0.2s; cursor: pointer; position: relative;}
+  .subscribeEndBox > div > label:hover {
+    border:2px solid #ff7276;
+    transform: scale(1.03);
+    transition: all 0.2s;
+    box-shadow: 0 4px 4px rgba(0,23,80,.02), 0 1px 6px rgba(0,23,80,.03), 0 8px 8px rgba(0,23,80,.024), 0 16px 16px rgba(0,23,80,.024), 8px 32px 32px rgba(0,23,80,.036), 8px 64px 64px rgba(0,23,80,.036);
+  }
+
+  .subscribeEndBox > div > label > span {font-size: 16px; line-height: 24px;}
+  .subscribeEndBox > div > label > span {font-size: 36px; padding:10px 0; font-weight: 600;}
+  .subscribeEndBox > div > label > span.loop {margin-top:40px;}
+  .subscribeEndBox > div > label > span.price {margin-top:30px;}
+  .subscribeEndBox > div > label > div.option {display:flex; align-items: baseline;}
+  .subscribeEndBox > div > label > div.option > em { font-style: normal; font-size: 10px; padding:2px; border-radius: 4px; border:1px solid #7594c8; margin-left:10px; color: #7594c8;}
+  .subscribeEndBox > div > label > div.option > span {font-size: 24px; color:#ff7276;}
+  .subscribeEndBox > div > label > div.option > span:first-child {font-size:36px;}
+  .subscribeEndBox > div > label > span.checked {position: absolute; right:135px; top:-40px; line-height: 80px; font-size: 30px; text-align: center; color:#fff; width:80px; height:80px; background: #ff7276; border-radius: 40px; visibility: hidden; z-index: 2;}
+}
+  
+.subscribeEnd {margin:60px 0 30px !important;}
+.subscribeEnd > button {margin:0 auto; border-radius: 3px; color:#fff; border:0; width:120px; height:36px; font-size:14px; font-weight: 800; text-align:center; background: #ff7276;}
+
+
+/*******************footer**************************/
+		 /* footer 시작 */       
+			em,address {font-style: normal;}   
+		   .bar2 {color:#8f8f8f; font-size:13px;}
+           #footer {background: #211f1f; margin-top:50px; height:293px;}
+           .footer_sns {position: absolute; right: 17px; top: 33px; z-index: 1;}
+           .footer_sns li {display: inline-block; width: 36px; height: 36px; margin-left: 4px;}
+           .footer_sns li.s1 {background-position: 0 -375px;}
+           .footer_sns li.s2 {background-position: -36px -375px;}
+           .footer_sns li.s3 {background-position: -72px -375px;}
+           .footer_sns li.s4 {background-position: -108px -375px;}
+           .footer_sns li.s5 {background-position: -144px -375px;}
+           .footer_sns li.s1:hover {background-position: 0 -411px;}
+           .footer_sns li.s2:hover {background-position: -36px -411px;}
+           .footer_sns li.s3:hover {background-position: -72px -411px;}
+           .footer_sns li.s4:hover {background-position: -108px -411px;}
+           .footer_sns li.s5:hover {background-position: -144px -411px;}
+           .footer_sns .tel {text-align: right; padding-top: 5px;}
+           .footer_sns .tel a {color: #8f8f8f; font-size: 21px;}
+           .footer_sns .tel a em {color: #fff;}
+           
+           .footer_infor {padding: 50px 0; width: 80%;}
+           .footer_infor h2 img {width: 150px;}
+           .footer_infor ul {padding: 15px 0;}
+           .footer_infor ul li a {font-size:13px;}
+           .footer_infor address p {font-size:13px;}
+           .footer_infor li {position: relative; display: inline-block;/**/ padding-right: 16px; white-space: nowrap;}
+           .footer_infor li:after {content: ''; position: absolute; right: 5px; top: 5px; width: 1px; height: 11px; background: #8f8f8f;}
+           .footer_infor li:last-child:after {width: 0; height: 0;}
+           .footer_infor li a {color: #8f8f8f;}
+           .footer_infor address p {color: #8f8f8f; padding-bottom: 15px;}
+           
+           .container {position: relative; max-width:1280px; margin: 0 auto; /* background:rgba(0,0,0,0.1); */ }
+           
+           @media (max-width:600px){
+               .container {width: 100%; }
+               .footer_sns {position: static; text-align: center; background: #352c2c; padding-bottom: 15px;}
+               .footer_sns .tel {display: none;}
+               .footer_sns ul {padding-left:0;}
+               .footer_infor {width: 100%; text-align: center;}
+               .footer_infor {padding: 30px 0;}
+               .footer_infor address p br {display: none;}
+           }
+           .icon {background-image: url(../img/icon.png);}
+
+
+           @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+                  only screen and (min-device-pixel-ratio: 1.5),
+                  only screen and (min-resolution: 1.5dppx){
+                       .icon {background-image: url(../img/icon@2.png); background-size: 500px;}
+                  }
+                  .ir_pm {display:block; overflow:hidden; font-size:0; line-height:0; text-indent:-9999px;}
+                  .ir_wa {display:block; overflow:hidden; position:relative; z-index:-1; width:100%; height: 100%;} 
+                  .ir_so {overflow: hidden; position:absolute; width:0; height:0; line-height:0; text-indent:-9999px; }
+                   
+                
+                   
+                   .tel em{font-style: normal;}
+                   /* footer 끝 */
+                
+

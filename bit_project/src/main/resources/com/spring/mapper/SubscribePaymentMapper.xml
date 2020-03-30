@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.mapper.SubscribePaymentMapper">
+		
+	<!--  admin 페이지 쉐어 수락/거절 리스트 -->
+	<select id="getShareList" resultType="com.spring.tazo.ShareWatingListVO">
+		select * from share_waiting_list where share_state=0 order by consignment_start_date
+	</select>
+	<!--  admin 페이지 쉐어 수락 시 리스트 -->
+	<update id="shareWaitingListAcceptOrDeny" parameterType="map">
+	update share_waiting_list set share_state=#{chk_num} where waiting_num=#{waiting_num}
+	</update>
+	<!--  admin 개인쉐어 수락 리스트 0은 대기 1은 수락 2는 거절 3은 등록완료 -->
+	<select id="getShareAcceptList" resultType="com.spring.tazo.ShareWatingListVO">
+	select * from share_waiting_list where share_state=1 order by consignment_start_date
+	</select>
+	
+	<!--  admin 개인쉐어 거절 리스트 아직 안씀  -->
+	<select id="getShareDenyList" resultType="com.spring.tazo.ShareWatingListVO">
+	select * from share_waiting_list where share_state=2 order by consignment_start_date
+	</select>
+	
+	<!--  admin 개인쉐어 정산 리스트  -->
+	<select id="getSettleList" resultType="com.spring.product.SettlementVO">
+	select * from settlement_details where state='정산대기' order by settlement_num
+	</select>
+	
+	<!--  admin 반납확정 리스트  -->
+	<!-- <select id="getReturnList" resultType="com.spring.mypage.PStateVO">
+	select * from product_state where state='반납확정' order by state_num asc
+	</select> -->
+	
+	<select id="getReturnList" resultType="com.spring.mypage.PStateVO" >
+	select * from product_state where state='반납확정' AND 
+	SUBSCRIBE_NUM NOT IN (
+        select SUBSCRIBE_NUM from product_state where state='배송전'
+    )
+	</select>
+	
+	
+	<select id="getEmail" resultType="com.spring.payment.SubscriptionVO" >
+	select email, subscribe_num, grade from subscribe where subscribe_num IN (	
+		select subscribe_num from product_state where state='반납확정' AND 
+		SUBSCRIBE_NUM NOT IN (
+	        select SUBSCRIBE_NUM from product_state where state='배송전'
+	    )
+	)
+	</select>
+	<select id="getWish" parameterType="map" resultType="int">
+	select product_num from wishlist where email=#{email} AND product_num NOT IN (
+		select NVL(product_num, 0) from product where current_amount=0
+	)
+	</select>
+	<select id="adminSelectWish" parameterType="map" resultType="int">
+	select product_num from (
+        select rownum rnum, product_num, current_amount from (
+            select product_num, current_amount from product where category_l=#{grade} and current_amount!=0 order by current_amount desc
+        )
+	)where rnum=1;
+	</select>
+	<insert id="adminInsertWish" parameterType="map">
+	<selectKey keyProperty="wish_num" resultType="int" order="BEFORE">
+	select wishlist_sequence.NEXTVAL from dual
+	</selectKey>
+	insert into wishlist values(#{wish_num}, #{email}, #{product_num}, sysdate)
+	</insert>
+	
+	<!-- 반납확정을 배송전으로 바꾸는 쿼리. 아직 미사용 -->
+	<!-- <update id="returnBatch">
+	update (
+		select * from product_state where state='반납확정' AND SUBSCRIBE_NUM NOT IN (
+        	select SUBSCRIBE_NUM from product_state where state='배송전'
+    	)
+	)
+	set state='배송전'
+	</update> -->
+	
+	<insert id="insertWish" parameterType="map">
+	<selectKey keyProperty="num1" order="BEFORE" resultType="int">
+	select subscribe_ps_sequence.NEXTVAL from dual
+	</selectKey>
+	insert into product_state values(#{num1}, #{subscribe_num}, #{randomPnum}, '배송전', #{date}, '')
+	</insert>
+
+	<select id="pickupList" resultType="com.spring.mypage.PStateVO">
+	select * from product_state where state='반납확정' order by return_application
+	</select>
+	
+	<update id="pickAccept" parameterType="map">
+	update product_state set state='반납완료' where state_num=#{state_num}
+	</update>
+	
+	<delete id="deleteWish" parameterType="map">
+	delete from wishlist where email=#{email} AND product_num=#{randomPnum}
+	</delete>
+	
+	<update id="updateProductAmount" parameterType="map">
+	update product set rental_amount=rental_amount+1, current_amount=current_amount-1 
+	where product_num=#{randomPnum}
+	</update>
+	<update id="settleAccept" parameterType="map">
+	update settlement_details set state='정산완료' 
+	where settlement_num=#{settlement_num}
+	</update>
+	
+	<select id="personalSharingCheck" parameterType="map" resultType="int">
+	select NVL(count(*), 0) from product_share where product_num=#{product_num}
+	</select>
+	        
+	<update id="personalSharingFund" parameterType="map">
+	update product_share set share_amount=share_amount+1, current_amount=current_amount-1, total_accumulated_fund=total_accumulated_fund+accumulated_fund
+	where product_num=#{product_num}
+	</update>
+</mapper>

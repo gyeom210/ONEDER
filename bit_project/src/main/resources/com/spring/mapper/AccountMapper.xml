@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.mapper.AccountMapper">
+ <select id="getSubscribe_num" parameterType="String" resultType="int">
+ 	select subscribe_num from subscribe where email=#{email}
+ </select>
+
+ <delete id="deleteProduct_state" parameterType="int">
+ 	delete from product_state where subscribe_num=#{subscribe_num}
+ </delete>
+ 
+ <delete id="deleteSubscribe_payment" parameterType="int">
+ 	delete from subscribe_payment where subscribe_num=#{subscribe_num}
+ </delete>
+ 
+ <delete id="deleteAlarm" parameterType="String">
+ 	delete from alarm where email=#{email}
+ </delete>
+ 
+ <delete id="deleteReservation" parameterType="String">
+ 	delete from reservation where email=#{email}
+ </delete>
+ 
+ <delete id="deleteBookmark" parameterType="String">
+ 	delete from bookmark where email=#{email}
+ </delete>
+ 
+ <delete id="deleteWishlist" parameterType="String">
+ 	delete from wishlist where email=#{email}
+ </delete>
+ 
+ <delete id="deleteDelivery_loc" parameterType="String">
+ 	delete from delivery_loc where email=#{email}
+ </delete>
+ 
+ <delete id="deleteMember_account" parameterType="String">
+ 	delete from member_account where email=#{email}
+ </delete>
+ 
+ <delete id="deleteSubscribe" parameterType="String">
+ 	delete from subscribe where email=#{email}
+ </delete>
+ 
+ <delete id="deleteMember_point" parameterType="String">
+ 	delete from member_point where email=#{email}
+ </delete>
+
+ <delete id="deleteMember" parameterType="String">
+ 	delete from member where email=#{email}
+ </delete>
+ 
+ 
+</mapper>

@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 	
+	**게시글**
+	board_num NUMBER PRIMARY KEY,
+	nickname VARCHAR2(20), /* nickname */
+	board_name VARCHAR2(100),
+	content VARCHAR2(500), /* content */
+	regist DATE, /* regist */
+	img VARCHAR2(200), /* img */
+	count NUMBER, /* count */ 조회수
+	category VARCHAR2(20), /* category */
+	scrap_count NUMBER /* scrap_count */ 
+	
+-->
+
+<mapper namespace="com.spring.mapper.CMMapper">
+
+	<resultMap type="com.spring.community.CommunityVO" id="cmMap">
+		<result property="board_num" column="board_num"/>
+		<result property="nickname" column="nickname"/>
+		<result property="board_name" column="board_name"/>
+		<result property="content" column="content"/>
+		<result property="regist" column="regist"/>
+		<result property="img" column="img"/>
+		<result property="count" column="count"/>
+		<result property="category" column="category"/>
+		<result property="scrap_count" column="scrap_count"/>
+		<result property="start" column="start" />
+		<result property="end" column="end" />
+		<result property="co_count" column="co_count" /> <!-- 댓글 수 -->
+		<result property="an_count" column="an_count" /> <!-- 대댓 수 -->
+		<result property="cm_count" column="cm_count" /> <!-- 총 게시글 수 -->
+		<result property="cmsearch_count" column="cmsearch_count" />
+		<result property="email" column="email" />
+		<result property="profile" column="profile" />
+	</resultMap>
+	
+	<resultMap type="com.spring.community.CommentVO" id="coMap">
+		<result property="comment_num" column="comment_num"/>
+		<result property="board_num" column="board_num"/>
+		<result property="nickname" column="nickname"/>
+		<result property="content" column="content"/>
+		<result property="regist" column="regist"/>
+		<result property="co_count" column="co_count" />
+		<result property="email" column="email" />
+		<result property="profile" column="profile" />
+	</resultMap>
+	
+	<resultMap type="com.spring.community.AnswerVO" id="answerMap">
+		<result property="answer_num" column="answer_num"/>
+		<result property="comment_num" column="comment_num"/>
+		<result property="nickname" column="nickname"/>
+		<result property="content" column="content"/>
+		<result property="regist" column="regist"/>
+		<result property="email" column="email" />
+		<result property="profile" column="profile" />
+	</resultMap>
+	
+<!-- 	<select id="getCommunity" resultMap="cmMap" parameterType="com.spring.community.CommunityVO">
+		select * from (
+			select * from board where board_num in (
+				select board_num from board_comment)) 
+		where ROWNUM &gt;=#{start} AND ROWNUM &lt;=#{end} order by board_num desc	
+		
+		select board.board_num, board.nickname, board.board_name, board.content, board.regist,
+		board.img, board.count, board.category, board.scrap_count,
+		(select count(*) from board_comment where board_comment.board_num = board.board_num) as co_count
+		from board where ROWNUM &gt;=#{start} AND ROWNUM &lt;=#{end} order by board_num desc
+		
+				select board.board_num, board.nickname, board.board_name, board.content, board.regist,
+		board.img, board.count, board.category, board.scrap_count,
+		(select count(*) from board_comment where board_comment.board_num = board.board_num) as co_count
+		from board order by board_num desc
+	</select> -->
+	
+<!-- 	<select id="getCommunityCount" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM BOARD where category = #{category}
+	</select> -->
+	
+<!--  <select id="getCM" parameterType="com.spring.community.CommunityVO" resultMap="cmMap">
+		select * from(
+		select rownum rnum, board.board_num, board.nickname, board.board_name, board.content, board.regist,
+		board.img, board.count, board.category, board.scrap_count,
+		(select count(*) from board_comment where board_comment.board_num = board.board_num) as co_count
+		from board where board.category = #{category} order by board.board_num desc )
+		<![CDATA[WHERE rnum >=#{start} and rnum<=#{end}]]> 
+	</select> -->
+	
+	<!-- 최신순 -->
+	<select id="filter1" parameterType="com.spring.community.CommunityVO" resultMap="cmMap">
+		<!-- 
+		select * from(
+	    	select rownum rnum, board_num, nickname, board_name, content, regist, img, count, category, scrap_count,
+	    		(select count(*) from board_comment where board_comment.board_num = board_num) as co_count,
+	    		(select count(*) from board where category = #{category}) as cm_count
+			from (select * from board order by regist desc) where category = #{category}) 
+		board <![CDATA[WHERE rnum >=#{start} and rnum<=#{end}]]> 
+		 -->
+		 select * from(
+	    	select board_num, nickname, board_name, content, regist, img, count, category, scrap_count, email,
+	    		(select member.img from member where board.email = member.email) as profile,
+	    		(select count(*) from board_comment where board_comment.board_num = board.board_num) as co_count,
+	    		(select count(*) from board_answer where board_answer.board_num = board.board_num) as an_count,
+	    		(select count(*) from board where category = #{category}) as cm_count
+	    		from board where category = #{category} order by regist desc) 
+	</select>
+	
+	<!-- 조회순 -->
+	<select id="filter2" parameterType="com.spring.community.CommunityVO" resultMap="cmMap">
+		select * from(
+	    	select board_num, nickname, board_name, content, regist, img, count, category, scrap_count, email,
+	    		(select member.img from member where board.email = member.email) as profile,
+	    		(select count(*) from board_comment where board_comment.board_num = board.board_num) as co_count,
+	    		(select count(*) from board_answer where board_answer.board_num = board.board_num) as an_count,
+	    		(select count(*) from board where category = #{category}) as cm_count
+	    		from board where category = #{category} order by count desc) 
+	</select>
+	
+	<!-- 댓글순 -->
+	<select id="filter3" parameterType="com.spring.community.CommunityVO" resultMap="cmMap">
+		select * from(
+	    	select board_num, nickname, board_name, content, regist, img, count, category, scrap_count, email,
+	    		(select member.img from member where board.email = member.email) as profile,
+	    		(select count(*) from board_comment where board_comment.board_num = board.board_num) as co_count,
+	    		(select count(*) from board_answer where board_answer.board_num = board.board_num) as an_count,
+	    		(select count(*) from board where category = #{category}) as cm_count
+	    		from board where category = #{category} order by co_count desc) 
+	</select>
+	
+	<!-- 검색 -->
+	<select id="getCMsearch" parameterType="com.spring.community.CommunityVO" resultMap="cmMap">
+<!-- 		select * from (
+   			select board.board_num, 
+   						board.board_name, 
+   						board.nickname, 
+   						board.content, 
+   						board.regist, 
+   						board.img, 
+   						board.count, 
+   						board.category, 
+   						board.scrap_count, 
+   						(select count(*) from board where category = #{category} and (nickname LIKE '%${search_Data}%' or board_name LIKE '%${search_Data}%' or content LIKE '%${search_Data}%')) as cmsearch_count,
+						(select count(*) from board_comment where board_comment.board_num = board.board_num) as co_count
+			from (select * from board order by regist desc) where category = #{category} and (nickname LIKE '%${search_Data}%' or board_name LIKE '%${search_Data}%' or content LIKE '%${search_Data}%'))
+		board <![CDATA[WHERE rnum >=#{start} and rnum<=#{end}]]> -->
+		
+		select * from (
+   			select  board_num, board_name, nickname, content, regist, img, count, category, scrap_count, email,
+   						(select member.img from member where board.email = member.email) as profile,
+   						(select count(*) from board where category = #{category} and (nickname LIKE '%${search_Data}%' or board_name LIKE '%${search_Data}%' or content LIKE '%${search_Data}%')) as cmsearch_count,
+						(select count(*) from board_comment where board_comment.board_num = board.board_num) as co_count,
+						(select count(*) from board_answer where board_answer.board_num = board.board_num) as an_count
+			from board)
+		where category = #{category} and (nickname LIKE '%${search_Data}%' or board_name LIKE '%${search_Data}%' or content LIKE '%${search_Data}%') order by regist desc
+		
+	</select>
+	
+	<!-- 닉네임 검색 -->
+	<select id="getuserSearch" parameterType="com.spring.community.CommunityVO" resultMap="cmMap">
+<!-- 		SELECT * FROM (
+				SELECT board.board_num, board.board_name, board.nickname, board.content, board.regist, 
+				board.img, board.count, board.category, board.scrap_count, 
+				(select member.img from member where board.email = member.email) as profile,
+				(select count(*) from board where nickname = #{nickname}) as cmsearch_count
+				from (select * from board order by regist desc) WHERE nickname = #{nickname}
+		) -->
+		
+		select * from(select board_num, board_name, nickname, content, regist, img, count, category, scrap_count,
+                    (select member.img from member where board.email = member.email) as profile,
+                    (select count(*) from board_answer where board_answer.board_num = board.board_num) as an_count,
+                    (select count(*) from board where nickname = #{nickname}) as cmsearch_count from board)
+        board where nickname = #{nickname} order by regist desc
+	</select>
+	
+	<!-- 글 상세보기 -->
+	<select id="detailCommunity" resultMap="cmMap" parameterType="int">
+		SELECT * FROM board WHERE board_num = #{board_num}
+	</select>
+	
+	<update id="updateCount" parameterType="int">
+		UPDATE board SET count=count+1 WHERE board_num=#{board_num}
+	</update>
+	
+	<update id="updateScrap" parameterType="int">
+		UPDATE board SET scrap_count = scrap_count+1 WHERE board_num=#{board_num}
+	</update>
+	
+	<!--프로필사진 가져오기 -->
+	<select id="getuserImg" parameterType="String" resultType="String">
+		select img from member where email = #{email}
+	</select>
+	
+	
+<!-- 	
+	************************************************************댓글************************************************************
+	comment_num NUMBER PRIMARY KEY,
+    board_num NUMBER, FOREIGN KEY(board_num) REFERENCES board(board_num),
+	nickname VARCHAR2(20), /* nickname */
+	content VARCHAR2(500), /* content */
+	regist DATE /* regist */
+	****************************************************************************************************************************
+-->
+	
+	<!-- 댓글 -->
+	 <select id="getCO" resultMap="coMap" parameterType="com.spring.community.CommunityVO">
+<!-- 		select * from (
+							select rownum rnum, comment_num, board_num, nickname, content, regist, email from (
+										select * from board_comment order by regist desc) where board_num=#{board_num}) 
+		<![CDATA[WHERE rnum >=#{start} and rnum<=#{end}]]>  -->
+		select * from (select b.*, m.img as profile from board_comment b inner join member m on b.email = m.email where b.board_num = #{board_num}) order by regist desc
+	</select>
+	
+	<select id="getCommentCount" resultType="int" parameterType="int">
+		select count(*) from board_comment where board_num =#{board_num}
+	</select>
+	
+	<insert id="writeCO" parameterType="com.spring.community.CommentVO" >
+		<selectKey keyProperty="comment_num" order="BEFORE" resultType="int">
+			SELECT board_comment_sequence.NEXTVAL FROM DUAL
+		</selectKey>
+		insert into board_comment (comment_num, board_num, nickname, content, regist, email) 
+		values (#{comment_num}, #{board_num}, #{nickname}, #{content}, sysdate, #{email})
+	</insert>
+	
+	<update id="updateCO" parameterType="com.spring.community.CommentVO">
+		update board_comment set content = #{content} where comment_num = #{comment_num}
+	</update>
+	
+	<delete id="deleteCO" parameterType="int">
+		delete from board_comment where comment_num = #{comment_num}
+	</delete>
+	
+	<delete id="deleteboardc" parameterType="int">
+		delete from board_comment where board_num = #{board_num}
+	</delete>
+	
+
+<!-- 	
+	**********************************************************대댓글************************************************************
+	answer_num NUMBER PRIMARY KEY,
+    comment_num NUMBER, FOREIGN KEY(comment_num) REFERENCES board_comment(comment_num),
+	nickname VARCHAR2(20), /* nickname */
+	content VARCHAR2(500), /* content */
+	regist DATE /* regist */
+	****************************************************************************************************************************
+-->
+
+	<insert id="writeAnswer" parameterType="com.spring.community.AnswerVO" >
+		<selectKey keyProperty="answer_num" order="BEFORE" resultType="int">
+			SELECT board_answer_sequence.NEXTVAL FROM DUAL
+		</selectKey>
+		insert into board_answer (answer_num, comment_num, nickname, content, regist, email, board_num) 
+		values (#{answer_num}, #{comment_num}, #{nickname}, #{content}, sysdate, #{email}, #{board_num})
+	</insert>
+	
+	<select id="getAnswer" resultMap="answerMap" parameterType="int">
+<!-- 		select * from (select )board_answer where comment_num = #{comment_num} order by regist desc -->
+		<!-- select * from (select a.*, m.img as profile from board_answer a inner join member m on a.email = m.email where a.comment_num = #{comment_num}) order by regist desc -->
+		select * from (select answer_num, comment_num, nickname, content, regist, email, board_num from board_answer) where comment_num = #{comment_num}
+
+	</select>
+	
+	<select id="getAnswerCount" resultType="int" parameterType="int">
+		select count(*) from board_answer where board_num =#{board_num}
+	</select>
+	
+	<update id="updateAnswer" parameterType="com.spring.community.AnswerVO">
+		update board_answer set content = #{content} where answer_num = #{answer_num}
+	</update>
+
+	<delete id="deleteAnswer" parameterType="int">
+		delete from board_answer where answer_num = #{answer_num}
+	</delete>
+	
+	<delete id="deleteboarda" parameterType="int">
+		delete from board_answer where board_num = #{board_num}
+	</delete>
+
+</mapper>

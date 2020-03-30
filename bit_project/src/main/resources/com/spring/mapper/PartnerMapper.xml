@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.mapper.PartnerMapper">
+	<resultMap type="com.spring.partner.PartnerVO" id="partnerResultMap">
+		<result property="partner_num" column="partner_num" />
+		<result property="license_num" column="license_num" />
+		<result property="name" column="name" />
+		<result property="content" column="content" />
+		<result property="phone" column="phone" />
+		<result property="email" column="email" />
+		<result property="homepage" column="homepage" />
+		<result property="postal_num" column="postal_num" />
+		<result property="address" column="address" />
+		<result property="address_detail" column="address_detail" />
+		<result property="img" column="img" />
+		<result property="term" column="term" />
+		<result property="category" column="category" />
+		<result property="state" column="state"  />
+		<result property="accept_date" column="accept_date"  />
+			
+	</resultMap>
+	
+	<select id="getPartnerList" resultMap="partnerResultMap">
+		select name, content, img, category, homepage from partner where state = 'Y'
+	</select>
+	
+	
+	<insert id="ptAdd" parameterType="com.spring.partner.PartnerVO">
+	<selectKey keyProperty="partner_num" resultType="int" order="BEFORE">
+    SELECT PARTNER_SEQUENCE.NEXTVAL FROM DUAL
+  	</selectKey>
+  	INSERT INTO partner(partner_num, license_num, name, content, phone, email, homepage, postal_num, address, address_detail, img, term, category) 
+  	VALUES(#{partner_num}, #{license_num}, #{name}, #{content}, #{phone}, #{email}, #{homepage}, #{postal_num}, #{address}, #{address_detail}, #{img}, #{term}, #{category})
+	</insert>
+
+	
+  	<select id="ptcheckLicenseExist" parameterType="map" resultType="int">
+	SELECT COUNT(*) FROM partner WHERE license_num=#{license_num}
+	</select>
+	
+
+	<select id="partnerimg" resultType="com.spring.partner.PartnerVO">
+	SELECT * FROM partner where state = 'Y'
+	</select>
+	
+	<select id="getPartnerinfo" resultType="com.spring.partner.PartnerVO">
+	SELECT * FROM partner 
+	</select>
+	
+	
+	<delete id="ptdelete" parameterType="map">
+	delete from partner where name=#{name} 
+	</delete>
+	
+	
+	<!-- admin group 변경 -->
+   <update id="partneradd" parameterType="com.spring.partner.PartnerVO">
+    update partner set state = 'Y', accept_date = #{accept_date} where name = #{name}
+   </update>
+   
+	<update id="ptsave"  parameterType="com.spring.partner.PartnerVO">
+   
+    update partner set license_num = #{license_num} , homepage = #{homepage} , phone = #{phone} , term = #{term} WHERE name= #{name}
+   </update>
+   
+	
+</mapper>

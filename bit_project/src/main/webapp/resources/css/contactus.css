@@ -1,0 +1,144 @@
+/*************************** header ******************************/
+
+/*************************** container ******************************/
+@font-face { font-family: 'S-CoreDream-4Regular'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-4Regular.woff') format('woff'); font-weight: normal; font-style: normal; }
+*{
+	font-family: 'S-CoreDream-4Regular';
+}
+body {
+	margin: 0;
+}
+#contact-us-form {
+	width: 1280px;
+	margin: 0 auto;
+}
+
+#map-wrapper {
+	width: 1280px;
+	margin: 0 auto;
+}
+
+#logo {
+	text-align: center;
+	padding: 40px;
+	background-color: #ffb0b1;
+	color: white;
+}
+
+#contact-us-form form table {
+	margin: 0 auto;
+	width: 250px;
+}
+
+#contact-us-form form table .span {
+	text-align: center;
+}
+
+/* td {
+	padding: 7px;
+} */
+
+.submit {
+	color: white;
+	border-radius: 0.3em;
+}
+
+#map-wrapper {
+	width: 100%;
+	margin: 100px 0 150px 0;
+	text-align: center;
+}
+
+#map {
+	width: 500px;
+	height: 400px;
+	display: inline-block;
+	margin-left: 5%;
+	margin-right: 5%;
+}
+
+#information {
+	display: inline-block;
+	margin-left: 5%;
+	margin-right: 5%;
+}
+
+.btn {
+	color: #fff;
+	border: 1px solid;
+	border-radius: 5px;
+	background-color: #ffb0b1;
+	width: 130px;
+	height: 40px;
+	font-size: 15px;
+	margin: 40px;
+}
+
+.span {
+	width: 100%;
+	margin: 0 auto;
+	display: block;
+}
+
+.field-text {
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	width: 350px;
+	height: 30px;
+}
+
+.field-text2 {
+	padding: 30px 0 0 0;
+}
+
+.text-area {
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	width: 350px;
+	height: 100px;
+	resize: none;
+}
+
+@media screen and (max-width: 480px) {
+	#contact-us-wrapper {
+		width: 100%;
+	}
+	#contact-us-form {
+		width: 100%;
+	}
+	.field-text {
+		width: 250px;
+		font-size: 20px;
+		padding: 4px;
+		height: 35px;
+		border: 1px solid #3e3e3e;
+		border-radius: 3px;
+		opacity: 0.6;
+	}
+	.field-text value {
+		opacity: 0.6;
+	}
+	.field-text2 {
+		width: 250px;
+		font-size: 20px;
+		padding: 30px 0 0 4px;
+	}
+	.text-area {
+		width: 250px;
+		border: 1px solid #3e3e3e;
+		border-radius: 3px;
+		opacity: 0.6;
+	}
+	#map {
+		width: 100%;
+		margin-left: auto;
+		margin-right: auto;
+	
+	}
+	#information {
+		margin-left: auto;
+		margin-right: auto;
+		display: block;
+		
+	}
+}

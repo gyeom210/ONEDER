@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.mapper.PDMapper">
+
+	<resultMap type="com.spring.product.ProductVO" id="prMap">
+		<result property="product_num" column="product_num" />
+		<result property="product_name" column="product_name" />
+		<result property="total_amount" column="total_amount" />
+		<result property="rental_amount" column="rental_amount" />
+		<result property="current_amount" column="current_amount" />	
+		<result property="manufacturer" column="manufacturer" />
+		<result property="product_content" column="product_content" />
+
+		<result property="gpa" column="gpa" />
+		<result property="category_l" column="category_l" />
+		<result property="category_m" column="category_m" />
+		<result property="category_s" column="category_s" />
+		<result property="img_sum" column="img_sum" />
+		<result property="img_main" column="img_main" />
+		<result property="img_detail" column="img_detail" />
+		<result property="regist" column="regist" />
+		<result property="readcount" column="readcount" />
+	</resultMap>
+
+	
+	<insert id="prAdd" parameterType="com.spring.product.ProductVO" >
+		<selectKey keyProperty="product_num" resultType="int" order="BEFORE">
+			SELECT product_sequence.NEXTVAL FROM DUAL
+		</selectKey>
+		insert into product(product_num, product_name, total_amount,
+		rental_amount, current_amount, manufacturer,
+		product_content, category_l, category_m, category_s, main_img,
+		<choose>
+			<when test="img_sum == null and img_main == null and img_detail == null">
+					regist) values(
+			#{product_num}, #{product_name}, #{total_amount}, #{rental_amount}, #{current_amount},
+			#{manufacturer}, #{product_content}, #{category_l}, #{category_m}, #{category_s}, #{main_img},
+			sysdate)
+			</when>
+			<when test="img_sum != null and img_main != null and img_detail == null">
+					img_sum, img_main, regist) values(
+			#{product_num}, #{product_name}, #{total_amount}, #{rental_amount},#{current_amount},
+			#{manufacturer}, #{product_content}, #{category_l}, #{category_m}, #{category_s}, #{main_img},
+			#{img_sum}, #{img_main},sysdate)
+			</when>
+			<when test="img_sum != null and img_main == null and img_detail == null">
+					img_sum, regist) values(
+			#{product_num}, #{product_name}, #{total_amount}, #{rental_amount},#{current_amount},
+			#{manufacturer}, #{product_content}, #{category_l}, #{category_m}, #{category_s}, #{main_img},
+			#{img_sum}, sysdate)
+			</when>
+				<when test="img_sum != null and img_main != null and img_detail != null">
+					img_sum, img_main, img_detail, regist) values(
+			#{product_num}, #{product_name}, #{total_amount}, #{rental_amount},#{current_amount},
+			#{manufacturer}, #{product_content}, #{category_l}, #{category_m}, #{category_s}, #{main_img},
+			#{img_sum}, #{img_main}, #{img_detail},sysdate)
+			</when>
+		</choose>
+	</insert>
+	
+	<select id="getPnum" resultType="int">
+			SELECT product_num
+    		FROM product
+    		WHERE product_num = (SELECT MAX(product_num)AS product_num FROM product)
+	</select>
+
+	<update id="shareState" parameterType="map">
+			UPDATE share_waiting_list
+    		SET share_state=#{share_state}
+    		WHERE waiting_num=#{waiting_num}
+	</update>
+	<insert id="shareAdd" parameterType="com.spring.product.ProductShareVO">
+		<selectKey keyProperty="share_num" resultType="int" order="BEFORE">
+			SELECT share_sequence.NEXTVAL FROM DUAL
+		</selectKey>
+	insert into product_share values(#{share_num}, #{waiting_num}, #{product_num}, #{product_name},#{email},#{consignment_start_date},#{consignment_end_date},
+	#{total_share_count},#{total_accumulated_fund},#{accumulated_fund},#{total_amount},#{share_amount},#{current_amount})
+	</insert>
+	
+
+	<update id="prModify" parameterType="com.spring.product.ProductVO">		
+		update product set product_name=#{product_name}, total_amount=#{total_amount},current_amount=#{current_amount},
+		manufacturer=#{manufacturer}, product_content=#{product_content},
+		category_l=#{category_l}, category_m=#{category_m}, category_s=#{category_s}, regist=sysdate
+			<if test="img_sum != null">
+			,img_sum=#{img_sum}
+			</if>
+			<if test="img_main != null">
+			,img_main=#{img_main}
+			</if>
+			<if test="img_detail != null">
+			,img_detail=#{img_detail}
+			</if>
+			<if test="main_img != null">
+			,main_img=#{main_img}
+			</if>
+		where product_num=#{product_num}
+	</update>
+	
+	<delete id="prDelete1" parameterType="map">
+	delete from question where product_num=#{product_num}
+	</delete>
+	<delete id="prDelete2" parameterType="map">
+	delete from review where product_num=#{product_num}
+	</delete>
+	<delete id="prDelete3" parameterType="map">
+	delete from wishlist where product_num=#{product_num}
+	</delete>
+	<delete id="prDelete4" parameterType="map">
+	delete from bookmark where product_num=#{product_num}
+	</delete>
+	<delete id="prDelete5" parameterType="map">
+	delete from reservation where product_num=#{product_num}
+	</delete>
+	<delete id="prDelete6" parameterType="map">
+	delete from alarm where product_num=#{product_num}
+	</delete>
+	<delete id="prDelete7" parameterType="map">
+	delete from product_share where product_num=#{product_num}
+	</delete>
+	<delete id="prDelete8" parameterType="map">
+	delete from product where product_num=#{product_num}
+	</delete>
+
+
+	<!-- 상품 리스트 전체 출력(쓰진않음) -->
+	<select id="allSearch" resultType="com.spring.product.ProductVO">
+		select rownum rnum, product_num, product_name, total_amount, rental_amount,
+		current_amount, manufacturer, product_content,
+		gpa, category_l, category_m, category_s, img_sum, img_main, img_detail,
+		regist, readcount from product
+		order by rnum asc
+	</select>
+
+	<!-- 필터선택 안했을 때 상품 리스트 출력 -->
+	<select id="scrollSearch" parameterType="map"
+		resultType="com.spring.product.ProductVO">
+		select * from (
+		select rownum rnum, product_num, product_name,
+		total_amount, rental_amount, current_amount, manufacturer,
+		product_content,
+		gpa, category_l, category_m, category_s, img_sum,
+		img_main, img_detail, regist
+		from (
+		select * from product order by product_num
+		)
+		)
+	<![CDATA[WHERE rnum>=#{pno}+1 and rnum<=#{pno}+8]]>
+	</select>
+
+
+	<!-- 필터설정 이후 스크롤 시. 1. 해당 필터로 조회. 그 중 8개만 -->
+	<select id="filterScroll" parameterType="map" resultType="com.spring.product.ProductVO">
+		select * from (
+		select rownum rnum, product_num, product_name,
+		total_amount, rental_amount, current_amount, manufacturer,
+		product_content,
+		gpa, CATEGORY_L, CATEGORY_M, CATEGORY_S, img_sum,
+		img_main, img_detail, regist, readcount FROM (
+		SELECT *
+		FROM product
+		where 1=1
+		<if test="cateMap1.size != 0">
+			AND CATEGORY_L IN
+			<foreach collection="cateMap1" item='item' index='i' open="(" close=")" separator=",">
+			#{i}
+			</foreach>
+		</if>
+		<if test="cateMap2.size != 0">
+			AND CATEGORY_M IN
+			<foreach collection="cateMap2" item='item' index='j' open="(" close=")" separator=",">
+			#{j}
+			</foreach>
+		</if>
+		<if test="cateMap3.size != 0">
+			AND CATEGORY_S IN
+			<foreach collection="cateMap3" item='item' index='z' open="(" close=")" separator=",">
+			#{z}
+			</foreach>
+		</if>
+		<if test="special=='신상품'">
+		order by regist desc, product_num asc
+		</if>
+		<if test="special=='인기순'">
+		order by readcount desc, product_num asc
+		</if>
+		<if test="special=='평점순'">
+		order by gpa desc, product_num asc
+		</if>
+		<if test="special==null">
+		order by product_num asc
+		</if>
+		
+		)
+		
+		)
+	<![CDATA[WHERE rnum>=#{pno}+1 and rnum<=#{pno}+8]]>
+	</select>
+
+	<!-- 상품 상세 -->
+	<select id="getProductDetail" parameterType="map"
+		resultType="com.spring.product.ProductVO">
+		select * from product where product_num=#{product_num}
+	</select>
+	<update id="getProductReadCount" parameterType="map">
+		update product set readcount=#{readcount}+1 where product_num=#{product_num}
+	</update>
+	
+	<!-- 구독 등급에 따라 위시리스트나 예약을 할 수 있게 -->
+	
+	<select id="getMemberSubsState" parameterType="map" resultType="int">
+		select NVL(count(*), 0) from member where email=#{email} AND subscribe='Y'
+	</select>
+	<select id="getMemberSubsGrade" parameterType="map" resultType="String">
+		select grade from subscribe where email=#{email}
+	</select>
+	
+	<!--  알람  -->
+	<insert id="addAlarm" parameterType="map">
+		<selectKey keyProperty="alarm_num" resultType="int" order="BEFORE">
+			select alarm_sequence.NEXTVAL from dual
+		</selectKey>
+		insert into alarm values(#{alarm_num}, #{email}, #{product_num}, #{phone})
+	</insert>
+
+	<delete id="deleteAlarm" parameterType="map">
+		delete from alarm where product_num=#{product_num} AND email=#{email}
+	</delete>
+
+	<select id="getAlarm" parameterType="map" resultType="int">
+		select NVL(count(*), 0) from alarm where product_num=#{product_num} AND email=#{email} AND phone=#{phone}
+	</select>
+	<select id="getAlarm2" parameterType="map" resultType="int">
+		select NVL(count(*), 0) from alarm where product_num=#{product_num} AND email=#{email}
+	</select>
+	<!--  알람  -->
+	
+	<!-- 북마크 -->
+	<insert id="addBookMark" parameterType="map">
+		<selectKey keyProperty="mark_num" resultType="int"
+			order="BEFORE">
+			select bookmark_sequence.NEXTVAL from dual
+		</selectKey>
+		insert into bookmark values(#{mark_num}, #{email}, #{product_num},
+		sysdate)
+	</insert>
+
+	<delete id="deleteBookMark" parameterType="map">
+		delete from bookmark where product_num=#{product_num} AND email=#{email}
+	</delete>
+
+	<select id="getBookMark" parameterType="map" resultType="int">
+		select NVL(count(*), 0) from bookmark where product_num=#{product_num} AND
+		email=#{email}
+	</select>
+	<!-- 북마크 -->
+
+	<!-- 위시리스트 -->
+	<insert id="addWishList" parameterType="map">
+		<selectKey keyProperty="wish_num" resultType="int"
+			order="BEFORE">
+			select wishlist_sequence.NEXTVAL from dual
+		</selectKey>
+		insert into wishlist values(#{wish_num}, #{email}, #{product_num},
+		sysdate)
+	</insert>
+
+	<delete id="deleteWishList" parameterType="map">
+		delete from wishlist where product_num=#{product_num} AND email=#{email}
+	</delete>
+
+	<!--  해당 유저의 email로 위시리스트가 10개인지 체크 -->
+	<select id="getWishListCount" parameterType="map" resultType="int">
+		select NVL(count(*), 0) from wishlist where email=#{email}
+	</select>
+
+	<select id="getWishList" parameterType="map" resultType="int">
+		select NVL(count(*), 0) from wishlist where product_num=#{product_num} AND
+		email=#{email}
+	</select>
+	<!-- 위시리스트 -->
+
+	<!-- 예약 -->
+	<insert id="addReservation" parameterType="map">
+		<selectKey keyProperty="reserve_num" resultType="int"
+			order="BEFORE">
+			select reservation_sequence.NEXTVAL from dual
+		</selectKey>
+		insert into reservation(reserve_num, email, product_num, regist)
+		values(#{reserve_num}, #{email}, #{product_num}, sysdate)
+	</insert>
+
+	<delete id="deleteReservation" parameterType="map">
+		delete from reservation where product_num=#{product_num} AND email=#{email}
+	</delete>
+		<select id="getReservation1" parameterType="map" resultType="int">
+		select NVL(count(*), 0) from reservation where
+		email=#{email}
+	</select>
+	<select id="getReservation2" parameterType="map" resultType="int">
+		select NVL(count(*), 0) from reservation where
+		product_num=#{product_num} AND email=#{email}
+	</select>
+
+	<!-- 예약 -->
+
+	<!-- 상품 상세 -->
+
+	<!-- 입고 SMS 알림 서비스 관련 -->
+	<select id="amountCheck" parameterType="map" resultType="int">
+		select total_amount from product where product_num=#{product_num}
+	</select>
+	
+	<select id="SMSalarm" parameterType="map" resultType="com.spring.product.AlarmVO">
+		select * from alarm where product_num=#{product_num}
+	</select>
+	<!-- 입고 SMS 알림 서비스 관련 -->
+	<!-- 상품 문의 -->
+	 <select id="qnaSearch" parameterType="map" resultType="com.spring.product.QnaVO">
+		select * FROM (
+		SELECT rownum rnum, question_num, question_title,
+		product_num,email,nickname,content,regist,secret,answer
+		FROM question
+		where product_num=#{product_num}
+		ORDER BY regist desc
+		)
+	<![CDATA[WHERE rnum>=#{startPage} and rnum<=#{endPage}]]>
+	</select> 
+<!-- 	<select id="qnaSearch" parameterType="map" resultType="com.spring.product.QnaPlusAnsVO">
+		select * FROM (
+			select rownum rnum, q.question_num, q.question_title, q.product_num, q.email, q.nickname, q.content as content, q.regist as regist, q.secret, q.answer, a.content as acontent, a.regist as aregist, a.answer_num 
+			from question q, question_answer a
+			where q.question_num= a.question_num and q.product_num=#{product_num} and a.product_num=#{product_num}
+			order by regist asc
+		)
+	<![CDATA[WHERE rnum>=#{startPage} and rnum<=#{endPage}]]>
+	</select> -->
+	<select id="qnaAnsSearch" parameterType="map" resultType="com.spring.product.QnaAnsVO">
+	select * from question_answer where question_num=#{question_num} 
+	</select>
+
+	<select id="qnaCount" parameterType="map" resultType="int">
+		select
+		count(*) FROM question where product_num=#{product_num}
+	</select>
+
+	<insert id="qnaWrite" parameterType="com.spring.product.QnaVO">
+		<selectKey keyProperty="question_num" resultType="int"
+			order="BEFORE">
+			SELECT question_sequence.NEXTVAL FROM DUAL
+		</selectKey>
+		insert into question(question_num, question_title, product_num,
+		email, nickname, content, regist, secret)
+		values(
+		#{question_num}, #{question_title}, #{product_num}, #{email}, #{nickname}, #{content}, sysdate,
+		#{secret}
+		)
+	</insert>
+	<delete id="qnaAnsDelete" parameterType="map">
+		delete from question_answer where question_num=#{question_num}
+	</delete>
+	<delete id="qnaDelete" parameterType="map">
+		delete from question where product_num=#{product_num} AND
+		question_num=#{question_num}
+	</delete>
+	
+	<update id="qnaModify" parameterType="com.spring.product.QnaVO">
+		update question set question_title=#{question_title}, email=#{email}, nickname=#{nickname},
+		content=#{content}, secret=#{secret}, regist=sysdate where
+		question_num=#{question_num}
+	</update>
+	<select id="qnaemailchk" parameterType="map" resultType="String">
+		select email FROM member where email=#{email}
+	</select>
+	<select id="qnaadminchk" parameterType="map" resultType="String">
+		select email FROM admin where email=#{email}
+	</select>
+	
+	<select id="reviewoverflow" parameterType="map" resultType="int">
+		select NVL(count(*), 0) from review where product_num=#{product_num} AND email=#{email}
+	</select>
+	
+	
+	<!-- 문의 -->
+
+
+	<!-- 리뷰 -->
+	<select id="reviewCount" parameterType="map" resultType="int">
+		select
+		count(*) FROM review where product_num=#{product_num}
+	</select>
+
+	<insert id="reviewWrite"
+		parameterType="com.spring.product.ReviewVO">
+		<selectKey keyProperty="review_num" resultType="int"
+			order="BEFORE">
+			SELECT review_sequence.NEXTVAL FROM DUAL
+		</selectKey>
+		insert into review(review_num, product_num, email, nickname, content, img,
+		regist, gpa) values(
+		#{review_num}, #{product_num}, #{email}, #{nickname}, #{content},#{img},
+		sysdate, #{gpa})
+	</insert>
+
+	<!-- <select id="reviewSearch" parameterType="map" resultType="com.spring.product.ReviewVO"> 
+		select * FROM ( SELECT rownum rnum, review_num, product_num,nickname,content, 
+		img, regist, gpa FROM review where product_num=#{product_num} ORDER BY regist 
+		asc ) <![CDATA[WHERE rnum>=#{startPage} and rnum<=#{endPage}]]> </select> -->
+
+	<select id="reviewSearch" parameterType="map"
+		resultType="com.spring.product.reviewjoinmemberVO">
+		select * FROM (
+		SELECT rownum rnum, r.review_num, r.product_num,
+		r.nickname, r.content, r.regist, r.gpa, r.point_details, r.img as rimg,
+		m.img as mimg, r.email as email
+		FROM review r, member m
+		where product_num=#{product_num} and r.email=m.email              
+		ORDER BY regist asc
+		)
+	<![CDATA[WHERE rnum>=#{startPage} and rnum<=#{endPage}]]>
+	</select>
+
+
+	<delete id="reviewDelete" parameterType="map">
+		delete from review where product_num=#{product_num} AND
+		review_num=#{review_num}
+	</delete>
+	<update id="reviewModify"
+		parameterType="com.spring.product.ReviewVO">
+		update review set nickname=#{nickname}, content=#{content}, gpa=#{gpa},
+		regist=sysdate, img=#{img} where review_num=#{review_num}
+	</update>
+
+	<update id="reviewModifyNoImg"
+		parameterType="com.spring.product.ReviewVO">
+		update review set nickname=#{nickname}, content=#{content}, gpa=#{gpa},
+		regist=sysdate where review_num=#{review_num}
+	</update>
+	
+	<update id="addPoint" parameterType="map">
+		update member set point=point+500 where email=#{email}
+	</update>
+	<update id="pointDetail" parameterType="map">
+		update review set point_details=1 where email=#{email} AND product_num=#{product_num}
+	</update>
+	<update id="reviewGpa" parameterType="map">
+	update product set gpa=(
+		select sum(gpa)/count(*) AS gpa from review where product_num=#{product_num}
+		)
+	where product_num=#{product_num}
+	</update>
+	
+	<!-- 리뷰 -->
+
+
+	<!-- 상품 검색 -->
+	<select id="productListGetCount" parameterType="map"
+		resultType="int">
+		select count(product_num) from product
+		<choose>
+			<when test="search_type == 'na'">
+				<if test="search_word != null and search_word != ''">
+					where product_name like '%' || #{search_word} || '%'
+				</if>
+			</when>
+			<when test="search_type == 'no'">
+				<if test="search_word != null and search_word != ''">
+					where product_num=#{search_word}
+				</if>
+			</when>
+		</choose>
+	</select>
+
+
+	<select id="selectProductList" parameterType="map"
+		resultType="com.spring.product.ProductVO">
+		select * from
+		(
+		select rownum rnum, product_num, product_name, total_amount, rental_amount,
+		current_amount, manufacturer, product_content,
+		gpa, category_l, category_m, category_s, img_sum, img_main, img_detail,
+		regist, readcount
+		from
+		(
+		select * from product
+		<choose>
+			<when test="search_type == 'na'">
+				<if test="search_word != null and search_word != ''">
+					where product_name like '%' || #{search_word} || '%'
+				</if>
+			</when>
+			<when test="search_type == 'no'">
+				<if test="search_word != null and search_word != ''">
+					where product_num=#{search_word}
+				</if>
+			</when>
+		</choose>
+		order by product_num DESC
+		)
+		)
+		where rnum <![CDATA[<=]]>
+		#{pno}+8 AND rnum <![CDATA[>=]]>
+		#{pno}+1
+	</select>
+	<!-- 상품 검색 -->
+
+	<!--  관리자 -->
+	<insert id="ansWrite" parameterType="com.spring.product.QnaAnsVO">
+		<selectKey keyProperty="answer_num" resultType="int" order="BEFORE">
+			SELECT question_ans_sequence.NEXTVAL FROM DUAL
+		</selectKey>
+		insert into question_answer(answer_num, question_num, nickname, product_num, content, regist, email) 
+		values(#{answer_num}, #{question_num}, #{nickname},#{product_num}, #{content}, sysdate, #{email})
+	</insert>
+	
+	<update id="ansState" parameterType="com.spring.product.QnaAnsVO">
+		update question set answer='답변완료' where question_num=#{question_num}
+	</update>	
+	
+	<!--  관리자 -->
+	
+</mapper>

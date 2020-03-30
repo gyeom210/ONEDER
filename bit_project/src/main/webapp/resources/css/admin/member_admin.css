@@ -1,0 +1,139 @@
+@charset "UTF-8";
+@import url("https://cdn.jsdelivr.net/gh/moonspam/NanumBarunGothic@latest/nanumbarungothicsubset.css");
+
+#board_history {
+	margin-bottom:5px;
+    height: 35px;
+    border-radius: 7px;
+    display: flex;
+    justify-content: space-between;
+    background-color: #e4e4e4;
+    box-shadow: 3px 3px 5px 0 rgb(172, 171, 171);
+    cursor:pointer;
+}
+.history_drop {
+	background-color:#f9f9f9;
+	margin-bottom:60px;
+	display:none;
+}
+.board_history_content {
+	line-height: 35px;
+    padding-left: 20px;
+}
+.board_history_content > b, .board_history_btn > b {
+	font-size:1.1em;
+	color:rgb(109, 109, 109);
+}
+.board_history_btn {
+	line-height: 40px;
+    padding-right: 20px;
+}
+
+
+
+.board_list_wrap {
+	display:block;
+	margin:0 auto;
+}
+
+
+
+.board_free {
+    box-shadow:3px 3px 5px 0 rgb(172, 171, 171);
+    padding:30px;
+    border-radius:10px;
+    max-width:900px;
+}
+.board_free_name > h2 {
+    text-align: center;
+    margin-bottom:40px;
+    color:rgb(73, 69, 69);
+}
+.free_line > td {
+    border-bottom:solid 1px rgb(206, 207, 205);
+}
+.oo {
+    float:right;
+}
+.board_free_content > table {
+    margin:0 auto;
+}
+
+.board_list_wrap {
+    box-shadow:3px 3px 5px 0 rgb(172, 171, 171);
+    padding:30px;
+    border-radius:10px;
+    max-width:900px;
+}
+.board_list_wrap h2 {
+	margin-top:40px;
+    margin-bottom: 15px;
+}
+
+.board_list_wrap table {
+    width:100%;
+    border-collapse:collapse;
+}
+.board_list_wrap table thead tr {
+    border-bottom:1px solid gray;
+    background-color:#f9f9f9;
+}
+.board_list_wrap table thead tr th {
+    font-size:16px;
+    font-weight:bold;
+    color:#000;
+}
+.board_list_wrap table thead tr th, .board_list_wrap table tbody tr td {
+    padding:12px 5px;
+    vertical-align:middle;
+}
+.board_list_wrap table tbody tr {
+    border-bottom:1px solid #ddd;
+}
+.board_list_wrap table tbody tr:hover {
+    background-color:#fafafa;
+}
+.board_list_wrap table tbody tr td {
+    font-size:14px;
+    color:#333;
+}
+.board_list_wrap table tbody tr td:not(:nth-of-type(3)){
+    text-align:center;
+}
+.board_list_wrap table tbody tr td a:hover, .board_list_wrap table tbody tr td a:active {
+    color:#EA7475;
+}
+
+@media(max-width:600px) {
+    .board_list_wrap {
+        max-width:100%;
+        box-shadow:none;
+        border-radius:0;
+        padding:0;
+    }
+}
+#foo-table tbody tr td:nth-child(2) {
+	cursor:pointer;
+}
+#foo-table tbody tr td:nth-child(2):hover {
+	color:#EA7475;
+}
+#foo-table_wrapper {
+	margin-top:40px;
+}
+#foo-table h2 {
+	margin-top:60px;
+	margin-bottom:0;
+}
+#foo-table thead tr {
+    background-color: rgb(243, 243, 243);
+} 
+/*
+#foo-table tbody tr:hover {
+    background-color: rgb(243, 243, 243);
+}
+*/
+
+#foo-table_length {
+	margin-bottom:15px;
+}

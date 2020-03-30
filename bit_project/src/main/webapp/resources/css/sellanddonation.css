@@ -1,0 +1,110 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,500,700);
+
+body{
+    font-family: 'Raleway', Arial, sans-serif;
+    background-color: #fcfcfc;
+    margin: 0 auto;
+}
+
+h1 {
+	margin: 30px;
+}
+
+.container{
+    width: 1280px;
+    margin: 0 auto;
+    
+}
+
+.content{
+    margin-left: 5%;
+    margin-right: 5%;
+}
+#sell p{
+    color: gray;
+}
+
+#donation p{
+    color: gray;
+}
+
+#sell-and-donation-info td{
+    width: 300px;
+    height: 30px;
+}
+
+#sell-and-donation-chk td{
+    width: 450px;
+    height: 30px;
+}
+#sell-and-donation-chk b{
+    color: red;
+}
+
+#sub{
+    width: 70px; 
+    color: white;
+    background-color: #EA7475;
+}
+
+.btn{
+    color: #fff;
+    border: 1px solid;
+    border-radius: 5px;
+    background-color: #EA7475;
+    width: 65px;
+    height: 35px;
+    font-size: 15px;
+    margin: 30px 0 30px 0;
+}
+
+.field-text{
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    height: 20px;
+}
+
+@media (max-width: 480px) {
+    body {
+        width: 100%;
+    }
+
+    #subject {
+        width: 100%;
+    }
+    .container {
+        width: 100%;
+    }
+
+    .content {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    #info {
+        width: 100%;
+    }
+
+    #sell {
+        width: 100%;
+    }
+
+    h2{
+        width: 100%;
+    }
+
+    #donation {
+        width: 100%;
+    }
+    p {
+        width: 100%;
+        word-break: keep-all;
+    }
+
+    #sell-and-donation-chk td {
+        width: 100%;
+        display: block;
+        position: relative;
+        height: 45px;
+    }
+}

@@ -1,0 +1,118 @@
+@charset "UTF-8";
+@import url("https://cdn.jsdelivr.net/gh/moonspam/NanumBarunGothic@latest/nanumbarungothicsubset.css");
+
+.member_update {
+    display:none;
+    min-height:750px;
+    box-shadow:3px 3px 5px 0 rgb(172, 171, 171);
+    border-radius:10px;
+    margin: 0 auto;
+}
+#update_form > h1 {
+    margin-bottom:40px;
+    color:rgb(73, 69, 69);
+    text-align: center;
+}
+.member_img {
+    text-align: center;
+}
+#profilefield {
+	text-align: center;
+}
+.update_table {
+    margin-top:30px;
+    width:500px;
+    margin-left:auto;
+    margin-right:auto;
+}
+.button1, .button4, .button5 {
+    margin-right:30px;
+    background-color: #EA7475;
+    color:white;
+    font-size: 14px;
+    border:0;
+    outline:0;
+    border-radius:8px;
+    width:80px;
+    height:25px;
+    box-shadow:3px 3px 5px 0 rgb(172, 171, 171);
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.button2{
+	margin-right:30px;
+    background-color: #EA7475;
+    color:white;
+    font-size: 14px;
+    border:0;
+    outline:0;
+    border-radius:8px;
+    width:80px;
+    height:25px;
+    box-shadow:3px 3px 5px 0 rgb(172, 171, 171);
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+.update_table tr td {
+	padding:10px;
+}
+.button3 {
+    background-color: #EA7475;
+    color:white;
+    font-size: 15px;
+    border:0;
+    outline:0;
+    border-radius:8px;
+    width:150px;
+    height:40px;
+    box-shadow:3px 3px 5px 0 rgb(172, 171, 171);
+    margin-top:40px;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+.button3:active {	
+     -webkit-transform: scale(0.9);
+     -ms-transform: scale(0.9);
+     transform: scale(0.9);     
+}
+
+.button1:active, .button2:active, .button4:active, .button5:active {	
+     -webkit-transform: scale(0.9);
+     -ms-transform: scale(0.9);
+     transform: scale(0.9);     
+}
+.add {
+    color:#EA7475;
+    font-size: 20px;
+}
+.nickname, .postal_num, .password, .new_password, .new_password_confirm, .address, .address_detail, .instagram_id, .children_name, .children_birth {
+    border-radius:5px;
+    width:200px;
+    height:30px;
+}
+
+@media(max-width:480px) {
+.member_update {
+    padding:10px;
+}
+.update_table tr td {
+	padding:10px 10px 10px 0;
+}
+.button1, .button2, .button4 {
+	width:75px;
+}
+.update_table {
+    margin-top:30px;
+    width:100%;
+    margin-left:auto;
+    margin-right:auto;
+}
+.add {
+	font-size:1rem;
+}
+.update_btn {
+	text-align:center;
+}
+
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.mapper.CalendarMapper">
+
+	<resultMap type="com.spring.calendar.CalendarVO" id="CalendarResultMap">
+		<result property="state_num" column="state_num" />
+		<result property="subscribe_num" column="subscribe_num" />
+		<result property="product_num" column="product_num" />
+		<result property="state" column="state" />
+		<result property="delivery_date" column="delivery_date" />
+		<result property="return_application" column="return_application" />
+		
+		<result property="email" column="email" />
+		<result property="grade" column="grade" />
+		<result property="count" column="count" />
+	</resultMap>
+	
+	<!-- 반납신청일 업데이트, 상태값 '반납신청' -->
+	<update id="updatePS" parameterType="com.spring.calendar.CalendarVO">
+		UPDATE PRODUCT_STATE SET RETURN_APPLICATION=#{return_application}, STATE=#{state} 
+		WHERE SUBSCRIBE_NUM=#{subscribe_num} AND STATE='대여중'
+	</update>
+	
+	<!-- 반납신청일 초기화, 상태값 '대여중' -->
+	<update id="resetPS" parameterType="com.spring.calendar.CalendarVO">
+		UPDATE PRODUCT_STATE SET RETURN_APPLICATION=#{return_application}, STATE=#{state} 
+		WHERE SUBSCRIBE_NUM=#{subscribe_num} AND STATE='반납신청'
+	</update>
+	
+	<!-- subscribe 불러오기 -->
+	<select id="getSC" parameterType="String" resultMap="CalendarResultMap">
+		SELECT * FROM SUBSCRIBE WHERE EMAIL=#{email}
+	</select>
+	
+	<!-- product_state 불러오기  -->
+	<select id="getPS" parameterType="int" resultMap="CalendarResultMap">
+		SELECT * FROM PRODUCT_STATE WHERE SUBSCRIBE_NUM=#{subscribe_num}
+	</select>	
+	
+</mapper>

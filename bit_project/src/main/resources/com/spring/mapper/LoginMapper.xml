@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.mapper.LoginMapper">
+
+   <!-- kakao/naver 로그인시 받아온정보 DB에 저장 -->
+   <resultMap type="com.spring.login.LoginVO" id="LoginMap">
+   <result property="email" column="email"  />
+   <result property="usergroup" column="usergroup" /> 
+   <result property="nickname" column="nickname"  />
+   <result property="name" column="name"  />
+   <result property="password" column="password"  /> 
+   <result property="phone" column="phone" />
+   <result property="address" column="address" />
+   <result property="address_detail" column="address_detail" />
+   <result property="postal_num" column="postal_num" />
+   <result property="birth" column="birth" />
+   <result property="children_birth" column="children_birth" />
+   <result property="children_name" column="children_name" />
+   <result property="point" column="point" />
+   <result property="regist" column="regist" />
+   <result property="last_connection" column="last_connection" />
+   <result property="subscribe" column="subscribe" />
+   <result property="instagram_id" column="instagram_id" />
+   <result property="receive_email" column="receive_email" />
+   <result property="receive_text" column="receive_text" />
+   <result property="img" column="img"  />
+   <result property="email_state" column="email_state" />
+   </resultMap>
+   
+   <!-- 카운트 구해서 등록된 회원인지 확인 -->
+   <select id="checkMember" parameterType="String" resultType="int">
+   		SELECT COUNT(*) FROM MEMBER WHERE EMAIL=#{email} 
+   </select>
+   
+   <!-- 관리자인지 확인 -->
+   <select id="checkAdmin" parameterType="String" resultType="int">
+   		SELECT COUNT(*) FROM ADMIN WHERE EMAIL=#{email}
+   </select>
+   
+   <!-- 관리자계정이면 정보 불러오기 -->
+   <select id="getAdmin" parameterType="String" resultMap="LoginMap">
+ 		SELECT * FROM ADMIN WHERE EMAIL=#{email}  
+   </select>
+   
+   <!-- 등록된 회원이면 사용자 정보 불러오기 -->
+   <select id="getDetail" parameterType="String" resultMap="LoginMap">
+   		SELECT * FROM MEMBER WHERE EMAIL=#{email}
+   </select>
+   
+   <!-- 닉네임 가져와서 중복된건지 확인 (중복이면 뒤에 숫자 붙혀준다) -->
+   <select id="getNickname" resultMap="LoginMap">
+   		SELECT NICKNAME FROM MEMBER
+   </select>
+   
+   <!-- 로그인시 last_connection 날짜 오늘날짜로 수정 -->
+   <update id="updateConnection" parameterType="com.spring.login.LoginVO">
+   		UPDATE MEMBER SET LAST_CONNECTION=#{last_connection} WHERE EMAIL=#{email}
+   </update>
+   
+   <!-- 카카오/네이버 로그인시 Member 등록 -->
+   <insert id="insertMember" parameterType="com.spring.login.LoginVO">
+   		INSERT INTO MEMBER(EMAIL, PASSWORD, NICKNAME, BIRTH, REGIST, LAST_CONNECTION, 
+   		IMG, EMAIL_STATE) 
+   		VALUES(#{email}, #{password}, #{nickname}, #{birth}, #{regist}, #{last_connection}, 
+   		#{img}, #{email_state})
+   </insert>
+  
+   
+</mapper>

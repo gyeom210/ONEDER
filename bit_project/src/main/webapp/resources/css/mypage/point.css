@@ -1,0 +1,130 @@
+@charset "UTF-8";
+@import url("https://cdn.jsdelivr.net/gh/moonspam/NanumBarunGothic@latest/nanumbarungothicsubset.css");
+
+.point_wrap {
+	padding: 0 10px;
+    display:none;
+    max-width:900px;
+    min-height:750px;
+    box-shadow:3px 3px 5px 0 rgb(172, 171, 171);
+    border-radius:10px;
+    margin: 0 auto;
+}
+.point_wrap > h2 {
+    color:rgb(73, 69, 69);
+    margin-bottom:5px;
+}
+.point_history {
+    margin-bottom:50px;
+}
+.point_history > h3 {
+    color:rgb(73, 69, 69);
+    margin-bottom:10px;
+}
+.point_history > table {
+    font-size: 15px;
+    color:rgb(71, 70, 70);
+    text-align:left;
+    width:100%;
+    border-top:solid 3px rgb(206, 207, 205);
+    border-collapse:collapse;
+}
+.line2 > td, .line2 > th {
+    border-bottom:solid 1px rgb(206, 207, 205);
+    padding:10px;
+}
+.point_block {
+    margin-bottom:50px;
+    height:35px;
+    border-radius:7px;
+    display:flex;
+    justify-content: space-between;
+    background-color: #e4e4e4;
+    box-shadow:3px 3px 5px 0 rgb(172, 171, 171);
+}
+.point_content_1 {
+    line-height: 35px;
+    padding-left:20px;
+}
+.point_content_2 {
+    line-height: 35px;
+    padding-right:20px;
+}
+.point_content_1 > b {
+    font-size:13px;
+    padding:3px;
+}
+.point_content_2 > h3 {
+    color:#EA7475;
+    display:inline;
+}
+.point_use > h3 {
+    color:rgb(73, 69, 69);
+    display:inline;
+}
+.point_use > p {
+    font-size:11px;
+}
+#point_form > table {
+    margin-top:10px;
+    font-size: 15px;
+    color:rgb(71, 70, 70);
+    text-align:left;
+    width:100%;
+    border-top:solid 3px rgb(206, 207, 205);
+    border-collapse:collapse;
+}
+.use_line > th {
+    text-align:left;
+    padding:10px;
+}
+.use_line > td {
+    text-align:center;
+}
+.point_button {
+    width:110px;
+    height:35px;
+    font-size:15px;
+    margin-top:30px;
+    background-color:#EA7475 ;
+    color:white;
+    border:0;
+    outline:0;
+    border-radius:8px;
+    box-shadow:3px 3px 5px 0 rgb(172, 171, 171);
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+.point_button:active {
+	-webkit-transform: scale(0.9);
+     -ms-transform: scale(0.9);
+     transform: scale(0.9);    
+}
+.point_text {
+    border-radius:3px;
+    border: 1px solid #cccccc;
+    width:130px;
+    height:10px;
+    padding:12px;
+    
+}
+#subscription {
+	
+}
+#gift-wrap{
+	background-color: #EFEFEF;
+	text-align:right;
+}
+
+.point_history table tr:nth-child(1) {
+	background-color:#f9f9f9;
+}
+.point_history table tr:hover {
+	background-color:#fafafa;
+}
+
+@media(max-width:480px) {
+.point_wrap{
+    padding:10px;
+}
+}
