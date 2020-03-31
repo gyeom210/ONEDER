@@ -30,10 +30,10 @@ public class WritingController {
 	@Autowired(required = false)
 	private CommunityService communityService;
 	
-	@RequestMapping(value = "/co_writeForm.co", method = RequestMethod.GET)
+	@RequestMapping(value = "/community_writeForm.co", method = RequestMethod.GET)
 	public String co_writeForm(Model model) {
 
-		return "co_writeForm";
+		return "community_writeForm";
 	}
 	
 	/* 글쓰기 */
@@ -41,8 +41,6 @@ public class WritingController {
 	public String write(WritingVO writingvo, Model model, MultipartHttpServletRequest request) {
 
 	String text = writingvo.getContent();
-	System.out.println("게시글 내용 : " + text);
-	
 	Pattern pattern = Pattern.compile("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>"); //img 태그 src 추출 정규표현식
 	Matcher matcher = pattern.matcher(text);     
 	
@@ -57,7 +55,6 @@ public class WritingController {
 	writingvo.setScrap_count(0);
 	
 	int res = writingService.write(writingvo);
-	System.out.println(res);
 	
 	model.addAttribute("writingvo", writingvo);
 
@@ -67,11 +64,11 @@ public class WritingController {
 	}
 	
 	/* 글 수정 폼*/
-	@RequestMapping("/updateForm.cw")
+	@RequestMapping("/community_updateForm.cw")
 	public String updateForm(Model model, HttpServletRequest request) {
 		WritingVO writingvo = writingService.updateForm(Integer.parseInt(request.getParameter("board_num")));
 		request.setAttribute("writingvo", writingvo);
-		return "co_updateForm";
+		return "community_updateForm";
 	}
 	
 	/* 글 수정*/
@@ -80,7 +77,6 @@ public class WritingController {
 		int res = 0;
 		
 		String text = writingvo.getContent();
-		System.out.println("수정할 게시글 내용 : " + text);
 		
 		Pattern pattern = Pattern.compile("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>"); //img 태그 src 추출 정규표현식
 		Matcher matcher = pattern.matcher(text);     
@@ -108,8 +104,6 @@ public class WritingController {
 			communityService.deleteboarda(board_num);
 			communityService.deleteboardc(board_num);
 			writingService.delete(board_num);
-			
-			System.out.println("삭제완료");
 			
 			writer.write("<script>alert('게시글 삭제 완료'); location.href='community.co';</script>");
 		} catch (IOException e) {

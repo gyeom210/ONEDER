@@ -56,7 +56,7 @@
 <!-- 게시판 내용 시작 -->
 <div id="community_main">
     <div id="community_container_header">
-        <div class="community_title"><p class="zz"><%=category %></p></div>
+        <div class="community_title"><p class="community_category"><%=category %></p></div>
     </div>
     
     <!-- filter + dropdown -->
@@ -86,7 +86,7 @@
 	</div>
 	
 	<!-- 검색 결과 -->
-	 <div class="community_search_result"><p class="gg"></p></div>
+	 <div class="community_search_result"><p class="community_search_result_text"></p></div>
 	 
 	<!-- 게시글 리스트 -->
 	<% if(category.equals("육아사진게시판")) { %>
@@ -104,11 +104,9 @@
 		var email = '<%=email%>';
 		var group = '<%=group%>';
 		
-		console.log(email);
-		console.log(group);
 		if(email != 'null') {
 			if(group != "비매너회원") {
-				window.location.href = "co_writeForm.co";
+				window.location.href = "community_writeForm.co";
 			}else {
 				alert("접근금지");
   			return false;
@@ -120,11 +118,12 @@
 		}
 	}
 </script>
+
 <div style="height: 50px;">
 <footer>
-
 	 <%@ include file="/WEB-INF/views/footer.jsp" %> 
 </footer>
 </div>
+
 </body>
 </html>

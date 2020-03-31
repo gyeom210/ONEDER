@@ -27,7 +27,7 @@
 <meta charset="UTF-8">
 <meta name="viewport"  content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width">
 
-<title>community_detail</title>
+<title>community</title>
 <link href="${pageContext.request.contextPath}/resources/css/community_detail.css" rel="stylesheet" type="text/css" /> <!-- css -->
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -74,21 +74,17 @@
         	<img src="<%=img_e %>">
         	<p style="margin-left:10px; margin-right:10px; margin-top:5px; font-size:1.2rem;"><%=cmvo.getNickname() %></p>
         	
-        	  <% if(email_co != null ) { %>
-	                <% if (email_e.equals(email_co)) { %>
+        	  <% if(email_co != null ) { %> <!-- 세션 존재 -->
+	                <% if (email_e.equals(email_co)) { %> <!-- 작성자 본인일때 글수정,글삭제 표시 --> 
 	                <div class="community_mt_footer_btn">
-	                	
 	                
-	                <button type="button" class="community_mt_footer_update_btn" style="border:1px solid; color:#fff; border-radius:5px; background-color:#ffb0b1; width:60px; height:30px; font-size:15px; margin-top:5px;" onclick="location.href='updateForm.cw?board_num=<%=cmvo.getBoard_num() %>'">글수정</button>
-	           		<button type="button" class="community_mt_footer_update_btn" style="border:1px solid; color:#fff; border-radius:5px; background-color:black; width:60px; height:30px; font-size:15px; margin-top:5px;" onclick="delchk('<%=cmvo.getBoard_num() %>');">글삭제</button>
+	                <button type="button" class="community_mt_footer_update_btn" onclick="location.href='community_updateForm.cw?board_num=<%=cmvo.getBoard_num() %>'">글수정</button>
+	           		<button type="button" class="community_mt_footer_delete_btn" onclick="delchk('<%=cmvo.getBoard_num() %>');">글삭제</button>
 	                
-	                
-	                </div> 
-	                <% } else if(userDetail_co.getUsergroup().equals("admin")) { %>
-	                <div class="community_mt_footer_btn">
-	                		<button class="community_mt_footer_update_btn" onclick="delchk('<%=cmvo.getBoard_num() %>');">삭제</button>
-	                </div>
+	                <% } else if(userDetail_co.getUsergroup().equals("admin")) { %> <!-- 관리자일때 글삭제 표시 -->
+	                		<button type="button" class="community_mt_footer_delete_btn" onclick="delchk('<%=cmvo.getBoard_num() %>');">글삭제</button>
 	                <% } %>
+	                	 </div>
                 <% } %>
                 
         </div>
@@ -123,7 +119,7 @@
     <!-- 댓글입력창 시작 -->
     <div id="community_container_comments">
         <div class="community_comments_count">
-            <h3>댓글</h3><div class="count_circle"><p class="count_circle_num"><%=comment_count %></p></div>
+            <p>댓글 <span class="comment_count_num"><%=comment_count %></span></p>
         </div>
      <form method="POST" name="commentsForm" id ="commentsForm" accept-charset="utf-8">
         <div class="community_comments_form">
@@ -133,17 +129,11 @@
             	<input type="hidden" name="email" id="email1" value="<%=email_co %>">
             <% } %>
             	
-            	<%
-        		if(email_co == null) {
-            	%>
+            	<% if(email_co == null) { %>
             	<img src="/bit_project/image/0c57c52f289644ceb799d673566eed91.png">
-            	<%
-        		} else {
-            	%>
+            	<% } else { %>
                 <img src="<%=img_co %>" >
-                <%
-        		}
-                %>
+                <% } %>
                 
             </div>
             <div class="community_comments_form_input">
@@ -166,9 +156,13 @@
     <!-- 댓글입력창 끝 -->   
        
        <!--  댓글 목록 시작 -->
-        <div class="community_comments_view paginated">
+        <div class="community_comments_view paginated"></div>
 		
-		</div> <!-- 댓글 목록 끝 -->
+		<!-- 댓글 더보기 -->
+		<!-- <div class="community_comments_view_more" style="width:100px; height:25px; margin:0 auto;"><button type="button" class="view_more" style="width:100%; height:100%; border-radius:5px;">더보기</button></div> -->
+		<div class="community_comments_view_more">
+		<a id="view_more" href="javascript:moreComment('coList', 10);">더보기</a>
+		</div>
 	</div> <!-- 댓글 입력창 끝 -->
 	
   
@@ -185,6 +179,40 @@ function delchk(board_num) {
 	}else {
 		return false;
 	}
+}
+
+function moreComments(id, cnt){
+	var list_length = $("#" + id + "div").length;
+	var aname = id + "_btn";
+	var callLength = list_length;
+	
+	$('#startCount').val(callLength);
+	$('#viewCount').val(cnt);
+	
+	$.ajax({
+		type:"post",
+		url:"/getMoreComments.do",
+		data:$('#searchTxtForm').serialize(),
+		dateType:"json",
+		success:function(result){
+			if(result.resultCnt > 0){
+				var list = result.resultList;
+					if(resultVO.title != ''){
+						$('#' + aname).attr('href',"javascript:moreComment('" + id + "', " +cnt+");";
+						getMoreList(list);
+					}else {
+						$("#" + id + "_div").remove();
+					}
+			}else{
+		}
+			
+		},
+		error: function(request,status,error) {
+			alert("오류");
+		}
+	});
+						
+	function 
 }
 
 	$("document").ready(function(){
@@ -225,7 +253,6 @@ function delchk(board_num) {
 		$('.answer_btn').click(function() {
 			var email_co = '<%=(String)session.getAttribute("email")%>';
 			var group1 = '<%=group%>';
-			console.log(group1);
 		
 			if(email_co == 'null') {
 				alert("로그인 후 이용해주세요");
@@ -233,7 +260,7 @@ function delchk(board_num) {
 				return false;
 			}else {
 				if(group1 == "비매너회원") {
-					alert("접근금지");
+					alert("접근금지입니다.");
 					return false;
 				}else {
 	        		if ($(this).parents("li").next().css("display") == 'none') {
@@ -248,20 +275,40 @@ function delchk(board_num) {
 		
 	}); //ready
 	
-	//댓글 수정 폼
+	$.fn.setCursorPosition = function( pos )
+	{
+	    this.each( function( index, elem ) {
+	        if( elem.setSelectionRange ) {
+	            elem.setSelectionRange(pos, pos);
+	        } else if( elem.createTextRange ) {
+	            var range = elem.createTextRange();
+	            range.collapse(true);
+	            range.moveEnd('character', pos);
+	            range.moveStart('character', pos);
+	            range.select();
+	        }
+	    });
+	    
+	    return this;
+	};
+	
+	//댓글 수정버튼 눌렀을 시 폼
     function comod_form($comment_num) {
      	var num = $comment_num;
      	
+     	$(this).parent().prev().css("display", "none");
+     	console.log(this);
    		$('input[id="' + num + '"]').removeAttr("readonly");
-   		$('input[id="' + num + '"]').focus();
+   		$('input[id="' + num + '"]').focus().setCursorPosition($('input[id="' + num + '"]').val().length);
    		$('input[id="' + num + '"]').css("border", "1px solid #ccc9c9");
-   		$("div[id='" + num + "']").html('<button type="button" style=" border: 1px solid; color: #fff; border-radius: 5px; background-color: #ffb0b1; height: 24px; font-size: 13px;" onclick="comod_btn(' + num + ')">수정하기</button></div>');
+   		$("div[id='" + num + "']").html('<button type="button" class="community_comment_update_btn" onclick="comod_btn(' + num + ')">수정하기</button></div>');
 	} 
 
     //댓글 수정
     function comod_btn($num) {
     	var num1 = $num;
     	var co = $('input[id="' + num1 + '"]').val();
+    	$('.community_comment_answer_btn').hide();
     	
        jQuery.ajax({
           url : '/bit_project/updateCO.co',
@@ -271,7 +318,7 @@ function delchk(board_num) {
           dataType : "json",
           success : function(retVal) {
              if(retVal.res == "OK") {
-            	 
+            	 alert("댓글이 수정되었습니다.");
             	 coList();
              }
              else {
@@ -350,12 +397,13 @@ function delchk(board_num) {
 	                		output += '<div class="community_comments_view_actions">';
 	                		output += '<span class="community_comments_view_time" style="margin-top:3px; margin-right:10px;">' + date + '</span>';
 	                		output += '<div class="community_comments_view_add">'; 
-	                		output += '<button type="button" style=" border: 1px solid; color: #fff; border-radius: 5px; background-color: #ffb0b1; height: 24px; font-size: 13px;" class="answer_btn">' + "답글작성" + '</button>' + '</div>';
+	                		output += '<button type="button" class="community_comment_answer_btn" class="answer_btn">' + "답글작성" + '</button>' + '</div>';
 	                		
-	                		if(item.email == email) { //로그인한사람과 댓글쓴사람이 같을 경우 수정 삭제 가능
+	                		if(item.email == email) 
+	                		{ //로그인한사람과 댓글쓴사람이 같을 경우 수정 삭제 가능
 						output += '<div class="community_comments_view_modify" id="' + item.comment_num + '">';
-						output += '<button type="button" style=" border: 1px solid; color: #fff; border-radius: 5px; background-color: #ffb0b1; height: 24px; font-size: 13px;" onclick="comod_form(' + item.comment_num + ')">' + "수정" + '</button>';
-						output += '<button type="button" style=" border: 1px solid; color: #fff; border-radius: 5px; background-color: #ffb0b1; height: 24px; font-size: 13px;" onclick="codel_btn(' + item.comment_num + ')">' + "삭제" + '</button></div>';
+						output += '<button type="button" class="community_comment_update_btn" onclick="comod_form(' + item.comment_num + ')">' + "수정" + '</button>';
+						output += '<button type="button" class="community_comment_delete_btn" onclick="codel_btn(' + item.comment_num + ')">' + "삭제" + '</button></div>';
 	                		}
 						output += '</div>';
 						output += '</div>';
@@ -387,21 +435,20 @@ function delchk(board_num) {
 	                
 	                answerList(item.comment_num);
 				});
-					 
+					 $('.comment_count_num').load(location.href + ' .comment_count_num');
 				} else { //댓글 없을때
 					var outputnull = "<div>";
 					outputnull += "<div class='cono' style='text-align:center; height: 50px; padding-top: 40px;'>등록된 댓글이 없습니다.</div>";
 					outputnull += "</div>";
 					$('.community_comments_view').append(outputnull);
 				}
-				page(datacount);
+				/* page(datacount); */
 			},
 			error:function(request,status,error){
 		        alert("code = "+ request.status + " message = " + request.responseText + " error = " + error); // 실패 시 처리
 		       }
 			}); //ajax
 		}
-  
   
   //대댓 목록
   function answerList($comment_num) {
@@ -457,8 +504,8 @@ function delchk(board_num) {
 						
 						if(item.email.trim() == email) {
 						answer += '<div class="community_answer_view_modify" id="' + item.answer_num + '">';
-						answer += '<button type="button" style=" border: 1px solid; color: #fff; border-radius: 5px; background-color: #ffb0b1; height: 24px; font-size: 13px; "onclick="anmod_form(' + item.answer_num + ')">' + "수정" + '</button>';
-						answer += '<button type="button" style=" border: 1px solid; color: #fff; border-radius: 5px; background-color: #ffb0b1; height: 24px; font-size: 13px; "onclick="andel_btn(' + item.answer_num + ')">' + "삭제" + '</button></div>';
+						answer += '<button type="button" class="community_comment_update_btn" "onclick="anmod_form(' + item.answer_num + ')">' + "수정" + '</button>';
+						answer += '<button type="button" class="community_comment_delete_btn" "onclick="andel_btn(' + item.answer_num + ')">' + "삭제" + '</button></div>';
 						}
 						
 						answer += '</div>';
@@ -493,7 +540,6 @@ function delchk(board_num) {
 			success: function(retVal) {
 				
 				if (retVal.res == "OK") { //데이터 성공일때 이벤트 작성
-					alert("댓글 등록 완료");
 					coList();
 					
 					//초기화
@@ -514,7 +560,7 @@ function delchk(board_num) {
    		$('input[id="' + num + '"]').removeAttr("readonly");
    		$('input[id="' + num + '"]').focus();
    		$('input[id="' + num + '"]').css("border","1px solid #ccc9c9");
-   		$('div[id="' + num + '"]').html('<button type="button"style=" border: 1px solid; color: #fff; border-radius: 5px; background-color: #ffb0b1; height: 24px; font-size: 13px;"  onclick="anmod_btn(' + num + ')">수정하기</button></div>');
+   		$('div[id="' + num + '"]').html('<button type="button" class="community_comment_update_btn" onclick="anmod_btn(' + num + ')">수정하기</button></div>');
 	} 
 
     //대댓 수정
@@ -533,11 +579,10 @@ function delchk(board_num) {
           dataType : "json",
           success : function(retVal) {
              if(retVal.res == "OK") {
-            	 
             	 coList();
              }
              else {
-                alert("댓글 수정 실패")
+                alert("댓글 수정 실패");
              }
           },
           error:function() {
@@ -708,101 +753,7 @@ function delchk(board_num) {
 		          }
 		       });
 		}
-        
-    function page(datacount){ 
-
-    	var reSortColors = function($table) {};
-    			
-    	 $('div.paginated').each(function() {
-    	  var pagesu = 10;  //페이지 번호 갯수
-    	  var currentPage = 0;
-    	  var numPerPage = 5;  //목록의 수
-    	  var $table = $(this);    
-    	  
-    	  //length로 원래 리스트의 전체길이구함
-    	  var numRows = datacount;
-    	  //Math.ceil를 이용하여 반올림
-    	  var numPages = Math.ceil(numRows / numPerPage);
-    	  //리스트가 없으면 종료
-    	  if (numPages==0) return;
-    	  //pager라는 클래스의 div엘리먼트 작성
-    	  var $pager = $('<div align="center" id="remo"><div class="pager"></div></div>');
-    	  
-    	  var nowp = currentPage;
-    	  var endp = nowp+5;
-    	  
-    	  //페이지를 클릭하면 다시 셋팅
-    	  $table.bind('repaginate', function() {
-    	  //기본적으로 모두 감춘다, 현재페이지+1 곱하기 현재페이지까지 보여준다
-    	  
-    	   $table.find('li.comments_container').hide().slice(currentPage * numPerPage, (currentPage + 1) * numPerPage).show();
-    	   $("#remo").html("");
-    	   
-    	   if (numPages > 1) {     // 한페이지 이상이면
-    	    if (currentPage < 5 && numPages-currentPage >= 5) {   
-    	     nowp = 0;     // 1부터 
-    	     endp = pagesu;    // 10까지
-    	    }else{
-    	     nowp = currentPage -5;  // 6넘어가면 2부터 찍고
-    	     endp = nowp+pagesu;   // 10까지
-    	     pi = 1;
-    	    }
-    	    
-    	    if (numPages < endp) {   // 10페이지가 안되면
-    	     endp = numPages;   // 마지막페이지를 갯수 만큼
-    	     nowp = numPages-pagesu;  // 시작페이지를   갯수 -10
-    	    }
-    	    if (nowp < 1) {     // 시작이 음수 or 0 이면
-    	     nowp = 0;     // 1페이지부터 시작
-    	    }
-    	   }else{       // 한페이지 이하이면
-    	    nowp = 0;      // 한번만 페이징 생성
-    	    endp = numPages;
-    	   }
-    	   // [처음]
-    	   $('<br /><span class="page-number">[처음]</span>').bind('click', {newPage: page},function(event) {
-    	          currentPage = 0;   
-    	          $table.trigger('repaginate');  
-    	          $($(".page-number")[2]).addClass('active').siblings().removeClass('active');
-    	      }).appendTo($pager).addClass('clickable');
-    	    // [이전]
-    	      $('<span class="page-number" >&nbsp;&nbsp;&nbsp;[이전]&nbsp;</span>').bind('click', {newPage: page},function(event) {
-    	          if(currentPage == 0) return; 
-    	          currentPage = currentPage-1;
-    	    $table.trigger('repaginate'); 
-    	    $($(".page-number")[(currentPage-nowp)+2]).addClass('active').siblings().removeClass('active');
-    	   }).appendTo($pager).addClass('clickable');
-    	    // [1,2,3,4,5,6,7,8]
-    	   for (var page = nowp ; page < endp; page++) {
-    	    $('<span class="page-number" style="margin-left: 8px;"></span>').text(page + 1).bind('click', {newPage: page}, function(event) {
-    	     currentPage = event.data['newPage'];
-    	     $table.trigger('repaginate');
-    	     $($(".page-number")[(currentPage-nowp)+2]).addClass('active').siblings().removeClass('active');
-    	     }).appendTo($pager).addClass('clickable');
-    	   } 
-    	    // [다음]
-    	      $('<span class="page-number">&nbsp;&nbsp;&nbsp;[다음]&nbsp;</span>').bind('click', {newPage: page},function(event) {
-    	    if(currentPage == numPages-1) return;
-    	        currentPage = currentPage+1;
-    	    $table.trigger('repaginate'); 
-    	     $($(".page-number")[(currentPage-nowp)+2]).addClass('active').siblings().removeClass('active');
-    	   }).appendTo($pager).addClass('clickable');
-    	    // [끝]
-    	   $('<span class="page-number">&nbsp;[끝]</span>').bind('click', {newPage: page},function(event) {
-    	           currentPage = numPages-1;
-    	           $table.trigger('repaginate');
-    	           $($(".page-number")[endp-nowp+1]).addClass('active').siblings().removeClass('active');
-    	   }).appendTo($pager).addClass('clickable');
-    	     
-    	     $($(".page-number")[2]).addClass('active');
-    	reSortColors($table);
-    	  });
-    	   $pager.insertAfter($table).find('span.page-number:first').next().next().addClass('active');   
-    	   $pager.appendTo($table);
-    	   $table.trigger('repaginate');
-    	 });
-    	}
- 
+    
 </script>
 
 <!-- 라인 공유 -->

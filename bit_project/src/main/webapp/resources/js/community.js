@@ -1,17 +1,17 @@
 	$("document").ready(function(){
-//		$(".zz").text(category);
-		var category = $(".zz").text(); //기본 게시판(자유게시판)
+//		$(".community_category").text(category);
+		var category = $(".community_category").text(); //기본 게시판(자유게시판)
 		
 		$('#wrapper-dropdown').val("최신순");
 		$("#search_form").val("");
-		$('.gg').empty();
+		$('.community_search_result_text').empty();
 		selectData(category);
 
 		//찾기 input 엔터
 		$('#search_form').keypress(function(event){
 			if (event.which == 13) {
 				
-			var category = $(".zz").text(); 
+			var category = $(".community_category").text(); 
 	        var search_Data = $("#search_form").val();
 	       
 	        searchData(category, search_Data);
@@ -28,7 +28,7 @@
 	
 	//필터
 	function button_click() {
-		var category = $(".zz").text(); 
+		var category = $(".community_category").text(); 
 		
 		selectData(category);
 	}
@@ -36,7 +36,7 @@
 		
         //리스트
         function selectData(category) {
-//        	var category = $(".zz").text(); 
+//        	var category = $(".community_category").text(); 
         	var option = $("#wrapper-dropdown option:selected").val(); //필터 값 가져오기
         	var datacount = 0;
         		$.ajax({
@@ -48,7 +48,7 @@
    	             success : function(data){  //성공
    	            		$('#community_data').empty();
    	            		$('#community_data_d').empty();
-   	                $('.zz').text(category); //게시판이름 바꾸기
+   	                $('.community_category').text(category); //게시판이름 바꾸기
    	                 	datacount = data.length; //게시글 총 개수
    						if(data.length != 0) { //게시글 존재
    	 					 	$.each(data, function(index, item) {
@@ -150,7 +150,7 @@
         
       //검색
         function searchData(category, search_Data) {
-        	var category = $(".zz").text(); //카테고리
+        	var category = $(".community_category").text(); //카테고리
 //			var search_Data = $("#search_form").val('');
 			var datacount = 0;
 	        $.ajax({
@@ -167,7 +167,7 @@
 	            		if(data.length != 0) { //게시글 존재
 	 					 $.each(data, function(index, item) {
 	 						 
-	 						$('.gg').text("검색 결과 " + item.cmsearch_count + " 건"); //검색 결과 안내
+	 						$('.community_search_result_text').text("검색 결과 " + item.cmsearch_count + " 건"); //검색 결과 안내
 	 						 
 	 						var output = ' ';
 							var reg_date = new Date(item.regist); 
@@ -243,7 +243,7 @@
    							outputnull += "</div>";
    							$('#community_data').append(outputnull);
    						}
-	            		
+	            		// 육아사진게시판일때도 검색결과 없는 줄 추가해야함!!
 	            		if(category != "육아사진게시판"){
 	            			page(datacount);
 	            		}

@@ -45,7 +45,7 @@ String nickname1 = (String)request.getAttribute("nickname");
 <div id="community_main">
     
     <div id="community_container_header">
-        <div class="community_title"><p class="zz"></p></div>
+        <div class="community_title"><p class="community_category"></p></div>
     </div>
 	 
 	 <!-- 닉네임 검색 결과 -->

@@ -125,25 +125,6 @@ public class CommunityAjaxController {
 //		return getuserSearch;
 //	}
 	
-	//게시판 댓글 보여주기
-	@PostMapping(value="/getCO.co", produces="application/json;charset=UTF-8")
-	public List<CommentVO> getCO(int board_num) {
-		List<CommentVO> list = communityService.getCO(board_num);
-		System.out.println(board_num);
-		return list;
-	}
-	
-//	@PostMapping(value="/getCO.co", produces="application/json;charset=UTF-8")
-//	public List<CommentVO> getCO(int board_num, int page) {
-//		int limit = 5;
-//		int start = (page - 1) * 5 + 1;
-//		int end = start + limit - 1;
-//
-//		List<CommentVO> list = communityService.getCO(board_num, start, end);
-//		List<CommentVO> list = communityService.getCO(board_num);
-//		return list;
-//	}
-	
 	//스크랩
 	@PostMapping(value="/updateScrap.co", produces="application/json;charset=UTF-8")
 	public Map<String, Object> updateScrap(int board_num) {
@@ -160,6 +141,24 @@ public class CommunityAjaxController {
 		
 		return retVal;
 	}
+	
+	//게시판 댓글 보여주기
+	@PostMapping(value="/getCO.co", produces="application/json;charset=UTF-8")
+	public List<CommentVO> getCO(int board_num) {
+		List<CommentVO> list = communityService.getCO(board_num);
+		return list;
+	}
+	
+//	@PostMapping(value="/getCO.co", produces="application/json;charset=UTF-8")
+//	public List<CommentVO> getCO(int board_num, int page) {
+//		int limit = 5;
+//		int start = (page - 1) * 5 + 1;
+//		int end = start + limit - 1;
+//
+//		List<CommentVO> list = communityService.getCO(board_num, start, end);
+//		List<CommentVO> list = communityService.getCO(board_num);
+//		return list;
+//	}
 	
 	//댓글 작성
 	@PostMapping(value="/writeCO.co", produces="application/json;charset=UTF-8")
