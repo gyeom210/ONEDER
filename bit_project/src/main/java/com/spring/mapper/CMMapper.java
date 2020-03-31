@@ -37,6 +37,7 @@ public interface CMMapper {
 	/* 댓글 */
 //	List<CommentVO> getCO(@Param("board_num") int board_num, @Param("start") int start, @Param("end") int end);
 	List<CommentVO> getCO(@Param("board_num") int board_num);
+	List<CommentVO> getCOM(@Param("board_num") int board_num, @Param("start") int start, @Param("end") int end);
 	int getCommentCount(int board_num);
 	int writeCO(CommentVO covo);
 	int updateCO(@Param("comment_num") int comment_num, @Param("content") String content);

@@ -156,13 +156,10 @@
     <!-- 댓글입력창 끝 -->   
        
        <!--  댓글 목록 시작 -->
-        <div class="community_comments_view paginated"></div>
+        <div class="community_comments_view"></div>
 		
 		<!-- 댓글 더보기 -->
 		<!-- <div class="community_comments_view_more" style="width:100px; height:25px; margin:0 auto;"><button type="button" class="view_more" style="width:100%; height:100%; border-radius:5px;">더보기</button></div> -->
-		<div class="community_comments_view_more">
-		<a id="view_more" href="javascript:moreComment('coList', 10);">더보기</a>
-		</div>
 	</div> <!-- 댓글 입력창 끝 -->
 	
   
@@ -173,6 +170,9 @@
 
 
 <script type="text/javascript">
+var start = 6;
+var end = 10;
+
 function delchk(board_num) {
 	if(confirm("게시글을 삭제하시겠습니까?")) {
 		location.href= 'delete.cw?board_num=' + board_num
@@ -181,43 +181,9 @@ function delchk(board_num) {
 	}
 }
 
-function moreComments(id, cnt){
-	var list_length = $("#" + id + "div").length;
-	var aname = id + "_btn";
-	var callLength = list_length;
-	
-	$('#startCount').val(callLength);
-	$('#viewCount').val(cnt);
-	
-	$.ajax({
-		type:"post",
-		url:"/getMoreComments.do",
-		data:$('#searchTxtForm').serialize(),
-		dateType:"json",
-		success:function(result){
-			if(result.resultCnt > 0){
-				var list = result.resultList;
-					if(resultVO.title != ''){
-						$('#' + aname).attr('href',"javascript:moreComment('" + id + "', " +cnt+");";
-						getMoreList(list);
-					}else {
-						$("#" + id + "_div").remove();
-					}
-			}else{
-		}
-			
-		},
-		error: function(request,status,error) {
-			alert("오류");
-		}
-	});
-						
-	function 
-}
 
 	$("document").ready(function(){
 		coList();
-		
 		
 		//댓글 등록
 		document.getElementById("community_comments_form_enter").addEventListener("click", cowrite);
@@ -272,9 +238,9 @@ function moreComments(id, cnt){
 			}
 		});
 		
-		
 	}); //ready
 	
+	//focus 마우스 위치 글자 맨뒤로 보내기
 	$.fn.setCursorPosition = function( pos )
 	{
 	    this.each( function( index, elem ) {
@@ -435,14 +401,19 @@ function moreComments(id, cnt){
 	                
 	                answerList(item.comment_num);
 				});
-					 $('.comment_count_num').load(location.href + ' .comment_count_num');
+					 $('.comment_count_num').load(location.href + ' .comment_count_num'); //댓글 갯수 카운트 새로고침
+					 if(datacount >= 6) {
+						 var output = '';
+						 
+						 output += '<div class="community_comments_view_more"><a class="view_more" href="javascript:moreComment();">더보기</a></div>';
+						 $('.community_comments_view').append(output);
+					 }
 				} else { //댓글 없을때
 					var outputnull = "<div>";
 					outputnull += "<div class='cono' style='text-align:center; height: 50px; padding-top: 40px;'>등록된 댓글이 없습니다.</div>";
 					outputnull += "</div>";
 					$('.community_comments_view').append(outputnull);
 				}
-				/* page(datacount); */
 			},
 			error:function(request,status,error){
 		        alert("code = "+ request.status + " message = " + request.responseText + " error = " + error); // 실패 시 처리
@@ -450,6 +421,104 @@ function moreComments(id, cnt){
 			}); //ajax
 		}
   
+	
+	//댓글 더보기
+	function moreComment(){
+		var datacount = '<%=comment_count %>';
+		alert("댓글 더보기 " + start + "==" + end + "==" + datacount);
+		
+		$.ajax({
+			url:'/bit_project/getCOM.co',
+			type: 'POST',
+			data:{'board_num' : $("#board_num").attr("value"), 'start' : start, 'end' : end},
+			dataType: "json",
+			async: false,
+			contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+			success: function(data) {
+				if(data.length!=0){ //댓글 존재할시
+					$('.community_comments_view_more').remove();
+					 $.each(data, function(index, item) {
+						var output = ' ';
+						var reg_date = new Date(item.regist); 
+	                		var date = date_format(reg_date);
+	                		var email = "<%=email_co %>";
+	                		var nickname = "<%=nickname_co %>";
+	                		var img = "<%=img_co %>";
+	                
+						output += '<div class="comments_container" value="' + item.comment_num + '">';	 
+	                		output += '<div class="community_comments_view_user">';
+	                		output += '<img src="' + item.profile + '">';
+	                		output += '</div>';
+	                		output += '<div class="community_comments_view_container">';
+	                		output += '<div class="community_comments_view_comments">'; 
+	                		output += '<input type="hidden" id="comment_num" value="' + item.comment_num + '">';
+	                		output += '<span class="community_mt_footer_users"><b>' + item.nickname + '</b></span>';
+	                		output += '<input type="hidden" id="email" value="' + item.email + '">';
+	                		output += '<input type="text" id="' + item.comment_num + '" class="comment_form" readonly onfocus:"this.blur()"; value="' + item.content + '" style="padding-left:10px;">';
+	                		output += '</div>';
+	                		output += '<div class="community_comments_view_actions">';
+	                		output += '<span class="community_comments_view_time" style="margin-top:3px; margin-right:10px;">' + date + '</span>';
+	                		output += '<div class="community_comments_view_add">'; 
+	                		output += '<button type="button" class="community_comment_answer_btn" class="answer_btn">' + "답글작성" + '</button>' + '</div>';
+	                		
+	                		if(item.email == email) 
+	                		{ //로그인한사람과 댓글쓴사람이 같을 경우 수정 삭제 가능
+						output += '<div class="community_comments_view_modify" id="' + item.comment_num + '">';
+						output += '<button type="button" class="community_comment_update_btn" onclick="comod_form(' + item.comment_num + ')">' + "수정" + '</button>';
+						output += '<button type="button" class="community_comment_delete_btn" onclick="codel_btn(' + item.comment_num + ')">' + "삭제" + '</button></div>';
+	                		}
+						output += '</div>';
+						output += '</div>';
+						
+						output += '<div class="answer_form" style="display: none;" id="' + item.comment_num + '">';
+						output += '<form id="answerForm" method="POST" accept-charset="utf-8">';
+				     	output += '<div class="community_answer_form">';
+				     	output += '<div class="community_answer_form_user">';
+				     	output += '<input type="hidden" name="nickname" id="nickname1" value="' + nickname + '">';
+				     	output += '<img src="' + img + '">';
+				     	output += '<input type="hidden" name="email" id="email" value="' + email + '">';
+				     	output += '</div>';
+				     	output += '<div class="community_answer_form_input">';
+				     	output += '<input type="hidden" name="comment_num" value="' + item.comment_num + '">';
+				     	output += '<input type="hidden" name="board_num" value="' + item.board_num + '">';
+				     	output += '<div class="community_answer_form_content">';
+				     	output += '<input type="text" class="community_answer_form_comments" name="content" contenteditable="true" placeholder="의견을 남겨 보세요.">';
+				     	output += '</div>';
+				     	output += '<div class="community_answer_form_actions">';
+				     	output += '<button class="community_answer_form_enter" id="community_answer_form_enter" type="button" onclick="answerwrite(' + item.comment_num + ')">' + "등록" + '</button>';
+				     	output += '</div>';
+				     	output += '</div>';
+				     	output += '</div>';
+				     	output += '</form>';
+				     	output += '</div>';
+						output += '</div>';
+						
+						$('.community_comments_view').append(output);
+	                
+	                answerList(item.comment_num);
+				});
+					 $('.comment_count_num').load(location.href + ' .comment_count_num'); //댓글 갯수 카운트 새로고침
+					 
+					 if(end <= datacount) {
+						 var output = '';
+						 
+						 output += '<div class="community_comments_view_more"><a class="view_more" href="javascript:moreComment();">더보기</a></div>';
+						 $('.community_comments_view').append(output);
+						 
+						 start += 5;
+						 end += 5;
+					 }else {
+						 alert("댓글 더 없음");
+					 }
+				} 
+			},
+			error:function(request,status,error){
+		        alert("code = "+ request.status + " message = " + request.responseText + " error = " + error); // 실패 시 처리
+		       }
+			}); //ajax
+	}; //function
+	
+	
   //대댓 목록
   function answerList($comment_num) {
 	  var num = $comment_num;

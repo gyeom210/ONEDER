@@ -33,6 +33,7 @@ public interface CommunityService {
 	/*댓글*/
 //	public List<CommentVO> getCO(@Param("board_num") int board_num, @Param("start") int start, @Param("end") int end);
 	public List<CommentVO> getCO(@Param("board_num") int board_num);
+	public List<CommentVO> getCOM(@Param("board_num") int board_num, @Param("start") int start, @Param("end") int end);
 	public int getCommentCount(int board_num);
 	public int writeCO(CommentVO covo);
 	public int updateCO(@Param("comment_num") int comment_num, @Param("content") String content);

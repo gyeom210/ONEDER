@@ -142,7 +142,7 @@ public class CommunityAjaxController {
 		return retVal;
 	}
 	
-	//게시판 댓글 보여주기
+	//댓글 보여주기
 	@PostMapping(value="/getCO.co", produces="application/json;charset=UTF-8")
 	public List<CommentVO> getCO(int board_num) {
 		List<CommentVO> list = communityService.getCO(board_num);
@@ -159,6 +159,13 @@ public class CommunityAjaxController {
 //		List<CommentVO> list = communityService.getCO(board_num);
 //		return list;
 //	}
+	
+	//댓글 더보기
+	@PostMapping(value="/getCOM.co", produces="application/json;charset=UTF-8")
+	public List<CommentVO> getCOM(int board_num, int start, int end) {
+		List<CommentVO> list = communityService.getCOM(board_num, start, end);
+		return list;
+	}
 	
 	//댓글 작성
 	@PostMapping(value="/writeCO.co", produces="application/json;charset=UTF-8")

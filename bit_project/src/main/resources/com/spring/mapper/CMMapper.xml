@@ -212,26 +212,30 @@
 			<![CDATA[WHERE rnum >=#{start} and rnum<=#{end}]]>  
 		-->
 		 
+<!-- 		
 		select * from (
 		select b.*, m.img as profile from 
 		board_comment b inner join member m on b.email = m.email 
 		where b.board_num = #{board_num}
 		) order by regist desc 
-		<!--
-		<![CDATA[
-         SELECT * FROM (
-            SELECT * FROM (
-               SELECT board_comment.*, ROWNUM row_num FROM (
-                  SELECT c.*, m.img profile 
-                     FROM board_comment c LEFT JOIN member m 
-                     ON c.email = m.email
-                     WHERE c.board_num = #{board_num}
-                     ORDER BY c.num DESC
-                     )ORDER_COMMENTS
-                  )PAGING_COMMENTS WHERE row_num >= #{paging.startNum}
-               ) WHERE row_num <= #{paging.endNum}
-      ]]>
-      -->
+-->
+		SELECT * FROM (
+			SELECT (
+				RANK() OVER(
+					order by b.regist desc)
+			) rownums, b.*, m.img as profile from board_comment b inner join member m on b.email = m.email 
+			<![CDATA[where	 b.board_num = #{board_num}) where rownums <= 5]]>
+
+	</select>
+	
+	<!-- 댓글 더보기 -->
+	<select id="getCOM" resultMap="coMap" parameterType="com.spring.community.CommunityVO">
+		SELECT * FROM (
+			SELECT (
+				RANK() OVER(
+					order by b.regist desc)
+			) rownums, b.*, m.img as profile from board_comment b inner join member m on b.email = m.email 
+			<![CDATA[where	 b.board_num = #{board_num}) where rownums >= #{start} and rownums <= #{end}]]>
 	</select>
 	
 	<!-- 댓글 갯수 -->

@@ -104,6 +104,15 @@ public class CommunityServiceImpl implements CommunityService {
 		
 		return getCO;
 	}
+	
+	@Override
+	public List<CommentVO> getCOM(int board_num, int start, int end) {
+		List<CommentVO> getCOM = null;
+		CMMapper cmmapper = sqlSession.getMapper(CMMapper.class);
+		getCOM = cmmapper.getCOM(board_num, start, end);
+		
+		return getCOM;
+	}
 
 	@Override
 	public int getCommentCount(int board_num) {

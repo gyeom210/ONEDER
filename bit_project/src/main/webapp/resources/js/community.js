@@ -58,10 +58,10 @@
    			                var date = date_format(reg_date);  //날짜 format
 			        			                		
    			                if (item.category != "육아사진게시판") { //글게시판
-       							output += '<div id="community_container_mt" class="community_container_mt">';
+       							output += '<div id="community_container_mt">';
        							output += '<div class="underline"></div>';
        							output += '<div class="community_mt_title">';
-       							output += '<a class="community_mt_link" href="community_detail.co?board_num=' + item.board_num  + '">';
+       							output += '<a class="community_mt_link" href="community_detail.co?board_num=' + item.board_num  + '"></a>';
        							
        							if(item.img != "null") {
        							output += '<div class="community_mt_img">';
@@ -85,7 +85,6 @@
        							output += '<span class="community_mt_footer_views">' + "조회수 " + item.count + ' </span>';
        							output += '</span>';
        							output += '</footer>';
-       							output += '</a>';
        							output += '</div>';
        							output += '</div>';
        							
@@ -100,7 +99,7 @@
        							output += '</div>';
        							output += '<h2 class="community_name">' + item.board_name + '</h2>';
        							output += '<address class="community_mi_writer">';
-       							output += '<a class="community_mi_writer_user" href="community_user.co?nickname=' + item.nickname + '">'; //글쓴이 ?? 검색
+       							output += '<a class="community_mi_writer_user" href="community_user.co?nickname=' + item.nickname + '">'; 
        							output += '<img src="' + item.profile + '">';
        							output += '<span class="community_mt_footer_users">' + item.nickname + ' </span>';
        							output += '</a>';
