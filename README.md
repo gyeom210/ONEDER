@@ -15,7 +15,7 @@
 <br>
 
 ## 사용기술
-> - FrontEnd : Javascript, HTML5, CSS3, JQuery, Ajax, JSP, BootStrap <br>
+> :heavy_check_mark: FrontEnd : Javascript, HTML5, CSS3, JQuery, Ajax, JSP, BootStrap <br>
 > - Back-End : Java, MyBatis, Oracle, Spring Tool Suite <br>
 > - Open API : Chart.js, Kakao Developers, NAVER Developers, import, JavaMail, SummerNote Editor <br>
 > - Tool : Apache Tomcat 9, Apache Commons, Amazon (RDS, EC2), Eclipse, Git, Github, SourceTree, Slack <br>
