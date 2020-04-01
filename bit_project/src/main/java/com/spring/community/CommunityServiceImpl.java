@@ -16,28 +16,28 @@ public class CommunityServiceImpl implements CommunityService {
 
 	/***********************************필터***********************************/
 	@Override
-	public List<CommunityVO> filter1(String category) {
+	public List<CommunityVO> filter1(String category, int start, int end) {
 		List<CommunityVO> filter1 = null;
 		CMMapper cmmapper = sqlSession.getMapper(CMMapper.class);
-		filter1 = cmmapper.filter1(category);
+		filter1 = cmmapper.filter1(category, start, end);
 
 		return filter1;
 	}
 	
 	@Override
-	public List<CommunityVO> filter2(String category) {
+	public List<CommunityVO> filter2(String category, int start, int end) {
 		List<CommunityVO> filter2 = null;
 		CMMapper cmmapper = sqlSession.getMapper(CMMapper.class);
-		filter2 = cmmapper.filter2(category);
+		filter2 = cmmapper.filter2(category, start, end);
 		
 		return filter2;
 	}
 	
 	@Override
-	public List<CommunityVO> filter3(String category) {
+	public List<CommunityVO> filter3(String category, int start, int end) {
 		List<CommunityVO> filter3 = null;
 		CMMapper cmmapper = sqlSession.getMapper(CMMapper.class);
-		filter3 = cmmapper.filter3(category);
+		filter3 = cmmapper.filter3(category, start, end);
 		
 		return filter3;
 	}

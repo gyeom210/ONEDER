@@ -58,94 +58,47 @@
 		<result property="profile" column="profile" />
 	</resultMap>
 	
-<!-- 	<select id="getCommunity" resultMap="cmMap" parameterType="com.spring.community.CommunityVO">
-		select * from (
-			select * from board where board_num in (
-				select board_num from board_comment)) 
-		where ROWNUM &gt;=#{start} AND ROWNUM &lt;=#{end} order by board_num desc	
-		
-		select board.board_num, board.nickname, board.board_name, board.content, board.regist,
-		board.img, board.count, board.category, board.scrap_count,
-		(select count(*) from board_comment where board_comment.board_num = board.board_num) as co_count
-		from board where ROWNUM &gt;=#{start} AND ROWNUM &lt;=#{end} order by board_num desc
-		
-				select board.board_num, board.nickname, board.board_name, board.content, board.regist,
-		board.img, board.count, board.category, board.scrap_count,
-		(select count(*) from board_comment where board_comment.board_num = board.board_num) as co_count
-		from board order by board_num desc
-	</select> -->
-	
-<!-- 	<select id="getCommunityCount" parameterType="String" resultType="int">
-		SELECT COUNT(*) FROM BOARD where category = #{category}
-	</select> -->
-	
-<!--  <select id="getCM" parameterType="com.spring.community.CommunityVO" resultMap="cmMap">
-		select * from(
-		select rownum rnum, board.board_num, board.nickname, board.board_name, board.content, board.regist,
-		board.img, board.count, board.category, board.scrap_count,
-		(select count(*) from board_comment where board_comment.board_num = board.board_num) as co_count
-		from board where board.category = #{category} order by board.board_num desc )
-		<![CDATA[WHERE rnum >=#{start} and rnum<=#{end}]]> 
-	</select> -->
-	
 	<!-- 최신순 -->
 	<select id="filter1" parameterType="com.spring.community.CommunityVO" resultMap="cmMap">
-		<!-- 
-		select * from(
-	    	select rownum rnum, board_num, nickname, board_name, content, regist, img, count, category, scrap_count,
-	    		(select count(*) from board_comment where board_comment.board_num = board_num) as co_count,
-	    		(select count(*) from board where category = #{category}) as cm_count
-			from (select * from board order by regist desc) where category = #{category}) 
-		board <![CDATA[WHERE rnum >=#{start} and rnum<=#{end}]]> 
-		 -->
-		 select * from(
-	    	select board_num, nickname, board_name, content, regist, img, count, category, scrap_count, email,
-	    		(select member.img from member where board.email = member.email) as profile,
-	    		(select count(*) from board_comment where board_comment.board_num = board.board_num) as co_count,
-	    		(select count(*) from board_answer where board_answer.board_num = board.board_num) as an_count,
-	    		(select count(*) from board where category = #{category}) as cm_count
-	    		from board where category = #{category} order by regist desc) 
+	    select * from (
+		    select (row_number() over(order by regist desc)) rnum,
+	    			board_num, nickname, board_name, content, regist, img, count, category, scrap_count, email,
+		    		(select member.img from member where board.email = member.email) as profile,
+		    		(select count(*) from board_comment where board_comment.board_num = board.board_num) as co_count,
+		    		(select count(*) from board_answer where board_answer.board_num = board.board_num) as an_count,
+		    		(select count(*) from board where category = #{category}) as cm_count
+			from board where category = #{category})
+			where rnum &gt;=#{start} AND rnum &lt;=#{end}
 	</select>
 	
 	<!-- 조회순 -->
 	<select id="filter2" parameterType="com.spring.community.CommunityVO" resultMap="cmMap">
-		select * from(
-	    	select board_num, nickname, board_name, content, regist, img, count, category, scrap_count, email,
+		 select * from (
+		select (row_number() over(order by count desc)) rnum,
+    			board_num, nickname, board_name, content, regist, img, count, category, scrap_count, email,
 	    		(select member.img from member where board.email = member.email) as profile,
 	    		(select count(*) from board_comment where board_comment.board_num = board.board_num) as co_count,
 	    		(select count(*) from board_answer where board_answer.board_num = board.board_num) as an_count,
 	    		(select count(*) from board where category = #{category}) as cm_count
-	    		from board where category = #{category} order by count desc) 
+		from board where category = #{category})
+		where rnum &gt;=#{start} AND rnum &lt;=#{end}
 	</select>
 	
 	<!-- 댓글순 -->
 	<select id="filter3" parameterType="com.spring.community.CommunityVO" resultMap="cmMap">
-		select * from(
-	    	select board_num, nickname, board_name, content, regist, img, count, category, scrap_count, email,
+		 select * from (
+		select (row_number() over(order by co_count desc)) rnum,
+    			board_num, nickname, board_name, content, regist, img, count, category, scrap_count, email,
 	    		(select member.img from member where board.email = member.email) as profile,
 	    		(select count(*) from board_comment where board_comment.board_num = board.board_num) as co_count,
 	    		(select count(*) from board_answer where board_answer.board_num = board.board_num) as an_count,
 	    		(select count(*) from board where category = #{category}) as cm_count
-	    		from board where category = #{category} order by co_count desc) 
+		from board where category = #{category})
+		where rnum &gt;=#{start} AND rnum &lt;=#{end}
 	</select>
 	
 	<!-- 검색 -->
 	<select id="getCMsearch" parameterType="com.spring.community.CommunityVO" resultMap="cmMap">
-<!-- 		select * from (
-   			select board.board_num, 
-   						board.board_name, 
-   						board.nickname, 
-   						board.content, 
-   						board.regist, 
-   						board.img, 
-   						board.count, 
-   						board.category, 
-   						board.scrap_count, 
-   						(select count(*) from board where category = #{category} and (nickname LIKE '%${search_Data}%' or board_name LIKE '%${search_Data}%' or content LIKE '%${search_Data}%')) as cmsearch_count,
-						(select count(*) from board_comment where board_comment.board_num = board.board_num) as co_count
-			from (select * from board order by regist desc) where category = #{category} and (nickname LIKE '%${search_Data}%' or board_name LIKE '%${search_Data}%' or content LIKE '%${search_Data}%'))
-		board <![CDATA[WHERE rnum >=#{start} and rnum<=#{end}]]> -->
-		
 		select * from (
    			select  board_num, board_name, nickname, content, regist, img, count, category, scrap_count, email,
    						(select member.img from member where board.email = member.email) as profile,
@@ -159,14 +112,6 @@
 	
 	<!-- 닉네임 검색 -->
 	<select id="getuserSearch" parameterType="com.spring.community.CommunityVO" resultMap="cmMap">
-<!-- 		SELECT * FROM (
-				SELECT board.board_num, board.board_name, board.nickname, board.content, board.regist, 
-				board.img, board.count, board.category, board.scrap_count, 
-				(select member.img from member where board.email = member.email) as profile,
-				(select count(*) from board where nickname = #{nickname}) as cmsearch_count
-				from (select * from board order by regist desc) WHERE nickname = #{nickname}
-		) -->
-		
 		select * from(select board_num, board_name, nickname, content, regist, img, count, category, scrap_count,
                     (select member.img from member where board.email = member.email) as profile,
                     (select count(*) from board_answer where board_answer.board_num = board.board_num) as an_count,

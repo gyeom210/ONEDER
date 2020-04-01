@@ -90,10 +90,13 @@
 	 
 	<!-- 게시글 리스트 -->
 	<% if(category.equals("육아사진게시판")) { %>
-    	<div id="community_data_d" class="paginated"></div>
+    	<div id="community_data_d"></div>
     <% } else { %>
-    	<div id="community_data" class="paginated"></div>
+    	<div id="community_data"></div>
     <% } %>
+    
+     <!-- 페이징 -->
+    <div class="paginate" style="text-align:center;"></div>
     
 </div> <!-- 게시판 내용 끝 -->
 

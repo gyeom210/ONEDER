@@ -425,7 +425,6 @@ function delchk(board_num) {
 	//댓글 더보기
 	function moreComment(){
 		var datacount = '<%=comment_count %>';
-		alert("댓글 더보기 " + start + "==" + end + "==" + datacount);
 		
 		$.ajax({
 			url:'/bit_project/getCOM.co',
@@ -507,8 +506,6 @@ function delchk(board_num) {
 						 
 						 start += 5;
 						 end += 5;
-					 }else {
-						 alert("댓글 더 없음");
 					 }
 				} 
 			},
@@ -731,23 +728,36 @@ function delchk(board_num) {
 	
 	//날짜 format
     function date_format(format) {
-        var year = format.getFullYear();
-        var month = format.getMonth()+1;
-        var hour = format.getHours();
-        var min = format.getMinutes();
-        
-        if(month<10) {
-           month = '0' + month;
+    	var now = new Date(); 
+    	var minus;
+    	
+        if(now.getDate() == format.getDate()){
+            var nowTime = now.getTime();
+            var writeTime = format.getTime();
+            
+            if(nowTime>writeTime){
+                sec =parseInt(nowTime - writeTime) / 1000;
+                day  = parseInt(sec / 60 / 60 / 24);
+                sec = (sec - (day * 60 * 60 * 24));
+                hour = parseInt(sec/60/60);
+                sec = (sec - (hour*60*60));
+                min = parseInt(sec/60);
+                sec = parseInt(sec-(min*60));
+                if(hour > 0){
+                		return hour+"시간 전";
+                    console.log(hour+"시간 전");
+                }else if(min > 0){
+                		return min+"분 전";
+                    console.log(min+"분 전");
+                }
+            }
+        }else {
+        	var year = format.getFullYear();
+            var month = format.getMonth()+1;
+            var hour = format.getHours();
+            var min = format.getMinutes();
+        	return year + "." + month + "." + date + "&nbsp; " + hour +":" + min;
         }
-        var date = format.getHours();
-        if(hour<10) {
-           hour = '0' + hour;
-        }
-        var min = format.getMinutes();
-        if(min<10) {
-           min = '0' + min;
-        }
-        return year + "." + month + "." + date + "&nbsp; " + hour +":" + min;
      }
 
 <%-- 	

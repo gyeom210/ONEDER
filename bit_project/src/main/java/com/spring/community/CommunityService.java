@@ -11,12 +11,12 @@ public interface CommunityService {
 //	public int getCommunityCount(String category)  throws Exception;
 	
 	/*필터*/
-//	public List<CommunityVO> filter1(@Param("category") String category, @Param("start") int start, @Param("end") int end);
-//	public List<CommunityVO> filter2(@Param("category") String category, @Param("start") int start, @Param("end") int end);
-//	public List<CommunityVO> filter3(@Param("category") String category, @Param("start") int start, @Param("end") int end);
-	public List<CommunityVO> filter1(@Param("category") String category);
-	public List<CommunityVO> filter2(@Param("category") String category);
-	public List<CommunityVO> filter3(@Param("category") String category);
+	public List<CommunityVO> filter1(@Param("category") String category, @Param("start") int start, @Param("end") int end);
+	public List<CommunityVO> filter2(@Param("category") String category, @Param("start") int start, @Param("end") int end);
+	public List<CommunityVO> filter3(@Param("category") String category, @Param("start") int start, @Param("end") int end);
+//	public List<CommunityVO> filter1(@Param("category") String category);
+//	public List<CommunityVO> filter2(@Param("category") String category);
+//	public List<CommunityVO> filter3(@Param("category") String category);
 	
 	/*검색*/
 //	public List<CommunityVO> getCMsearch(@Param("search_Data") String search_Data, @Param("category") String category, @Param("start") int start, @Param("end") int end);

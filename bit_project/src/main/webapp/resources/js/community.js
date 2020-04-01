@@ -1,11 +1,15 @@
 	$("document").ready(function(){
 //		$(".community_category").text(category);
 		var category = $(".community_category").text(); //기본 게시판(자유게시판)
+		var pageCount = 5; //한 화면에 나타낼 페이지 수
+		var currentPage = 1; //현재 페이지
+		var totalData = 0; //총 데이터 수
+		var dataPerPage = 5; 
 		
 		$('#wrapper-dropdown').val("최신순");
 		$("#search_form").val("");
 		$('.community_search_result_text').empty();
-		selectData(category);
+		selectData(category, dataPerPage, pageCount, currentPage);
 
 		//찾기 input 엔터
 		$('#search_form').keypress(function(event){
@@ -35,14 +39,24 @@
 
 		
         //리스트
-        function selectData(category) {
+        function selectData(category, dataPerPage, pageCount, currentPage) {
 //        	var category = $(".community_category").text(); 
         	var option = $("#wrapper-dropdown option:selected").val(); //필터 값 가져오기
         	var datacount = 0;
+        	var pageCount = 5; //한 화면에 나타낼 페이지 수
+			var dataPerPage = 5;
+			
+			if(category != "육아사진게시판")
+				dataPerPage = 5;
+			else
+				dataPerPage = 9;
+			
+        	alert("selectData 들어옴 ==> category" + category  + "dataPerpage" + dataPerPage + "pageCount" + pageCount + "currentPage" + currentPage + "option" + option);
+        	
         		$.ajax({
    				 url : '/bit_project/getCM.co', 
    	             type : "post", 
-   	             data : {"category" : category, "option" : option},
+   	             data : {"category" : category, "option" : option, "page" : currentPage},
    	             dataType: 'json',
    	             async: false,
    	             success : function(data){  //성공
@@ -116,11 +130,11 @@
 	                				
 	                				$('#community_data_d').append(output);
    			                }
-   			                
+   			             totalData = item.cm_count;
    						}); //each
-   						}
-   						
-   						else { //게시글 존재하지않을때
+   	 					alert("total : " + totalData + dataPerPage + pageCount + currentPage);
+			             paging(totalData, dataPerPage, pageCount, currentPage);
+   						}else { //게시글 존재하지않을때
    							if(category != "육아사진게시판") { //글게시판
    								var outputnull = "<div class='community_ncontainer' >";
    	   							outputnull += "<div>등록된 게시글이 없습니다.</div>";
@@ -133,12 +147,6 @@
    	   							$('#community_data_d').append(outputnull);
    							}
    						}
-   						if(category != "육아사진게시판"){
-	            			page(datacount);
-	            		}
-	            		else{
-	            			page1(datacount);
-	            		}
    					},
    	              error : function(data){
    	            	 alert('error');
@@ -244,10 +252,10 @@
    						}
 	            		// 육아사진게시판일때도 검색결과 없는 줄 추가해야함!!
 	            		if(category != "육아사진게시판"){
-	            			page(datacount);
+	            			paging_search(datacount);
 	            		}
 	            		else{
-	            			page1(datacount);
+	            			paging_search(datacount);
 	            		}
 	            		
    					},
@@ -271,10 +279,7 @@
             if(month<10) {
                month = '0' + month;
             }
-            var date = format.getHours();
-            if(hour<10) {
-               hour = '0' + hour;
-            }
+            var date = format.getDate();
             var min = format.getMinutes();
             if(min<10) {
                min = '0' + min;
@@ -283,198 +288,152 @@
          }
 		 
 	
-    function page(datacount){ 
 
-    	var reSortColors = function($table) {
-//    		  $('tbody tr:odd td', $table).removeClass('even').removeClass('listtd').addClass('odd');
-//    		  $('tbody tr:even td', $table).removeClass('odd').removeClass('listtd').addClass('even');
-    	 };
-    			
-    	 $('div.paginated').each(function() {
-    	  var pagesu = 10;  //페이지 번호 갯수
-    	  var currentPage = 0;
-    	  var numPerPage = 5;  //목록의 수
-    	  var $table = $(this);    
-    	  
-    	  //length로 원래 리스트의 전체길이구함
-    	  var numRows = datacount;
-    	  //Math.ceil를 이용하여 반올림
-    	  var numPages = Math.ceil(numRows / numPerPage);
-    	  //리스트가 없으면 종료
-    	  if (numPages==0) return;
-    	  //pager라는 클래스의 div엘리먼트 작성
-    	  var $pager = $('<div align="center" id="remo"><div class="pager"></div></div>');
-    	  
-    	  var nowp = currentPage;
-    	  var endp = nowp+5;
-    	  
-    	  //페이지를 클릭하면 다시 셋팅
-    	  $table.bind('repaginate', function() {
-    	  //기본적으로 모두 감춘다, 현재페이지+1 곱하기 현재페이지까지 보여준다
-    	  
-    	   $table.find('div.community_container_mt').hide().slice(currentPage * numPerPage, (currentPage + 1) * numPerPage).show();
-    	   $("#remo").html("");
-    	   
-    	   if (numPages > 1) {     // 한페이지 이상이면
-    	    if (currentPage < 5 && numPages-currentPage >= 5) {   // 현재 5p 이하이면
-    	     nowp = 0;     // 1부터 
-    	     endp = pagesu;    // 10까지
-    	    }else{
-    	     nowp = currentPage -5;  // 6넘어가면 2부터 찍고
-    	     endp = nowp+pagesu;   // 10까지
-    	     pi = 1;
-    	    }
-    	    
-    	    if (numPages < endp) {   // 10페이지가 안되면
-    	     endp = numPages;   // 마지막페이지를 갯수 만큼
-    	     nowp = numPages-pagesu;  // 시작페이지를   갯수 -10
-    	    }
-    	    if (nowp < 1) {     // 시작이 음수 or 0 이면
-    	     nowp = 0;     // 1페이지부터 시작
-    	    }
-    	   }else{       // 한페이지 이하이면
-    	    nowp = 0;      // 한번만 페이징 생성
-    	    endp = numPages;
-    	   }
+        /**********************************************************************************************************
+         ** 페이징 **
+       **********************************************************************************************************/
+        function paging(totalData, dataPerPage, pageCount, currentPage) {
+        	alert('출력할 totaldata : '+totalData); //333333
+        	/* $(".paginate").empty();  */
+            var totalPageDevide = totalData / dataPerPage;
+            var pageGroupDevide = currentPage / pageCount;
 
-    	   // [처음]
-    	   $('<br /><span class="page-number" onclick="window.scrollTo(0,0);">[처음]</span>').bind('click', {newPage: page},function(event) {
-    	          currentPage = 0;   
-    	          $table.trigger('repaginate');  
-    	          $($(".page-number")[2]).addClass('active').siblings().removeClass('active');
-    	      }).appendTo($pager).addClass('clickable');
-    	    // [이전]
-    	      $('<span class="page-number" onclick="window.scrollTo(0,0);">&nbsp;&nbsp;&nbsp;[이전]&nbsp;</span>').bind('click', {newPage: page},function(event) {
-    	          if(currentPage == 0) return; 
-    	          currentPage = currentPage-1;
-    	    $table.trigger('repaginate'); 
-    	    $($(".page-number")[(currentPage-nowp)+2]).addClass('active').siblings().removeClass('active');
-    	   }).appendTo($pager).addClass('clickable');
-    	    // [1,2,3,4,5,6,7,8]
-    	   for (var page = nowp ; page < endp; page++) {
-    	    $('<span class="page-number" style="margin-left: 8px;" onclick="window.scrollTo(0,0);"></span>').text(page + 1).bind('click', {newPage: page}, function(event) {
-    	     currentPage = event.data['newPage'];
-    	     $table.trigger('repaginate');
-    	     $($(".page-number")[(currentPage-nowp)+2]).addClass('active').siblings().removeClass('active');
-    	     }).appendTo($pager).addClass('clickable');
-    	   } 
-    	    // [다음]
-    	      $('<span class="page-number" onclick="window.scrollTo(0,0);">&nbsp;&nbsp;&nbsp;[다음]&nbsp;</span>').bind('click', {newPage: page},function(event) {
-    	    if(currentPage == numPages-1) return;
-    	        currentPage = currentPage+1;
-    	    $table.trigger('repaginate'); 
-    	     $($(".page-number")[(currentPage-nowp)+2]).addClass('active').siblings().removeClass('active');
-    	   }).appendTo($pager).addClass('clickable');
-    	    // [끝]
-    	   $('<span class="page-number" onclick="window.scrollTo(0,0);">&nbsp;[끝]</span>').bind('click', {newPage: page},function(event) {
-    	           currentPage = numPages-1;
-    	           $table.trigger('repaginate');
-    	           $($(".page-number")[endp-nowp+1]).addClass('active').siblings().removeClass('active');
-    	   }).appendTo($pager).addClass('clickable');
-    	     
-    	     $($(".page-number")[2]).addClass('active');
+            var totalPage = Math.ceil(totalPageDevide);    // 총 페이지 수 1
+            var pageGroup = Math.ceil(pageGroupDevide);    // 페이지 그룹 0
+            
+            var last = pageGroup * pageCount; //0
 
-    	reSortColors($table);
-    	  });
-    	   $pager.insertAfter($table).find('span.page-number:first').next().next().addClass('active');   
-    	   $pager.appendTo($table);
-    	   $table.trigger('repaginate');
-    	 });
-    	}
+            if (last > totalPage) // 0 > 1
+                last = totalPage;
+            
+            var first = last - (pageCount - 1); // 0 - (5 - 1)
+            
+            if (first <= 0) {
+                first = 1; //
+            }
+            var next = last + 1; // 다음 1
+            var prev = first - 1; // 이전 0
+            var one = 1; // 맨 처음 
+            var lastNo = totalPage; // 맨 끝 1
 
-    //육아사진게시판 페이징
-    function page1(datacount){ 
+            var html = "";
 
-    	var reSortColors = function($table) {
-    	 };
-    			
-    	 $('div.paginated').each(function() {
-    	  var pagesu = 10;  //페이지 번호 갯수
-    	  var currentPage = 0;
-    	  var numPerPage = 9;  //목록의 수
-    	  var $table = $(this);    
-    	  
-    	  //length로 원래 리스트의 전체길이구함
-    	  var numRows = datacount;
-    	  //Math.ceil를 이용하여 반올림
-    	  var numPages = Math.ceil(numRows / numPerPage); //10 / 9
-    	  //리스트가 없으면 종료
-    	  if (numPages==0) return;
-    	  //pager라는 클래스의 div엘리먼트 작성
-    	  var $pager = $('<div align="center" id="remo"><div class="pager"></div></div>');
-    	  
-    	  var nowp = currentPage; //0
-    	  var endp = nowp+5; // 9
-    	  
-    	  //페이지를 클릭하면 다시 셋팅
-    	  $table.bind('repaginate', function() {
-    	  //기본적으로 모두 감춘다, 현재페이지+1 곱하기 현재페이지까지 보여준다
-    	  
-    	   $table.find('div#community_container_mi').hide().slice(currentPage * numPerPage, (currentPage + 1) * numPerPage).show();
-    	   $("#remo").html("");
-    	   
-    	   if (numPages > 1) {     // 한페이지 이상이면
-    	    if (currentPage < 5 && numPages-currentPage >= 5) {   // 현재 5p 이하이면
-    	     nowp = 0;     // 1부터 
-    	     endp = pagesu;    // 10까지
-    	    }else{
-    	     nowp = currentPage -5;  // 10넘어가면 2부터 찍고
-    	     endp = nowp+pagesu;   // 20까지
-    	     pi = 1;
-    	    }
-    	    
-    	    if (numPages < endp) {   // 10페이지가 안되면
-    	     endp = numPages;   // 마지막페이지를 갯수 만큼
-    	     nowp = numPages-pagesu;  // 시작페이지를   갯수 -10
-    	    }
-    	    if (nowp < 1) {     // 시작이 음수 or 0 이면
-    	     nowp = 0;     // 1페이지부터 시작
-    	    }
-    	   }else{       // 한페이지 이하이면
-    	    nowp = 0;      // 한번만 페이징 생성
-    	    endp = numPages;
-    	   }
-    	   // [처음]
-    	   $('<br /><span class="page-number" onclick="window.scrollTo(0,0);">[처음]</span>').bind('click', {newPage: page},function(event) {
-    	          currentPage = 0;   
-    	          $table.trigger('repaginate');  
-    	          $($(".page-number")[2]).addClass('active').siblings().removeClass('active');
-    	      }).appendTo($pager).addClass('clickable');
-    	    // [이전]
-    	      $('<span class="page-number" onclick="window.scrollTo(0,0);">&nbsp;&nbsp;&nbsp;[이전]&nbsp;</span>').bind('click', {newPage: page},function(event) {
-    	          if(currentPage == 0) return; 
-    	          currentPage = currentPage-1;
-    	    $table.trigger('repaginate'); 
-    	    $($(".page-number")[(currentPage-nowp)+2]).addClass('active').siblings().removeClass('active');
-    	   }).appendTo($pager).addClass('clickable');
-    	    // [1,2,3,4,5,6,7,8]
-    	   for (var page = nowp ; page < endp; page++) {
-    	    $('<span class="page-number" style="margin-left: 8px;" onclick="window.scrollTo(0,0);"></span>').text(page + 1).bind('click', {newPage: page}, function(event) {
-    	     currentPage = event.data['newPage'];
-    	     $table.trigger('repaginate');
-    	     $($(".page-number")[(currentPage-nowp)+2]).addClass('active').siblings().removeClass('active');
-    	     }).appendTo($pager).addClass('clickable');
-    	   } 
-    	    // [다음]
-    	      $('<span class="page-number" onclick="window.scrollTo(0,0);">&nbsp;&nbsp;&nbsp;[다음]&nbsp;</span>').bind('click', {newPage: page},function(event) {
-    	    if(currentPage == numPages-1) return;
-    	        currentPage = currentPage+1;
-    	    $table.trigger('repaginate'); 
-    	     $($(".page-number")[(currentPage-nowp)+2]).addClass('active').siblings().removeClass('active');
-    	   }).appendTo($pager).addClass('clickable');
-    	    // [끝]
-    	   $('<span class="page-number" onclick="window.scrollTo(0,0);">&nbsp;[끝]</span>').bind('click', {newPage: page},function(event) {
-    	           currentPage = numPages-1;
-    	           $table.trigger('repaginate');
-    	           $($(".page-number")[endp-nowp+1]).addClass('active').siblings().removeClass('active');
-    	   }).appendTo($pager).addClass('clickable');
-    	     
-    	     $($(".page-number")[2]).addClass('active');
-    	     
-    	reSortColors($table);
-    	  });
-    	   $pager.insertAfter($table).find('span.page-number:first').next().next().addClass('active');   
-    	   $pager.appendTo($table);
-    	   $table.trigger('repaginate');
-    	 });
-    	}
+            if (prev > 0) {
+                html += "<a href=# id='one'>&lt;&lt;&nbsp;&nbsp;</a> ";
+                html += "<a href=# id='prev'>&lt;&nbsp;&nbsp;</a> ";
+
+            }
+            
+            for (var i = first; i <= last; i++) {
+            	alert("페이징 만드는중");
+                //html += "<a href='#' id=" + i + ">" + i + "</a> ";
+                html += "<a href='javascript:selectData(totalData, dataPerPage, pagecount, " + i + ")' id=" + i + ">" + i + "</a> ";
+                //html += "<a href='javascript:snsData(0, 6, 10, " + i + ")' id=" + i + ">" + i + "</a> ";
+                
+            }
+
+            if(totalPage==0){
+            	
+            }else {
+            	  if (last < totalPage) // 0 < 1
+            	        html += "<a href=# id='next'>&gt;&nbsp;&nbsp;</a>";
+            	        html += "<a href='javascript:void(0);' id='lastNo'>&gt;&gt;&nbsp;&nbsp;</a> ";
+
+            	        $(".paginate").html(html);    // 페이지 목록 생성
+            	        $(".paginate a").removeClass("page_on");
+
+            	        $(".paginate a#" + currentPage).addClass("page_on"); // 현재 페이지 표시	
+            }
+          
+
+            $(".paginate a").click(function () {
+                var $item = $(this);
+                var $id = $item.attr("id");
+                var selectedPage = $item.text(); // 번호 클릭.
+
+                if ($id == "one") selectedPage = one;
+                if ($id == "prev") selectedPage = prev;
+                if ($id == "next") selectedPage = next;
+                if ($id == "lastNo") selectedPage = lastNo;
+                
+                alert(selectedPage + "페이지 이동");
+                selectData(totalData, dataPerPage, pageCount, selectedPage);
+                paging(totalData, dataPerPage, pageCount, selectedPage);// 페이징
+            });
+            
+        }
+             
+	
+        
+      /**********************************************************************************************************
+      ** 검색 페이징 **
+      **********************************************************************************************************/
+        function paging_search(totalData, dataPerPage, pageCount, currentPage) {
+        	alert('검색 출력할 totaldata : '+totalData); //333333
+        	/* $(".paginate").empty();  */
+            var totalPageDevide = totalData / dataPerPage;
+            var pageGroupDevide = currentPage / pageCount;
+
+            var totalPage = Math.ceil(totalPageDevide);    // 총 페이지 수 1
+            var pageGroup = Math.ceil(pageGroupDevide);    // 페이지 그룹 0
+            
+            var last = pageGroup * pageCount; //0
+
+            if (last > totalPage) // 0 > 1
+                last = totalPage;
+            
+            var first = last - (pageCount - 1); // 0 - (5 - 1)
+            
+            if (first <= 0) {
+                first = 1; //
+            }
+            var next = last + 1; // 다음 1
+            var prev = first - 1; // 이전 0
+            var one = 1; // 맨 처음 
+            var lastNo = totalPage; // 맨 끝 1
+
+            var html = "";
+
+            if (prev > 0) {
+                html += "<a href=# id='one'>&lt;&lt;&nbsp;&nbsp;</a> ";
+                html += "<a href=# id='prev'>&lt;&nbsp;&nbsp;</a> ";
+
+            }
+            
+            for (var i = first; i <= last; i++) {
+            	alert("페이징 만드는중");
+                html += "<a href='javascript:searchData(totalData, dataPerPage, pagecount, " + i + ")' id=" + i + ">" + i + "</a> ";
+                
+            }
+
+            if(totalPage==0){
+            	
+            }else {
+            	  if (last < totalPage) // 0 < 1
+            	        html += "<a href=# id='next'>&gt;&nbsp;&nbsp;</a>";
+            	        html += "<a href='javascript:void(0);' id='lastNo'>&gt;&gt;&nbsp;&nbsp;</a> ";
+
+            	        $(".paginate").html(html);    // 페이지 목록 생성
+            	        $(".paginate a").removeClass("page_on");
+
+            	        $(".paginate a#" + currentPage).addClass("page_on"); // 현재 페이지 표시	
+            }
+          
+
+            $(".paginate a").click(function () {
+                var $item = $(this);
+                var $id = $item.attr("id");
+                var selectedPage = $item.text(); // 번호 클릭.
+
+                if ($id == "one") selectedPage = one;
+                if ($id == "prev") selectedPage = prev;
+                if ($id == "next") selectedPage = next;
+                if ($id == "lastNo") selectedPage = lastNo;
+                
+                alert(selectedPage + "이동 ???");
+                searchData(totalData, dataPerPage, pageCount, selectedPage);
+                paging_search(totalData, dataPerPage, pageCount, selectedPage);// 페이징
+                	
+            });
+            
+        }
