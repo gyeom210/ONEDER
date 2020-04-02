@@ -68,7 +68,7 @@
 		    		(select count(*) from board_answer where board_answer.board_num = board.board_num) as an_count,
 		    		(select count(*) from board where category = #{category}) as cm_count
 			from board where category = #{category})
-			where rnum &gt;=#{start} AND rnum &lt;=#{end}
+			<![CDATA[WHERE rnum >=#{start} and rnum<=#{end}]]> 
 	</select>
 	
 	<!-- 조회순 -->
@@ -81,7 +81,7 @@
 	    		(select count(*) from board_answer where board_answer.board_num = board.board_num) as an_count,
 	    		(select count(*) from board where category = #{category}) as cm_count
 		from board where category = #{category})
-		where rnum &gt;=#{start} AND rnum &lt;=#{end}
+		<![CDATA[WHERE rnum >=#{start} and rnum<=#{end}]]> 
 	</select>
 	
 	<!-- 댓글순 -->
@@ -94,13 +94,13 @@
 	    		(select count(*) from board_answer where board_answer.board_num = board.board_num) as an_count,
 	    		(select count(*) from board where category = #{category}) as cm_count
 		from board where category = #{category})
-		where rnum &gt;=#{start} AND rnum &lt;=#{end}
+		<![CDATA[WHERE rnum >=#{start} and rnum<=#{end}]]> 
 	</select>
 	
 	<!-- 검색 -->
 	<select id="getCMsearch" parameterType="com.spring.community.CommunityVO" resultMap="cmMap">
 		select * from (
-   			select  board_num, board_name, nickname, content, regist, img, count, category, scrap_count, email,
+   			select row_number() over(order by regist desc)) rnum, board_num, board_name, nickname, content, regist, img, count, category, scrap_count, email,
    						(select member.img from member where board.email = member.email) as profile,
    						(select count(*) from board where category = #{category} and (nickname LIKE '%${search_Data}%' or board_name LIKE '%${search_Data}%' or content LIKE '%${search_Data}%')) as cmsearch_count,
 						(select count(*) from board_comment where board_comment.board_num = board.board_num) as co_count,

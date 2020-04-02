@@ -33,26 +33,24 @@
 	//필터
 	function button_click() {
 		var category = $(".community_category").text(); 
+		var currentPage = 1;
 		
-		selectData(category);
+		selectData(category, currentPage);
 	}
 
 		
         //리스트
         function selectData(category, dataPerPage, pageCount, currentPage) {
-//        	var category = $(".community_category").text(); 
+        	var category = $(".community_category").text(); 
         	var option = $("#wrapper-dropdown option:selected").val(); //필터 값 가져오기
         	var datacount = 0;
         	var pageCount = 5; //한 화면에 나타낼 페이지 수
-			var dataPerPage = 5;
 			
 			if(category != "육아사진게시판")
 				dataPerPage = 5;
 			else
 				dataPerPage = 9;
 			
-        	alert("selectData 들어옴 ==> category" + category  + "dataPerpage" + dataPerPage + "pageCount" + pageCount + "currentPage" + currentPage + "option" + option);
-        	
         		$.ajax({
    				 url : '/bit_project/getCM.co', 
    	             type : "post", 
@@ -132,8 +130,7 @@
    			                }
    			             totalData = item.cm_count;
    						}); //each
-   	 					alert("total : " + totalData + dataPerPage + pageCount + currentPage);
-			             paging(totalData, dataPerPage, pageCount, currentPage);
+			             paging(totalData, dataPerPage, pageCount, currentPage); //페이징
    						}else { //게시글 존재하지않을때
    							if(category != "육아사진게시판") { //글게시판
    								var outputnull = "<div class='community_ncontainer' >";
@@ -149,7 +146,7 @@
    						}
    					},
    	              error : function(data){
-   	            	 alert('error');
+   	            	 alert('community list error');
    	              }//error
    			}); //ajax
    			
@@ -224,7 +221,7 @@
    							output += '</div>';
    							output += '<h2 class="community_name">' + item.board_name + '</h2>';
    							output += '<address class="community_mi_writer">';
-   							output += '<a class="community_mi_writer_user href="community_user.co?nickname=' + item.nickname + '">'; //글쓴이 ?? 검색
+   							output += '<a class="community_mi_writer_user href="community_user.co?nickname=' + item.nickname + '">'; 
    							output += '<img src="' + item.profile + '">';
    							output += '<span class="community_mt_footer_users">' + item.nickname + ' </span>';
    							output += '</a>';
@@ -242,25 +239,25 @@
                 				$('#community_data_d').append(output);
 			                	}
    						}); 
-			            
+	 					paging_search(totalData, dataPerPage, pageCount, currentPage); //검색 페이징
 	 				}
 	            		else {
-	            			var outputnull = "<div class='community_ncontainer' >";
+	            			if(category != "육아사진게시판"){
+	            				var outputnull = "<div class='community_ncontainer' >";
    							outputnull += "<div>검색 결과가 없습니다.</div>";
    							outputnull += "</div>";
    							$('#community_data').append(outputnull);
-   						}
-	            		// 육아사진게시판일때도 검색결과 없는 줄 추가해야함!!
-	            		if(category != "육아사진게시판"){
-	            			paging_search(datacount);
-	            		}
-	            		else{
-	            			paging_search(datacount);
-	            		}
+	            			}else{
+	            				var outputnull = "<div class='community_ncontainer' >";
+   							outputnull += "<div>검색 결과가 없습니다.</div>";
+   							outputnull += "</div>";
+   							$('#community_data_d').append(outputnull);
+	            			}
+   					}
 	            		
    					},
    	              error : function(data){
-   	            		alert('검색 실패');
+   	            		alert('community search error');
 	            }
 	        }); //ajax
 		}
@@ -269,17 +266,14 @@
     	
 		 //날짜 format
         function date_format(format) {
-//        	var year = format.getFullYear();
-            var year1 = format.getFullYear().toString();
-            var year = year1.substr(2,4);
+        	var year = format.getFullYear();
             var month = format.getMonth()+1;
+            var date = format.getDate();
             var hour = format.getHours();
-            var min = format.getMinutes();
             
             if(month<10) {
-               month = '0' + month;
+            	month = '0' + month;
             }
-            var date = format.getDate();
             var min = format.getMinutes();
             if(min<10) {
                min = '0' + min;
@@ -293,7 +287,6 @@
          ** 페이징 **
        **********************************************************************************************************/
         function paging(totalData, dataPerPage, pageCount, currentPage) {
-        	alert('출력할 totaldata : '+totalData); //333333
         	/* $(".paginate").empty();  */
             var totalPageDevide = totalData / dataPerPage;
             var pageGroupDevide = currentPage / pageCount;
@@ -325,15 +318,12 @@
             }
             
             for (var i = first; i <= last; i++) {
-            	alert("페이징 만드는중");
                 //html += "<a href='#' id=" + i + ">" + i + "</a> ";
                 html += "<a href='javascript:selectData(totalData, dataPerPage, pagecount, " + i + ")' id=" + i + ">" + i + "</a> ";
                 //html += "<a href='javascript:snsData(0, 6, 10, " + i + ")' id=" + i + ">" + i + "</a> ";
-                
             }
 
             if(totalPage==0){
-            	
             }else {
             	  if (last < totalPage) // 0 < 1
             	        html += "<a href=# id='next'>&gt;&nbsp;&nbsp;</a>";
@@ -356,7 +346,6 @@
                 if ($id == "next") selectedPage = next;
                 if ($id == "lastNo") selectedPage = lastNo;
                 
-                alert(selectedPage + "페이지 이동");
                 selectData(totalData, dataPerPage, pageCount, selectedPage);
                 paging(totalData, dataPerPage, pageCount, selectedPage);// 페이징
             });

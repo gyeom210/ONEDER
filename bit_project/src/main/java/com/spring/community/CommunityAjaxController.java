@@ -29,7 +29,6 @@ public class CommunityAjaxController {
 		int limit = 0;
 		int start = 0;
 		int end = 0;
-		System.out.println("커느롤러" + page);
 		
 		if(category.equals("육아사진게시판")) {
 			limit = 9;
@@ -41,7 +40,6 @@ public class CommunityAjaxController {
 			start = (page - 1) * 5 + 1;
 			end = start + limit - 1;
 		}
-		System.out.println("컨트롤러부분 옵션값 : " + option + "카테고리 : " +category + " page: " +start + end);
 		
 		if(option.equals("최신순")) {
 			list = communityService.filter1(category, start, end);
@@ -54,68 +52,38 @@ public class CommunityAjaxController {
 		return list;
 	}
 	
-//	@PostMapping(value="/getCM.co", produces="application/json;charset=UTF-8")
-//	public List<CommunityVO> getCM(int page, String category, String option) {
-//		List<CommunityVO> list = null;
-//		int limit = 0;
-//		int start = 0;
-//		int end = 0;
-//		
-//		if(category.equals("육아사진")) {
-//			limit = 9;
-//			start = (page - 1) * 9 + 1;
-//			end = start + limit - 1;
-//		}
-//		else {
-//			limit = 5;
-//			start = (page - 1) * 5 + 1;
-//			end = start + limit - 1;
-//		}
-//		System.out.println("컨트롤러부분 옵션값 : " + option + "카테고리 : " +category + " page: " +start + end);
-//		
-//		if(option.equals("최신순")) {
-//			list = communityService.filter1(category, start, end);
-//		} else if(option.equals("조회순")) {
-//			list = communityService.filter2(category, start, end);
-//		}else { //댓글순
-//			list = communityService.filter3(category, start, end);
-//		}
-//		
-//		return list;
-//	}
-	
 	//검색
-	@PostMapping(value="/getCMsearch.co", produces="application/json;charset=UTF-8")
-	public List<CommunityVO> getCMsearch(String search_Data, String category) {
-		List<CommunityVO> search_list = null;
-		search_list = communityService.getCMsearch(search_Data, category);
-		
-		return search_list;
-	}
-	
 //	@PostMapping(value="/getCMsearch.co", produces="application/json;charset=UTF-8")
 //	public List<CommunityVO> getCMsearch(String search_Data, String category, int page) {
 //		List<CommunityVO> search_list = null;
-//		System.out.println("search_data : " + search_Data + " c : " + category + " page : " + page);
-//		int limit = 0;
-//		int start = 0;
-//		int end = 0;
+//		search_list = communityService.getCMsearch(search_Data, category);
 //		
-//		if(category.equals("육아사진")) {
-//			limit = 9;
-//			start = (page - 1) * 9 + 1;
-//			end = start + limit - 1;
-//		}
-//		else {
-//			limit = 5;
-//			start = (page - 1) * 5 + 1;
-//			end = start + limit - 1;
-//		}
-//		
-//		search_list = communityService.getCMsearch(search_Data, category, start, end);
-//		System.out.println("Controller 출력 : " + search_list);
 //		return search_list;
 //	}
+	
+	@PostMapping(value="/getCMsearch.co", produces="application/json;charset=UTF-8")
+	public List<CommunityVO> getCMsearch(String search_Data, String category, int page) {
+		List<CommunityVO> search_list = null;
+		System.out.println("search_data : " + search_Data + " c : " + category + " page : " + page);
+		int limit = 0;
+		int start = 0;
+		int end = 0;
+		
+		if(category.equals("육아사진게시판")) {
+			limit = 9;
+			start = (page - 1) * 9 + 1;
+			end = start + limit - 1;
+		}
+		else {
+			limit = 5;
+			start = (page - 1) * 5 + 1;
+			end = start + limit - 1;
+		}
+		
+		search_list = communityService.getCMsearch(search_Data, category, start, end);
+		System.out.println("Controller 출력 : " + search_list);
+		return search_list;
+	}
 	
 	//닉네임검색
 	@PostMapping(value="/getuserSearch.co", produces="application/json;charset=UTF-8")
