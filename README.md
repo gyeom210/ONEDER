@@ -40,9 +40,12 @@
 <br>
 
 ## 역할 및 페이지 구성
+### 메인화면
+<img width="1440" alt="ONEDER_main" src="https://user-images.githubusercontent.com/57176747/78133563-98a3bb80-7459-11ea-87bb-4b4deaee77d0.png"> <br>
 
 ### 게시판
 ✔︎ [community.jsp](https://github.com/gyeom210/ONEDER/blob/master/bit_project/src/main/webapp/WEB-INF/views/community.jsp) <br>
+![커뮤니티게시판](https://user-images.githubusercontent.com/57176747/78256731-e42a9800-7533-11ea-9dbf-e678bd89f0fe.jpg) <br>
 ⁃ 글 게시판 / 사진 게시판 두가지의 레이아웃 <br>
 ⁃ ajax 기술하여 페이징 <br>
 ⁃ 필터 기능과 검색 기능 구현 <br>
