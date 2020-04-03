@@ -11,7 +11,7 @@
 		$('.community_search_result_text').empty();
 		selectData(category, dataPerPage, pageCount, currentPage);
 
-		//찾기 input 엔터
+		//검색 input 엔터
 		$('#search_form').keypress(function(event){
 			if (event.which == 13) {
 				
@@ -24,6 +24,7 @@
 
 	}); //document.ready     
 	
+
 	
 	//태그 제거
 	function removeTag( str ) {
@@ -32,12 +33,13 @@
 	
 	//필터
 	function button_click() {
-		var category = $(".community_category").text(); 
 		var currentPage = 1;
+		var category = $(".community_category").text(); 
+		var pageCount = 5;
+		var dataPerPage = 5;
 		
-		selectData(category, currentPage);
+		selectData(category, dataPerPage, pageCount, currentPage);
 	}
-
 		
         //리스트
         function selectData(category, dataPerPage, pageCount, currentPage) {
@@ -45,7 +47,7 @@
         	var option = $("#wrapper-dropdown option:selected").val(); //필터 값 가져오기
         	var datacount = 0;
         	var pageCount = 5; //한 화면에 나타낼 페이지 수
-			
+        	
 			if(category != "육아사진게시판")
 				dataPerPage = 5;
 			else
@@ -160,7 +162,7 @@
 	        $.ajax({
 	            url : '/bit_project/getCMsearch.co', 
    	            type : "post", 
-   	            data : {"search_Data" : search_Data, "category" : category},
+   	            data : {"search_Data" : search_Data, "category" : category, "page" : currentPage},
    	            dataType: 'json',
    	            async: false,
    	        	cache : false,
@@ -333,6 +335,7 @@
             	        $(".paginate a").removeClass("page_on");
 
             	        $(".paginate a#" + currentPage).addClass("page_on"); // 현재 페이지 표시	
+            	        $('a[class="page_on"]').css("color", "#ff7276"); //현재 페이지 색상
             }
           
 

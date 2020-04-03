@@ -96,7 +96,7 @@
     <% } %>
     
      <!-- 페이징 -->
-    <div class="paginate" style="text-align:center;"></div>
+    <div class="paginate" style="text-align:center; margin: 50px auto;"></div>
     
 </div> <!-- 게시판 내용 끝 -->
 

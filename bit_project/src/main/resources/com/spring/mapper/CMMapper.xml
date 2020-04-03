@@ -87,12 +87,13 @@
 	<!-- 댓글순 -->
 	<select id="filter3" parameterType="com.spring.community.CommunityVO" resultMap="cmMap">
 		 select * from (
-		select (row_number() over(order by co_count desc)) rnum,
+		select (row_number() over(order by 
+				(SELECT COUNT(*) as cnt FROM board_comment WHERE board.board_num = board_comment.board_num) + (select count(*) as cnt from board_answer where board.board_num = board_answer.board_num) desc)) rnum,
     			board_num, nickname, board_name, content, regist, img, count, category, scrap_count, email,
 	    		(select member.img from member where board.email = member.email) as profile,
-	    		(select count(*) from board_comment where board_comment.board_num = board.board_num) as co_count,
-	    		(select count(*) from board_answer where board_answer.board_num = board.board_num) as an_count,
-	    		(select count(*) from board where category = #{category}) as cm_count
+	    		(select count(*) as cnt from board_comment where board_comment.board_num = board.board_num) as co_count,
+	    		(select count(*) as cnt from board_answer where board_answer.board_num = board.board_num) as an_count,
+	    		(select count(*) as cnt from board where category = #{category}) as cm_count
 		from board where category = #{category})
 		<![CDATA[WHERE rnum >=#{start} and rnum<=#{end}]]> 
 	</select>
