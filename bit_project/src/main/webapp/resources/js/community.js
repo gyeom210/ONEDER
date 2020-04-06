@@ -45,7 +45,6 @@
         function selectData(category, dataPerPage, pageCount, currentPage) {
         	var category = $(".community_category").text(); 
         	var option = $("#wrapper-dropdown option:selected").val(); //필터 값 가져오기
-        	var datacount = 0;
         	var pageCount = 5; //한 화면에 나타낼 페이지 수
         	
 			if(category != "육아사진게시판")
@@ -63,7 +62,6 @@
    	            		$('#community_data').empty();
    	            		$('#community_data_d').empty();
    	                $('.community_category').text(category); //게시판이름 바꾸기
-   	                 	datacount = data.length; //게시글 총 개수
    						if(data.length != 0) { //게시글 존재
    	 					 	$.each(data, function(index, item) {
    	 					 	var output = ' ';
@@ -133,6 +131,7 @@
    			             totalData = item.cm_count;
    						}); //each
 			             paging(totalData, dataPerPage, pageCount, currentPage); //페이징
+			             $('html').scrollTop(0);
    						}else { //게시글 존재하지않을때
    							if(category != "육아사진게시판") { //글게시판
    								var outputnull = "<div class='community_ncontainer' >";
@@ -151,18 +150,20 @@
    	            	 alert('community list error');
    	              }//error
    			}); //ajax
-   			
 	}
         
       //검색
         function searchData(category, search_Data) {
         	var category = $(".community_category").text(); //카테고리
 //			var search_Data = $("#search_form").val('');
+        	$('.community_search_result_text').empty();
 			var datacount = 0;
+			$('.paginate').hide();
+			
 	        $.ajax({
 	            url : '/bit_project/getCMsearch.co', 
    	            type : "post", 
-   	            data : {"search_Data" : search_Data, "category" : category, "page" : currentPage},
+   	            data : {"search_Data" : search_Data, "category" : category},
    	            dataType: 'json',
    	            async: false,
    	        	cache : false,
@@ -180,70 +181,66 @@
 			                var date = date_format(reg_date);  //날짜 format
 			                
 			                if (item.category != "육아사진게시판") { //글게시판
-			                	
-   							output += '<div id="community_container_mt">';
-   							output += '<div class="underline"></div>';
-   							output += '<div class="community_mt_title">';
-   							output += '<a class="community_mt_link" href="community_detail.co?board_num=' + item.board_num  + ' ">';
-   							
-   							if(item.img != "null") {
+			                	output += '<div id="community_container_mt">';
+       							output += '<div class="underline"></div>';
+       							output += '<div class="community_mt_title">';
+       							output += '<a class="community_mt_link" href="community_detail.co?board_num=' + item.board_num  + '"></a>';
+       							
+       							if(item.img != "null") {
        							output += '<div class="community_mt_img">';
        							output += '<img src="' + item.img + '" class="com_img1">';
        							output += '</div>';
-       						}else {
+       							}else {
    								output += '<div class="community_mt_img">';
        							output += '</div>';
-       						}
-   							
-   							output += '<h2 class="community_name">' + item.board_name + '</h2>';
-   							output += '<p class="community_mt_mt">' + removeTag(item.content) + '</p>';
-   							output += '<footer class="community_mt_footer">';
-   							output += '<a class="community_mt_footer_user" href="community_user.co?nickname=' + item.nickname + ' ">';
-   							output += '<img src="' + item.profile + '">';
-   							output += '<span class="community_mt_footer_users">' +  item.nickname + ' </span>';
-   							output += '</a>';
-   							output += '<span class="community_mt_footer_caption">';
-   							output += '<span class="community_mt_footer_time">' + date + ' </span>';
-   							output += '<span class="community_mt_footer_comments">' + "댓글 " + (item.co_count+item.an_count) + ' </span>';
-   							output += '<span class="community_mt_footer_views">' + "조회수 " + item.count + ' </span>';
-   							output += '</span>';
-   							output += '</footer>';
-   							output += '</a>';
-   							output += '</div><br>';
-   							output += '</div>';
-   							
-   							$('#community_data').append(output);
+       							}
+       							
+       							output += '<h2 class="community_name">' + item.board_name + '</h2>';
+       							output += '<p class="community_mt_mt">' + removeTag(item.content) + '</p>';
+       							output += '<footer class="community_mt_footer">';
+       							output += '<a class="community_mt_footer_user" href="community_user.co?nickname=' + item.nickname + '">';
+       							output += '<img src="' + item.profile + '">';
+       							output += '<span class="community_mt_footer_users">' +  item.nickname + '</span>';
+       							output += '</a>';
+       							output += '<span class="community_mt_footer_caption">';
+       							output += '<span class="community_mt_footer_time">' + date + '</span>';
+       							output += '<span class="community_mt_footer_comments">' + "댓글 " + (item.co_count+item.an_count) + ' </span>';
+       							output += '<span class="community_mt_footer_views">' + "조회수 " + item.count + ' </span>';
+       							output += '</span>';
+       							output += '</footer>';
+       							output += '</div>';
+       							output += '</div>';
+       							
+       							$('#community_data').append(output);
 			                }else { //사진게시판
-			                	
-			                	output += '<div id="community_container_mi">';
-   							output += '<div class="community_mi_title">';
-   							output += '<a class="community_mi_link" href="community_detail.co?board_num=' + item.board_num  + '"></a>';
-   							output += '<div class="community_mi_img">';
-   							output += '<img src="' + item.img + '" class="com_img2">';
-   							output += '</div>';
-   							output += '<h2 class="community_name">' + item.board_name + '</h2>';
-   							output += '<address class="community_mi_writer">';
-   							output += '<a class="community_mi_writer_user href="community_user.co?nickname=' + item.nickname + '">'; 
-   							output += '<img src="' + item.profile + '">';
-   							output += '<span class="community_mt_footer_users">' + item.nickname + ' </span>';
-   							output += '</a>';
-   							output += '</address>';
-   							output += '<footer class="community_mi_footer">';
-   							output += '<span class="community_mi_footer_caption">';
-   							output += '<span class="community_mi_footer_time">' + date  + ' </span>';
-   							output += '<span class="community_mi_footer_comments">' + "댓글 " + (item.co_count+item.an_count) + ' </span>';
-   							output += '<span class="community_mi_footer_views">' + "조회수 " + item.count + ' </span>';
-   							output += '</span>';
-   							output += '</footer>';
-   							output += '</div>';
-                				output += '</div>';
-                				
-                				$('#community_data_d').append(output);
+			                		output += '<div id="community_container_mi">';
+       							output += '<div class="community_mi_title">';
+       							output += '<a class="community_mi_link" href="community_detail.co?board_num=' + item.board_num  + ' "></a>';
+       							output += '<div class="community_mi_img">';
+       							output += '<img src="' + item.img + '" class="com_img2">';
+       							output += '</div>';
+       							output += '<h2 class="community_name">' + item.board_name + '</h2>';
+       							output += '<address class="community_mi_writer">';
+       							output += '<a class="community_mi_writer_user" href="community_user.co?nickname=' + item.nickname + '">'; 
+       							output += '<img src="' + item.profile + '">';
+       							output += '<span class="community_mt_footer_users">' + item.nickname + ' </span>';
+       							output += '</a>';
+       							output += '</address>';
+       							output += '<footer class="community_mi_footer">';
+       							output += '<span class="community_mi_footer_caption">';
+       							output += '<span class="community_mi_footer_time">' + date  + ' </span>';
+       							output += '<span class="community_mi_footer_comments">' + "댓글 " + (item.co_count+item.an_count) + ' </span>';
+       							output += '<span class="community_mi_footer_views">' + "조회수 " + item.count + ' </span>';
+       							output += '</span>';
+       							output += '</footer>';
+       							output += '</div>';
+	                				output += '</div>';
+	                				
+	                				$('#community_data_d').append(output);
 			                	}
    						}); 
-	 					paging_search(totalData, dataPerPage, pageCount, currentPage); //검색 페이징
 	 				}
-	            		else {
+	            		else { //검색 결과 없을 경우
 	            			if(category != "육아사진게시판"){
 	            				var outputnull = "<div class='community_ncontainer' >";
    							outputnull += "<div>검색 결과가 없습니다.</div>";
@@ -276,11 +273,14 @@
             if(month<10) {
             	month = '0' + month;
             }
+            if(date<10) {
+            	date = '0' + date;
+            }
             var min = format.getMinutes();
             if(min<10) {
                min = '0' + min;
             }
-            return year + "." + month + "." + date + " " + hour +":" + min;
+            return year + "." + month + "." + date + " ";
          }
 		 
 	
@@ -348,14 +348,13 @@
                 if ($id == "prev") selectedPage = prev;
                 if ($id == "next") selectedPage = next;
                 if ($id == "lastNo") selectedPage = lastNo;
-                
+
                 selectData(totalData, dataPerPage, pageCount, selectedPage);
                 paging(totalData, dataPerPage, pageCount, selectedPage);// 페이징
             });
             
         }
              
-	
         
       /**********************************************************************************************************
       ** 검색 페이징 **

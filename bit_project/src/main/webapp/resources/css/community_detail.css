@@ -80,7 +80,7 @@
 	#community_container_comments > .community_comments_view > .comments_container >.community_comments_view_container > .answer_container > .community_answer_view_container > .community_answer_view_actions > button:hover{outline: none; }
 	
 	/* .answer_form{width: 880px; margin-bottom: 30px; padding-left: 40px; float: right;} */
-	.answer_form > #answerForm > .community_answer_form{display: flex; margin-bottom: 30px;}
+	.answer_form > #answerForm > .community_answer_form{display: flex; margin: 30px auto 30px auto;}
 	.answer_form > #answerForm > .community_answer_form > .community_answer_form_user{width: 40px; height: 40px; margin: 5px 5px; }
 	.answer_form > #answerForm > .community_answer_form > .community_answer_form_user > img{width: 40px; height: 40px; border-radius: 100%;}
 	.answer_form > #answerForm > .community_answer_form > .community_answer_form_input{display: flex; position: relative; width: 800px;  border: 1px solid #dbdbdb; border-radius: 5px; min-height: 100%;}

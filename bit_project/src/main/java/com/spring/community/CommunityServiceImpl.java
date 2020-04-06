@@ -44,10 +44,10 @@ public class CommunityServiceImpl implements CommunityService {
 	
 	/***********************************검색***********************************/
 	@Override
-	public List<CommunityVO> getCMsearch(String search_Data, String category, int start, int end) {
+	public List<CommunityVO> getCMsearch(String search_Data, String category) {
 		List<CommunityVO> getCMsearch = null;
 		CMMapper cmmapper = sqlSession.getMapper(CMMapper.class);
-		getCMsearch = cmmapper.getCMsearch(search_Data, category, start, end);
+		getCMsearch = cmmapper.getCMsearch(search_Data, category);
 		
 		return getCMsearch;
 	}

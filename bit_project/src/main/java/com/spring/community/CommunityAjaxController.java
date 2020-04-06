@@ -53,35 +53,10 @@ public class CommunityAjaxController {
 	}
 	
 	//검색
-//	@PostMapping(value="/getCMsearch.co", produces="application/json;charset=UTF-8")
-//	public List<CommunityVO> getCMsearch(String search_Data, String category, int page) {
-//		List<CommunityVO> search_list = null;
-//		search_list = communityService.getCMsearch(search_Data, category);
-//		
-//		return search_list;
-//	}
-	
 	@PostMapping(value="/getCMsearch.co", produces="application/json;charset=UTF-8")
-	public List<CommunityVO> getCMsearch(String search_Data, String category, int page) {
+	public List<CommunityVO> getCMsearch(String search_Data, String category) {
 		List<CommunityVO> search_list = null;
-		System.out.println("search_data : " + search_Data + " c : " + category + " page : " + page);
-		int limit = 0;
-		int start = 0;
-		int end = 0;
-		
-		if(category.equals("육아사진게시판")) {
-			limit = 9;
-			start = (page - 1) * 9 + 1;
-			end = start + limit - 1;
-		}
-		else {
-			limit = 5;
-			start = (page - 1) * 5 + 1;
-			end = start + limit - 1;
-		}
-		
-		search_list = communityService.getCMsearch(search_Data, category, start, end);
-		System.out.println("Controller 출력 : " + search_list);
+		search_list = communityService.getCMsearch(search_Data, category);
 		return search_list;
 	}
 	
@@ -220,23 +195,23 @@ public class CommunityAjaxController {
 		@PostMapping(value="/getAnswer.co", produces="application/json;charset=UTF-8")
 		public List<AnswerVO> getAnswer(int comment_num) {
 			List<AnswerVO> list = communityService.getAnswer(comment_num);
-			
+			System.out.println(list);
 			return list;
 		}
 		
 		//대댓글 프로필 사진가져오기
-		@PostMapping(value="/getuserImg.co", produces="application/json;charset=UTF-8")
-		public String getuserImg(String email) throws Exception {
-			System.out.println(email);
-			LoginVO dbvo = null;
-			
-			dbvo = service.getDetail(email);
-			System.out.println(dbvo.getNickname());
-			String img = dbvo.getImg();
-			System.out.println(dbvo.getImg());
-				
-			return img;
-		}
+//		@PostMapping(value="/getuserImg.co", produces="application/json;charset=UTF-8")
+//		public String getuserImg(String email) throws Exception {
+//			System.out.println(email);
+//			LoginVO dbvo = null;
+//			
+//			dbvo = service.getDetail(email);
+//			System.out.println(dbvo.getNickname());
+//			String img = dbvo.getImg();
+//			System.out.println(dbvo.getImg());
+//				
+//			return img;
+//		}
 		
 		//대댓 수정
 		@PostMapping(value="/updateAnswer.co", produces="application/json;charset=UTF-8")

@@ -101,14 +101,13 @@
 	<!-- 검색 -->
 	<select id="getCMsearch" parameterType="com.spring.community.CommunityVO" resultMap="cmMap">
 		select * from (
-   			select row_number() over(order by regist desc)) rnum, board_num, board_name, nickname, content, regist, img, count, category, scrap_count, email,
+   			select (row_number() over(order by regist desc)) rnum, board_num, board_name, nickname, content, regist, img, count, category, scrap_count, email,
    						(select member.img from member where board.email = member.email) as profile,
-   						(select count(*) from board where category = #{category} and (nickname LIKE '%${search_Data}%' or board_name LIKE '%${search_Data}%' or content LIKE '%${search_Data}%')) as cmsearch_count,
-						(select count(*) from board_comment where board_comment.board_num = board.board_num) as co_count,
-						(select count(*) from board_answer where board_answer.board_num = board.board_num) as an_count
+   						(select count(*) as cnt from board where category = #{category} and (nickname LIKE '%${search_Data}%' or board_name LIKE '%${search_Data}%' or content LIKE '%${search_Data}%')) as cmsearch_count,
+						(select count(*) as cnt from board_comment where board_comment.board_num = board.board_num) as co_count,
+						(select count(*) as cnt from board_answer where board_answer.board_num = board.board_num) as an_count
 			from board)
-		where category = #{category} and (nickname LIKE '%${search_Data}%' or board_name LIKE '%${search_Data}%' or content LIKE '%${search_Data}%') order by regist desc
-		
+		where category = #{category} and (nickname LIKE '%${search_Data}%' or board_name LIKE '%${search_Data}%' or content LIKE '%${search_Data}%')
 	</select>
 	
 	<!-- 닉네임 검색 -->
@@ -237,7 +236,11 @@
 	<select id="getAnswer" resultMap="answerMap" parameterType="int">
 <!-- 		select * from (select )board_answer where comment_num = #{comment_num} order by regist desc -->
 		<!-- select * from (select a.*, m.img as profile from board_answer a inner join member m on a.email = m.email where a.comment_num = #{comment_num}) order by regist desc -->
-		select * from (select answer_num, comment_num, nickname, content, regist, email, board_num from board_answer) where comment_num = #{comment_num}
+		select * from (
+			select (row_number() over(order by regist desc)) rnum, answer_num, comment_num, nickname, content, regist, email, board_num,
+			(select member.img from member where board_answer.email = member.email) as profile
+			from board_answer) 
+		where comment_num = #{comment_num}
 	</select>
 	
 	<!-- 대댓 갯수 -->

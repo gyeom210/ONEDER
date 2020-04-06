@@ -229,13 +229,13 @@ function delchk(board_num) {
 					alert("접근금지입니다.");
 					return false;
 				}else {
-	        		if ($(this).parents("li").next().css("display") == 'none') {
-	                		$(this).parents("li").slidDown();
+	        		if ($(this).parents(".community_comments_view_container").next().css("display") == 'none') {
+	                		$(this).parents(".community_comments_view_container").next().show();
 	                } else {
-	                    $(this).parents("li").slideUp();
+	                    $(this).parents(".community_comments_view_container").next().hide();
 	                }
-				}
-			}
+				} //일반회원
+			} // email_co != null
 		});
 		
 	}); //ready
@@ -363,7 +363,7 @@ function delchk(board_num) {
 	                		output += '<div class="community_comments_view_actions">';
 	                		output += '<span class="community_comments_view_time" style="margin-top:3px; margin-right:10px;">' + date + '</span>';
 	                		output += '<div class="community_comments_view_add">'; 
-	                		output += '<button type="button" class="community_comment_answer_btn" class="answer_btn">' + "답글작성" + '</button>' + '</div>';
+	                		output += '<button type="button" class="community_comment_answer_btn answer_btn">' + "답글작성" + '</button>' + '</div>';
 	                		
 	                		if(item.email == email) 
 	                		{ //로그인한사람과 댓글쓴사람이 같을 경우 수정 삭제 가능
@@ -398,7 +398,7 @@ function delchk(board_num) {
 						output += '</div>';
 						
 						$('.community_comments_view').append(output);
-	                
+					alert(item.comment_num + "번 대댓 찾는중");
 	                answerList(item.comment_num);
 				});
 					 $('.comment_count_num').load(location.href + ' .comment_count_num'); //댓글 갯수 카운트 새로고침
@@ -458,7 +458,7 @@ function delchk(board_num) {
 	                		output += '<div class="community_comments_view_actions">';
 	                		output += '<span class="community_comments_view_time" style="margin-top:3px; margin-right:10px;">' + date + '</span>';
 	                		output += '<div class="community_comments_view_add">'; 
-	                		output += '<button type="button" class="community_comment_answer_btn" class="answer_btn">' + "답글작성" + '</button>' + '</div>';
+	                		output += '<button type="button" class="community_comment_answer_btn answer_btn">' + "답글작성" + '</button>' + '</div>';
 	                		
 	                		if(item.email == email) 
 	                		{ //로그인한사람과 댓글쓴사람이 같을 경우 수정 삭제 가능
@@ -493,7 +493,7 @@ function delchk(board_num) {
 						output += '</div>';
 						
 						$('.community_comments_view').append(output);
-	                
+	                alert(item.comment_num + "번 대댓 찾는중");
 	                answerList(item.comment_num);
 				});
 					 $('.comment_count_num').load(location.href + ' .comment_count_num'); //댓글 갯수 카운트 새로고침
@@ -519,8 +519,9 @@ function delchk(board_num) {
   //대댓 목록
   function answerList($comment_num) {
 	  var num = $comment_num;
-	  var profile = null;
-	  
+/* 	  var profile = null; */
+	alert(num + "댓글 번호");
+	
 	  $.ajax({
 			url:'/bit_project/getAnswer.co',
 			type: 'POST',
@@ -529,34 +530,16 @@ function delchk(board_num) {
 			async: false,
 			contentType: 'application/x-www-form-urlencoded; charset=utf-8',
 			success: function(data) {
+				if(data.length != 0) { //데이터 존재
 				$.each(data, function(index, item) {
-					var email = item.email.trim();
-					
-					$.ajax({
-						url:'/bit_project/getuserImg.co',
-						type: 'POST',
-						data:{'email' : email},
-						dataType: "text",
-						async: false,
-						contentType: 'application/x-www-form-urlencoded; charset=utf-8',
-						success: function(img) {
-								profile = img;
-						},
-						error:function(request,status,error){
-					        alert("code = "+ request.status + " message = " + request.responseText + " error = " + error); // 실패 시 처리
-					    }
-					});
-							
 					var answer = ' ';
 					var reg_date = new Date(item.regist); 
             		var date = date_format(reg_date);
             		var email = "<%=email_co %>";
             		
-					if(num == item.comment_num) {
-					
 						answer += '<div class="answer_container" value="' + item.comment_num + '">';	 
 						answer += '<div class="community_answer_view_user">';
-						answer += '<img src="' + profile + '">';
+						answer += '<img src="' + item.profile + '">';
 						answer += '</div>';
 						answer += '<div class="community_answer_view_container">';
 						answer += '<div class="community_answer_view_answer">';
@@ -579,8 +562,9 @@ function delchk(board_num) {
 						answer += '</div>';
 						
 						$(".community_comments_view_container").append(answer);
-					}
 				});
+				}
+				$('.answer_container').empty();
 			},
 			error:function(request,status,error){
 		        alert("code = "+ request.status + " message = " + request.responseText + " error = " + error); // 실패 시 처리
@@ -595,8 +579,8 @@ function delchk(board_num) {
 			return false;
 		}
 		var num = $comment_num;
-		var params = $('li[id="' + num +'"]').children('form').serialize();
-		
+		var params = $('div[id="' + num +'"]').children('form').serialize();
+		alert(num + "==" + params);
 		$.ajax({
 			url:'/bit_project/writeAnswer.co',
 			type: 'POST',
@@ -754,8 +738,18 @@ function delchk(board_num) {
         }else {
         	var year = format.getFullYear();
             var month = format.getMonth()+1;
+            if(month < 10) {
+            	month = '0' + month;
+            }
+            var date = format.getDate();
+            if(date < 10) {
+            	date = '0' + date;
+            }
             var hour = format.getHours();
             var min = format.getMinutes();
+            if(min < 10){
+            	min = '0' + min;
+            }
         	return year + "." + month + "." + date + "&nbsp; " + hour +":" + min;
         }
      }
