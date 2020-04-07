@@ -374,7 +374,7 @@ function delchk(board_num) {
 						output += '</div>';
 						output += '</div>';
 						
-						output += '<div class="answer_form" style="display: none;" id="' + item.comment_num + '">';
+						output += '<div class="answer_form" style="display: none;" id="' + item.comment_num + '_as">';
 						output += '<form id="answerForm" method="POST" accept-charset="utf-8">';
 				     	output += '<div class="community_answer_form">';
 				     	output += '<div class="community_answer_form_user">';
@@ -398,14 +398,13 @@ function delchk(board_num) {
 						output += '</div>';
 						
 						$('.community_comments_view').append(output);
-					alert(item.comment_num + "번 대댓 찾는중");
 	                answerList(item.comment_num);
 				});
 					 $('.comment_count_num').load(location.href + ' .comment_count_num'); //댓글 갯수 카운트 새로고침
-					 if(datacount >= 6) {
+					 if(datacount > 5) {
 						 var output = '';
 						 
-						 output += '<div class="community_comments_view_more"><a class="view_more" href="javascript:moreComment();">더보기</a></div>';
+						 output += '<div class="community_comments_view_more" style="margin:40px auto; text-align: center;"><a class="view_more" href="javascript:moreComment();">더보기</a></div>';
 						 $('.community_comments_view').append(output);
 					 }
 				} else { //댓글 없을때
@@ -493,7 +492,6 @@ function delchk(board_num) {
 						output += '</div>';
 						
 						$('.community_comments_view').append(output);
-	                alert(item.comment_num + "번 대댓 찾는중");
 	                answerList(item.comment_num);
 				});
 					 $('.comment_count_num').load(location.href + ' .comment_count_num'); //댓글 갯수 카운트 새로고침
@@ -501,7 +499,7 @@ function delchk(board_num) {
 					 if(end <= datacount) {
 						 var output = '';
 						 
-						 output += '<div class="community_comments_view_more"><a class="view_more" href="javascript:moreComment();">더보기</a></div>';
+						 output += '<div class="community_comments_view_more" style="margin:40px auto; text-align: center;"><a class="view_more" href="javascript:moreComment();">더보기</a></div>';
 						 $('.community_comments_view').append(output);
 						 
 						 start += 5;
@@ -520,7 +518,6 @@ function delchk(board_num) {
   function answerList($comment_num) {
 	  var num = $comment_num;
 /* 	  var profile = null; */
-	alert(num + "댓글 번호");
 	
 	  $.ajax({
 			url:'/bit_project/getAnswer.co',
@@ -531,8 +528,6 @@ function delchk(board_num) {
 			contentType: 'application/x-www-form-urlencoded; charset=utf-8',
 			success: function(data) {
 				if(data.length == 0){
-					alert("없음");
-					$(".answer_container").css("display","none");
 				}
 				else { //데이터 존재
 				$.each(data, function(index, item) {
@@ -550,24 +545,21 @@ function delchk(board_num) {
 						answer += '<input type="hidden" id="answer_num" value="' + item.answer_num + '">';
 						answer += '<span class="community_mt_footer_users" style="font-size:14px;"><b>' + item.nickname + '</b></span>';
 						answer += '<input type="hidden" id="email" value="' + item.email + '">';
-						answer += '<input type="text" id="' + item.answer_num + '" class="answer_form" readonly onfocus:"this.blur()"; value="' + item.content + '" style="padding-left:10px;">';
+						answer += '<input type="text" id="' + item.answer_num + '" class="answer_form_text" readonly onfocus:"this.blur()"; value="' + item.content + '" style="padding-left:10px;">';
 						answer += '</div>';
 						answer += '<div class="community_answer_view_actions">';
 						answer += '<span class="community_answer_view_time" style="margin-top:3px; margin-right:10px;">' + date + '</span>';
 						
 						if(item.email.trim() == email) {
 						answer += '<div class="community_answer_view_modify" id="' + item.answer_num + '">';
-						answer += '<button type="button" class="community_comment_update_btn" "onclick="anmod_form(' + item.answer_num + ')">' + "수정" + '</button>';
-						answer += '<button type="button" class="community_comment_delete_btn" "onclick="andel_btn(' + item.answer_num + ')">' + "삭제" + '</button></div>';
+						answer += '<button type="button" class="community_comment_update_btn" onclick="anmod_form(' + item.answer_num + ')">' + "수정" + '</button>';
+						answer += '<button type="button" class="community_comment_delete_btn" onclick="andel_btn(' + item.answer_num + ')">' + "삭제" + '</button></div>';
 						}
 						
 						answer += '</div>';
 						answer += '</div>';
 						answer += '</div>';
 						
-						/* $('#"'+ item.comment_num + '".community_comments_view_container').append(answer); */
-						/* $('.community_comments_view_container').append(answer); */
-						/* $("#' + item.commnet_num + '_co").append(answer); */
 						$('div[id="' + item.comment_num +'_co"]').append(answer);
 						
 				});
@@ -581,13 +573,16 @@ function delchk(board_num) {
 	
 	//대댓 등록
 	function answerwrite($comment_num) {
+	alert($('.community_answer_form_comments'));
 		if($.trim($('.community_answer_form_comments').val()) == "") {
 			alert("댓글을 입력해주세요");
+			console.log($.trim($('.community_answer_form_comments').val()));
 			return false;
 		}
+		
+		alert("왔니");
 		var num = $comment_num;
-		var params = $('div[id="' + num +'"]').children('form').serialize();
-		alert(num + "==" + params);
+		var params = $('div[id="' + num +'_as"]').children('form').serialize();
 		$.ajax({
 			url:'/bit_project/writeAnswer.co',
 			type: 'POST',
@@ -615,23 +610,22 @@ function delchk(board_num) {
      	var num = $answer_num;
      	
    		$('input[id="' + num + '"]').removeAttr("readonly");
-   		$('input[id="' + num + '"]').focus();
+   		$('input[id="' + num + '"]').focus().setCursorPosition($('input[id="' + num + '"]').val().length);
    		$('input[id="' + num + '"]').css("border","1px solid #ccc9c9");
    		$('div[id="' + num + '"]').html('<button type="button" class="community_comment_update_btn" onclick="anmod_btn(' + num + ')">수정하기</button></div>');
 	} 
-
+	
     //대댓 수정
     function anmod_btn(num) {
-    	if($.trim($('.answer_form').val()) == "") {
+    	if($('.answer_form_text').val().trim() == "") {
 			alert("내용을 입력해주세요");
 			return false;
 		}
-    	alert($(".answer_form").val());
     	
        jQuery.ajax({
           url : '/bit_project/updateAnswer.co',
           type : 'POST',
-          data : {'answer_num' : num, 'content' : $(".answer_form").val()},
+          data : {'answer_num' : num, 'content' : $(".answer_form_text").val()},
           contentType : 'application/x-www-form-urlencoded; charset=UTF-8',
           dataType : "json",
           success : function(retVal) {

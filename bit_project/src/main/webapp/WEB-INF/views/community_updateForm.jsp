@@ -67,7 +67,7 @@
 			</div>
 			<div id="contentbox-bottom"> 
 				<input type="button" id="cancel-btn" onclick="history.back(-1);" value="취소">
-				<input type ="button" style="background-color: #ffb0b1;"   id="submit-btn" onclick="update_chk()" value="수정">
+				<input type ="button" style="background-color: #ffb0b1;" id="submit-btn" onclick="update_chk()" value="수정">
 				
 			</div>
 		</form>
@@ -166,7 +166,6 @@
 	        processData:false,
 			success: function(data){
 				var obj = data.url;
-				alert(obj);
     		    var image = $('<img>').attr('src', '' + obj); // 에디터에 img 태그로 저장
 	        	$('.summernote').summernote("insertNode", image[0]); // summernote 에디터에 img 태그 전송
 	        },

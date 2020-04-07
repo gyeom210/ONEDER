@@ -45,7 +45,7 @@ $(document).ready(function() {
                        <div class="image-edit">
                            <input type="file" name="img2" id="imageUpload" class="imageUpload" data-preview="imagePreview" accept=".png, .jpg, .jpeg" style="width:100px; height: 300px; border:1px solid;"multiple />
                            <label for="imageUpload"><i class="fas fa-chevron-circle-up fa-2x" style="color: #757575"></i></label> 
-                           <div class="zz" data-preview="imagePreview" style="width:250px; height:200px;" ></div>
+                           <div class="profilePreview" data-preview="imagePreview" style="width:250px; height:200px;" ></div>
                        </div>
                        <div class="preview" >
                            <div id="imagePreview" style="background-image: url('${pageContext.request.contextPath}/resources/img/default_profile.png');"></div>
@@ -53,18 +53,15 @@ $(document).ready(function() {
                         </div>
                   </div>
                   <div class="checkfield">
-                     <span> <input type="text" name="nickname" id="nickname"
-                        class="checkfield" placeholder="닉네임" required></span> <span>
-                        <button type="button" class="nicknamecheck-btn"
-                           onclick="nnChk();" value="N">중복확인</button></span>
+                     <span> <input type="text" name="nickname" id="nickname" class="checkfield" placeholder="닉네임" required></span> 
+                     <span>
+                        <button type="button" class="nicknamecheck-btn" onclick="nnChk();" value="N">중복확인</button></span>
                         <div class="alert alert-true" id="nickname-alert-true" style="font-size:10px; float:left; color:green;">사용 가능한 닉네임입니다.</div>
                         <div class="alert alert-false" id="nickname-alert-false" style="font-size:10px;float:left;color:red;">이미 사용 중인 닉네임입니다. </div>
                   </div>
                   <div class="checkfield">
-                     <span><input type="email" name="email" id="email"
-                        class="checkfield" placeholder="이메일주소" required></span> <span><button
-                           type="button" class="emailcheck-btn" onclick="emChk();"
-                           value="N">중복확인</button></span>
+                     <span><input type="email" name="email" id="email" class="checkfield" placeholder="이메일주소" required></span> 
+                        <span><button type="button" class="emailcheck-btn" onclick="emChk();" value="N">중복확인</button></span>
                      <div class="alert alert-true" id="email-alert-true" style="font-size:10px; float:left; color:green;">사용 가능한 이메일입니다.</div>
                      <div class="alert alert-false" id="email-alert-false" style="font-size:10px;float:left;color:red;">이미 사용 중인 이메일입니다. </div>
                   </div>

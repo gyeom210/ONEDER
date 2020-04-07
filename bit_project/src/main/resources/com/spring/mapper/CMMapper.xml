@@ -96,7 +96,7 @@
 	    		(select count(*) as cnt from board where category = #{category}) as cm_count
 		from board where category = #{category})
 		<![CDATA[WHERE rnum >=#{start} and rnum<=#{end}]]> 
-	</select>
+	</select> 
 	
 	<!-- 검색 -->
 	<select id="getCMsearch" parameterType="com.spring.community.CommunityVO" resultMap="cmMap">

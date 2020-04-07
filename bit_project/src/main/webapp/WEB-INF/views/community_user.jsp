@@ -32,12 +32,12 @@ String nickname1 = (String)request.getAttribute("nickname");
 
     <div id="community_container_menubar">
 		<ul class="community_menubar">
-        	<li data-tab="자유게시판" class="community_menubar_item"><a href="#">자유게시판</a></li>
-        	<li data-tab="육아사진게시판" class="community_menubar_item"><a href="#">육아사진게시판</a></li>
-        	<li data-tab="정보공유(팁)" class="community_menubar_item"><a href="#">정보공유(팁)</a></li>
-        	<li data-tab="공구게시판" class="community_menubar_item"><a href="#">공구게시판</a></li>
-        	<li data-tab="육아게시판" class="community_menubar_item"><a href="#">육아게시판</a></li>
-        	<li data-tab="이슈,토론게시판" class="community_menubar_item"><a href="#">이슈,토론게시판</a></li>
+        	<li data-tab="자유게시판" class="community_menubar_item"><a href="#" style="color: #616161;">자유게시판</a></li>
+        	<li data-tab="육아사진게시판" class="community_menubar_item"><a href="#" style="color: #616161;">육아사진게시판</a></li>
+        	<li data-tab="정보공유(팁)" class="community_menubar_item"><a href="#" style="color: #616161;">정보공유(팁)</a></li>
+        	<li data-tab="공구게시판" class="community_menubar_item"><a href="#" style="color: #616161;">공구게시판</a></li>
+        	<li data-tab="육아게시판" class="community_menubar_item"><a href="#" style="color: #616161;">육아게시판</a></li>
+        	<li data-tab="이슈,토론게시판" class="community_menubar_item"><a href="#" style="color: #616161;">이슈,토론게시판</a></li>
         </ul>
     </div>
     

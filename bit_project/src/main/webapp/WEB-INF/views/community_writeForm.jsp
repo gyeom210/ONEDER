@@ -57,13 +57,12 @@
 					<input type="hidden" name="category" value="자유게시판" />
 				</span>
 				<span> 
-					<input id="title" name="board_name" class="" type="text" placeholder="제목">
+					<input id="title" name="board_name" type="text" placeholder="제목">
 				</span>
 			</div>
 
 			<div id="contentbox-middle">
-				<textarea class="summernote" id="summernote" name="content"
-					placeholder="content" maxlength="140" rows="7"></textarea>
+				<textarea class="summernote" id="summernote" name="content" placeholder="content" maxlength="140" rows="7"></textarea>
 			</div>
 			<div id="contentbox-bottom">
 				<input type ="button" id="submit-btn" onclick="insert_chk()" value="글쓰기">
@@ -176,7 +175,6 @@
 	        processData:false,
 			success: function(data){
 				var obj = data.url;
-				alert(obj);
     		    var image = $('<img>').attr('src', '' + obj); // 에디터에 img 태그로 저장
 	        	$('.summernote').summernote("insertNode", image[0]); // summernote 에디터에 img 태그 전송
 	        },

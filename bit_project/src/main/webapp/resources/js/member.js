@@ -117,7 +117,7 @@
    /* 프로필  */
    $(function () {
 
-        $('.zz')
+        $('.profilePreview')
         .on("dragover", dragOver)
         .on("dragleave", dragOver)
         .on("drop", uploadFiles);
@@ -163,9 +163,9 @@
         function uploadFiles(e) {
             e.stopPropagation();
             e.preventDefault()
-            dragOver(e); //1
+            dragOver(e);
          
-           e.dataTransfer = e.originalEvent.dataTransfer; //2 
+           e.dataTransfer = e.originalEvent.dataTransfer;
             
           var files = e.target.files || e.dataTransfer.files;
           if (files.length > 1) {

@@ -155,7 +155,6 @@ public class MemberController {
 		        String storedFileName = UUID.randomUUID().toString().replaceAll("-", "") + originalFileExtension;
 		        
 		        if (mf.getSize() != 0) {
-		        	// mf.transferTo(new File(uploadPath+"/"+mf.getOriginalFilename()));
 		        	mf.transferTo(new File(uploadPath + storedFileName));
 		        	membervo.setImg("/bit_project/image/" + storedFileName);
 		        }  
