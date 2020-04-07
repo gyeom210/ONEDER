@@ -353,7 +353,7 @@ function delchk(board_num) {
 	                		output += '<div class="community_comments_view_user">';
 	                		output += '<img src="' + item.profile + '">';
 	                		output += '</div>';
-	                		output += '<div class="community_comments_view_container">';
+	                		output += '<div class="community_comments_view_container" id="' + item.comment_num + '_co">';
 	                		output += '<div class="community_comments_view_comments">'; 
 	                		output += '<input type="hidden" id="comment_num" value="' + item.comment_num + '">';
 	                		output += '<span class="community_mt_footer_users"><b>' + item.nickname + '</b></span>';
@@ -448,7 +448,7 @@ function delchk(board_num) {
 	                		output += '<div class="community_comments_view_user">';
 	                		output += '<img src="' + item.profile + '">';
 	                		output += '</div>';
-	                		output += '<div class="community_comments_view_container">';
+	                		output += '<div class="community_comments_view_container" id="' + item.comment_num + '_co">';
 	                		output += '<div class="community_comments_view_comments">'; 
 	                		output += '<input type="hidden" id="comment_num" value="' + item.comment_num + '">';
 	                		output += '<span class="community_mt_footer_users"><b>' + item.nickname + '</b></span>';
@@ -530,7 +530,11 @@ function delchk(board_num) {
 			async: false,
 			contentType: 'application/x-www-form-urlencoded; charset=utf-8',
 			success: function(data) {
-				if(data.length != 0) { //데이터 존재
+				if(data.length == 0){
+					alert("없음");
+					$(".answer_container").css("display","none");
+				}
+				else { //데이터 존재
 				$.each(data, function(index, item) {
 					var answer = ' ';
 					var reg_date = new Date(item.regist); 
@@ -561,10 +565,13 @@ function delchk(board_num) {
 						answer += '</div>';
 						answer += '</div>';
 						
-						$(".community_comments_view_container").append(answer);
+						/* $('#"'+ item.comment_num + '".community_comments_view_container').append(answer); */
+						/* $('.community_comments_view_container').append(answer); */
+						/* $("#' + item.commnet_num + '_co").append(answer); */
+						$('div[id="' + item.comment_num +'_co"]').append(answer);
+						
 				});
 				}
-				$('.answer_container').empty();
 			},
 			error:function(request,status,error){
 		        alert("code = "+ request.status + " message = " + request.responseText + " error = " + error); // 실패 시 처리
