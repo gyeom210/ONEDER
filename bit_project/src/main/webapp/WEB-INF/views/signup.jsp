@@ -176,30 +176,31 @@ $(document).ready(function() {
       <!-- footer 끝 -->
       
       <script src="${pageContext.request.contextPath}/resources/js/member.js"></script>
-       <script>
-       $('#pos_num').click(function() {
-         goPopup();
-      })
-      $('#pos_num').keyup(function() {
-         goPopup();
-      })
-       function goPopup() {
-          // 주소검색을 수행할 팝업 페이지를 호출합니다.
-          // 호출된 페이지(jusopopup.jsp)에서 실제 주소검색URL(http://www.juso.go.kr/addrlink/addrLinkUrl.do)를 호출하게 됩니다.
-          var pop = window.open("/bit_project/jusoPopup.jsp", "pop",
-                "width=570,height=420, scrollbars=yes, resizable=yes");
-      
-          // 모바일 웹인 경우, 호출된 페이지(jusopopup.jsp)에서 실제 주소검색URL(http://www.juso.go.kr/addrlink/addrMobileLinkUrl.do)를 호출하게 됩니다.
-          //var pop = window.open("/popup/jusoPopup.jsp","pop","scrollbars=yes, resizable=yes"); 
-       }
-      
-       function jusoCallBack(roadFullAddr,roadAddrPart1,addrDetail,roadAddrPart2,engAddr, jibunAddr, zipNo, admCd, rnMgtSn, bdMgtSn){
-           // 팝업페이지에서 주소입력한 정보를 받아서, 현 페이지에 정보를 등록합니다.
-      
-          $('#pos_num').val(zipNo);
-          $('#address').val(roadAddrPart1);
-          $('#address_detail').val(addrDetail);
-      }
- </script>
+ <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+$('#pos_num').click(function() {
+    goPopup();
+ })
+ $('#pos_num').keyup(function() {
+    goPopup();
+ })
+ 	function goPopup(){
+	new daum.Postcode({
+        oncomplete: function(data) {
+        	var themeObj = {
+        	   bgColor: "#FFFFFF", //바탕 배경색
+        	   emphTextColor: "#32A9E6" //강조 글자색
+        	};
+        	
+            document.getElementById('pos_num').value = data.zonecode;
+        	document.getElementById('address').value = data.roadAddr;
+        	document.getElementById('address').value = data.jibunAddress;
+        	document.getElementById('address_detail').focus();
+        }
+    }).open();
+     
+}
+    
+</script>
 </body>
 </html>
