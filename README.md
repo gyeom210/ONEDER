@@ -74,9 +74,14 @@
 ### 회원가입 및 회원수정
 ✔︎ [signup.jsp](https://github.com/gyeom210/ONEDER/blob/master/bit_project/src/main/webapp/WEB-INF/views/signup.jsp) 
 / [mypage_update.jsp](https://github.com/gyeom210/ONEDER/blob/master/bit_project/src/main/webapp/WEB-INF/views/mypage/mypage_update.jsp) <br>
-== 이미지 파일 올리기 == <br>
 ⁃ 프로필 이미지 drag & drop 기술 . 여러개의 사진 올릴시 경고창 띄움 <br>
 ⁃ Daum 우편번호 API 사용 <br>
+
+#### ☛ 파일 업로드 방식
+![ezgif com-video-to-gif-3](https://user-images.githubusercontent.com/57176747/78970564-8c4bec80-7b44-11ea-82c2-f862d8529a21.gif) <br>
+#### ☛ drag & drop 방식
+![ezgif com-video-to-gif-4](https://user-images.githubusercontent.com/57176747/78970565-8d7d1980-7b44-11ea-8031-dd164a6b7c1e.gif) <br>
+
 <br>
 <br>
 [이미지 drag & drop /member.js](https://github.com/gyeom210/ONEDER/blob/master/bit_project/src/main/webapp/resources/js/member.js)
@@ -160,6 +165,7 @@
     }); //function
 </code>
 </pre>
+
 [이미지 drag & drop /MemberController.java](https://github.com/gyeom210/ONEDER/blob/master/bit_project/src/main/java/com/spring/member/MemberController.java)
 <pre>
 <code>
